@@ -2,7 +2,7 @@
 
 ### Trabalho final para a disciplina de Programação Orientada a Objetos.
 
-#### Autores:
+#### Desenvolvedores:
 
 - [Gabriel Karini Schuch](https://github.com/gkschuch)
 - [Tiago Wolowski](https://github.com/Tiago-w)
