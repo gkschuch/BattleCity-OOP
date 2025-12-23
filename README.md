@@ -6,6 +6,7 @@
 
 - [Gabriel Karini Schuch](https://github.com/gkschuch)
 - [Tiago Wolowski](https://github.com/Tiago-w)
+- [Henrique dos Reis](https://github.com/HenriqueReis31)
 
 ---
 
