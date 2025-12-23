@@ -4,7 +4,6 @@ public abstract class Tank {
     private int life;
     private int speed;
     private int gunLevel;
-    private int tiago;
 
     // Construtor
     public Tank(int life, int speed, int gunLevel) {
