@@ -1,40 +1,67 @@
 package characters;
 
-public abstract class Tank {
-    private int life;
+import utils.*;
+
+public abstract class Tank implements Movable, Destructible {
+    private int lives; // O numero de vidas do tanque
     private int speed;
-    private int gunLevel;
+    private Direction direction;
+    private boolean invulnerable;
 
     // Construtor
-    public Tank(int life, int speed, int gunLevel) {
-        this.life = life;
+    public Tank(int lives, int speed) {
+        this.lives = lives;
         this.speed = speed;
-        this.gunLevel = gunLevel;
+        this.direction = Direction.UP;
+        this.invulnerable = false;
+    }
+
+    public abstract void shoot();
+
+    // Logica para quando tomar dano
+    @Override
+    public void takeDamege(int damege) {
+        if (!invulnerable) {
+            this.lives -= damege;
+            if (isDestroyed()) {
+                this.onDestroy();
+            }
+        }
+    }
+
+    // Adiciona o movimento do tanque
+    public void move() {
+        System.out.println("Tank is moving to: " + direction);
     }
 
     // Getters e Setters
 
-    public int getGunLevel() {
-        return gunLevel;
-    }
-
-    public int getLife() {
-        return life;
+    public int getlives() {
+        return lives;
     }
 
     public int getSpeed() {
         return speed;
     }
 
-    public void setGunLevel(int gunLevel) {
-        this.gunLevel = gunLevel;
+    public Direction getDirection() {
+        return direction;
     }
 
-    public void setLife(int life) {
-        this.life = life;
+    public boolean isDestroyed() {
+        return this.lives <= 0;
+    }
+
+    public void setlives(int lives) {
+        this.lives = lives;
     }
 
     public void setSpeed(int speed) {
         this.speed = speed;
     }
+
+    public void setDirection(Direction direction) {
+        this.direction = direction;
+    }
+
 }
