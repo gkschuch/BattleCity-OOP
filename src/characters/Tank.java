@@ -48,6 +48,14 @@ public abstract class Tank implements Movable, Destructible {
         return direction;
     }
 
+    public void setInvulnerable(boolean invulnerable) {
+        this.invulnerable = invulnerable;
+    }
+
+    public boolean isInvulnerable() {
+        return invulnerable;
+    }
+
     public boolean isDestroyed() {
         return this.lives <= 0;
     }
