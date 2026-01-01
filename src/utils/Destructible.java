@@ -1,14 +1,14 @@
 package utils;
 
 public interface Destructible {
-    // Reduz a vida do objeto
-    void takeDamege(int damege);
 
-    // Checa se o objeto esta "vivo"
-    // Retorna true se vida <=0, falso se nao for
+    // Metodo para aplicar dano
+    void takeDamage(int damage);
+
+    // metodo para checar se esta destruido(sem vidas)
     boolean isDestroyed();
 
-    // Logica para quando a vida chegar a zero
+    // Metodo quando o objeto for destruido
     void onDestroy();
 
 }

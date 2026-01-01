@@ -8,9 +8,9 @@ public enum Direction {
     LEFT,
     RIGHT;
 
+    // metodo para sortear aleatoriamente um direcao
     public static Direction getRandom() {
         Direction[] values = Direction.values();
         return values[new Random().nextInt(values.length)];
     }
-
 }
