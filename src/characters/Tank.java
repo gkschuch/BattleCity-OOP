@@ -3,12 +3,12 @@ package characters;
 import utils.*;
 
 public abstract class Tank implements Movable, Destructible {
-    private int lives; // O numero de vidas do tanque
+    private int lives;
     private int speed;
-    private Direction direction;
+    private Direction direction; // Direcao que o tanque esta apontando
     private boolean invulnerable;
 
-    // Construtor
+    // Construtor do tanque
     public Tank(int lives, int speed) {
         this.lives = lives;
         this.speed = speed;
@@ -16,27 +16,30 @@ public abstract class Tank implements Movable, Destructible {
         this.invulnerable = false;
     }
 
+    // Metodo abstrato do disparo
+    // Cada subclasse implementa como o seu tanque atira
     public abstract void shoot();
 
-    // Logica para quando tomar dano
+    // Metodo que aplica o dano no tanque somente se ele nao for invulneravel
     @Override
-    public void takeDamege(int damege) {
+    public void takeDamage(int damage) {
         if (!invulnerable) {
-            this.lives -= damege;
-            if (isDestroyed()) {
-                this.onDestroy();
-            }
+            int newLives = this.getLives() - damage;
+            // Garante que nao seja um numero negativo
+            this.setLives(Math.max(0, newLives));
+
+            this.onDestroy();
         }
     }
 
-    // Adiciona o movimento do tanque
+    // Move para a direcao atual no grid
+    // Fazer a movimetacao no grid
     public void move() {
         System.out.println("Tank is moving to: " + direction);
     }
 
     // Getters e Setters
-
-    public int getlives() {
+    public int getLives() {
         return lives;
     }
 
@@ -48,8 +51,8 @@ public abstract class Tank implements Movable, Destructible {
         return direction;
     }
 
-    public void setInvulnerable(boolean invulnerable) {
-        this.invulnerable = invulnerable;
+    public void toggleInvulnerability() {
+        this.invulnerable = !this.invulnerable;
     }
 
     public boolean isInvulnerable() {
@@ -60,7 +63,7 @@ public abstract class Tank implements Movable, Destructible {
         return this.lives <= 0;
     }
 
-    public void setlives(int lives) {
+    public void setLives(int lives) {
         this.lives = lives;
     }
 
