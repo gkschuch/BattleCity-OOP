@@ -1,43 +1,70 @@
 package characters;
 
+import utils.GameConfig;
+
 public class TankPlayer extends Tank {
     private String playerName;
     private int score;
-    private int gunLevel;
+    private int gunLevel; // Nível do tiro, evoluído via power-up de Estrela
 
+    // Construtor do tanque do jogador
     public TankPlayer(String name, int lives, int speed) {
-        super(lives, speed);
+        super(lives, speed); // Chama o construtor da classe pai (Tank)
         this.playerName = name;
-        this.score = 0;
-        this.gunLevel = 1; // Nivel padrao da arma
+        this.score = 0; // Comeca com uma pontuacao zerada
+        this.gunLevel = 1; // Nível inicial da arma
     }
 
+    // Implementa o disparo do jogador
     @Override
     public void shoot() {
-        // Na versao final cria o objeto projetil
-        System.out.println(this.playerName + " is shooting with a gun level " + this.gunLevel);
+        // Na versao final cria um projetil
+        System.out.println(this.getPlayerName() + " is shooting with a gun level " + this.getGunLevel());
     }
 
+    // O metodo e chamado toda a vez que o tanque e destruido
+    // Se nao tem mais vidas manda a mensagem de game over
+    // senao mostra o numero de vidas restante
     @Override
     public void onDestroy() {
-        System.out.println("Player " + this.playerName + " was destroyed!");
-        if (getlives() <= 0) {
-            System.out.println("GAME OVER - Final Score: " + score);
+        System.out.println("Player " + this.getPlayerName() + " was destroyed!");
+
+        if (this.getLives() <= 0) {
+            System.out.println("GAME OVER - Final Score: " + this.getScore());
+        } else {
+            System.out.println("Lives remaining: " + this.getLives());
         }
     }
 
+    // Incrementa a pontuacao
     public void addScore(int points) {
         this.score += points;
     }
 
+    // Metodo para adicionar vida ao jogador
+    // Se ele chegar no numero maximo de cidas ele ganha pontos a mais
+    public void addLives() {
+        int currentLives = this.getLives();
+
+        if (currentLives < GameConfig.MAX_LIVES) {
+            this.setLives(currentLives + 1);
+            System.out.println("Extra life obtained! Current lives: " + this.getLives());
+        } else {
+            this.addScore(GameConfig.SCORE_EXTRA_LIFE);
+            System.out.println("Max lives reached! Bonus points awarded instead.");
+        }
+    }
+
+    // Implementa a mecanica da estrela(Power up)
+    // Atualiza a arma
     public void upgradeGun() {
         // So consegue upar ate o nivel 3
-        if (this.gunLevel <= 3) {
+        if (this.gunLevel <= GameConfig.MAX_GUN_LEVEL) {
             this.gunLevel++;
         }
     }
 
-    // Getter
+    // Getters
 
     public int getScore() {
         return score;
@@ -47,4 +74,7 @@ public class TankPlayer extends Tank {
         return playerName;
     }
 
+    public int getGunLevel() {
+        return gunLevel;
+    }
 }
