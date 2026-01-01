@@ -1,13 +1,14 @@
 package characters.enemy;
 
 import utils.Direction;
+import utils.GameConfig;
 
 public class ArmedTank extends EnemyTank {
 
     // Construtor do tanque armado
     // 2 vidas, 5 de velocidade e 200 pontos
     public ArmedTank() {
-        super(2, 5, 200);
+        super(GameConfig.LIVES_ARMED, GameConfig.SPEED_ARMED, GameConfig.SCORE_ARMED);
     }
 
     // Implementa o comportamento do Tanque Armado(Aleatorio)

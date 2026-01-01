@@ -1,13 +1,14 @@
 package characters.enemy;
 
 import utils.Direction;
+import utils.GameConfig;
 
 public class NormalTank extends EnemyTank {
 
     // Construtor do tanque normal
     // 1 vida, 5 de velocidade e 100 pontos
     public NormalTank() {
-        super(1, 5, 100);
+        super(GameConfig.LIVES_NORMAL, GameConfig.SPEED_NORMAL, GameConfig.SCORE_NORMAL);
     }
 
     // Implementa o comportamento do tanque normal
