@@ -9,8 +9,8 @@ import grid.blocks.Water;
 
 public class Grid {
 
-    private int rows; // linhas do mapa
-    private int cols; // colunas do mapa
+    private int rows;         // linhas do mapa
+    private int cols;         // colunas do mapa
     private Block[][] blocks;
     private Base base;
 
@@ -47,6 +47,24 @@ public class Grid {
         this.base = base;
     }
 
+    public Block getBlock(int row, int col) {
+        if (!isInside(row, col)) {
+            return null;
+        }
+        return blocks[row][col];
+    }
+
+    public void setBlock(int row, int col, Block block) {
+        if (!isInside(row, col)) {
+            return;
+        }
+        blocks[row][col] = block;
+
+        if (block instanceof Base) {
+            base = (Base) block;
+        }
+    }
+
     // métodos
     public void initMap() {
 
@@ -58,7 +76,13 @@ public class Grid {
 
         for (int i = 0; i < rows; i++) {
             blocks[i][0] = new Steel(i, 0);
-            blocks[i][cols - 1] = new Steel(i, cols - 1);
+            blocks[i][12] = new Steel(i, 12);
+        }
+
+        for (int i = 0; i < cols; i++) {
+            blocks[0][i] = new Steel(0, i);
+            blocks[16][i] = new Steel(16, i);
+
         }
 
         blocks[5][3] = new Brick(5, 3);
@@ -71,7 +95,7 @@ public class Grid {
         blocks[12][7] = new Brick(12, 7);
 
         int baseRow = 14;
-        int baseCol = 7;
+        int baseCol = 8;
         base = new Base(baseRow, baseCol);
         blocks[baseRow][baseCol] = base;
     }
@@ -80,5 +104,45 @@ public class Grid {
         return row >= 0 && row < rows && col >= 0 && col < cols;
     }
 
+    public boolean isWalkable(int row, int col) {
+        if (!isInside(row, col)) {
+            return false;
+        }
+        Block b = blocks[row][col];
+        return b == null || b.isWalkable(); // polimorfismo, pega de cada classe do bloco chamado
+    }
+
+    public boolean canProjectilePass(int row, int col) {
+        if (!isInside(row, col))
+            return false;
+        Block b = blocks[row][col];
+        return b == null || b.isProjectilePassThrough();
+    }
+
+    public boolean handleProjectileHit(int row, int col) {
+        if (!isInside(row, col))
+            return false;
+
+        Block b = blocks[row][col];
+        if (b == null || b.isProjectilePassThrough()) {
+            return true;
+        }
+
+        if (b instanceof Brick) {
+            b.destroy();
+            blocks[row][col] = null;
+
+        } else if (b instanceof Base) {
+            b.destroy();
+            base = null;
+            blocks[row][col] = null;
+        }
+
+        return false;
+    }
+
+    public boolean isBaseDestroyed() {
+        return base == null || base.isDestroyed(); 
+    }
 
 }
