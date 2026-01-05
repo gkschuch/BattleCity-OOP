@@ -7,8 +7,8 @@ public class ArmoredTank extends EnemyTank {
 
     // Construtor do tanque blindado
     // 4 vidas, 2 de velociade e 300 pontos
-    public ArmoredTank() {
-        super(GameConfig.LIVES_ARMORED, GameConfig.SPEED_ARMORED, GameConfig.SCORE_ARMORED);
+    public ArmoredTank(double x, double y) {
+        super(x, y, GameConfig.LIVES_ARMORED, GameConfig.SPEED_ARMORED, GameConfig.SCORE_ARMORED);
     }
 
     // Implementa o comportamento do tanque blindado

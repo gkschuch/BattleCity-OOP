@@ -7,8 +7,8 @@ public class NormalTank extends EnemyTank {
 
     // Construtor do tanque normal
     // 1 vida, 5 de velocidade e 100 pontos
-    public NormalTank() {
-        super(GameConfig.LIVES_NORMAL, GameConfig.SPEED_NORMAL, GameConfig.SCORE_NORMAL);
+    public NormalTank(double x, double y) {
+        super(x, y, GameConfig.LIVES_NORMAL, GameConfig.SPEED_NORMAL, GameConfig.SCORE_NORMAL);
     }
 
     // Implementa o comportamento do tanque normal

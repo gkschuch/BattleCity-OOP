@@ -8,8 +8,8 @@ public class TankPlayer extends Tank {
     private int gunLevel; // Nível do tiro, evoluído via power-up de Estrela
 
     // Construtor do tanque do jogador
-    public TankPlayer(String name, int lives, int speed) {
-        super(lives, speed); // Chama o construtor da classe pai (Tank)
+    public TankPlayer(String name, double x, double y, int lives, double speed) {
+        super(x, y, speed, lives); // Chama o construtor da classe pai (Tank)
         this.playerName = name;
         this.score = 0; // Comeca com uma pontuacao zerada
         this.gunLevel = 1; // Nível inicial da arma

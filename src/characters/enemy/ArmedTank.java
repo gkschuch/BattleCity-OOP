@@ -7,8 +7,8 @@ public class ArmedTank extends EnemyTank {
 
     // Construtor do tanque armado
     // 2 vidas, 5 de velocidade e 200 pontos
-    public ArmedTank() {
-        super(GameConfig.LIVES_ARMED, GameConfig.SPEED_ARMED, GameConfig.SCORE_ARMED);
+    public ArmedTank(double x, double y) {
+        super(x, y, GameConfig.LIVES_ARMED, GameConfig.SPEED_ARMED, GameConfig.SCORE_ARMED);
     }
 
     // Implementa o comportamento do Tanque Armado(Aleatorio)

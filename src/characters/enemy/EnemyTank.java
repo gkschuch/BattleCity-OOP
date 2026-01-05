@@ -7,8 +7,8 @@ public abstract class EnemyTank extends Tank implements Runnable {
     private int scoreValue;
 
     // Construtor base dos tanques inimigos
-    public EnemyTank(int lives, int speed, int scoreValue) {
-        super(lives, speed); // Inicializa atributos na classe pai (Tank)
+    public EnemyTank(double x, double y, int lives, int speed, int scoreValue) {
+        super(x, y, lives, speed); // Inicializa atributos na classe pai (Tank)
         this.scoreValue = scoreValue;
     }
 
@@ -19,20 +19,20 @@ public abstract class EnemyTank extends Tank implements Runnable {
     // Controla o ciclo de vida do tanque independentemente
     @Override
     public void run() {
-        // O tanque executa enquanto nao for destruido
-        while (!isDestroyed()) {
-            updateIA();
-            move();
-            shoot();
-            try {
-                // Ajusta o tempo de atualizacao da thread de acordo
-                // com a velocidade do tanque
-                Thread.sleep(1000 / getSpeed());
-            } catch (InterruptedException e) {
-                // Encerra a thread corretamente
-                Thread.currentThread().interrupt();
+        String tankId = this.getClass().getSimpleName() + "@" + System.identityHashCode(this);
+        try {
+            while (!isDestroyed() && !Thread.currentThread().isInterrupted()) {
+                updateIA();
+                move();
+                shoot();
+                System.out.println("thread active:" + tankId + "in x:" + getX());
+                Thread.sleep(20);
             }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
+        System.out.println(">>> THREAD ENCERRADA: " + tankId);
+        onDestroy();
     }
 
     public int getScoreValue() {
