@@ -9,8 +9,8 @@ import grid.blocks.Water;
 
 public class Grid {
 
-    private int rows;         // linhas do mapa
-    private int cols;         // colunas do mapa
+    private int rows; // linhas do mapa
+    private int cols; // colunas do mapa
     private Block[][] blocks;
     private Base base;
 
@@ -60,7 +60,7 @@ public class Grid {
         }
         blocks[row][col] = block;
 
-        if (block instanceof Base) {
+        if (block != null && block.isBase()) {
             base = (Base) block;
         }
     }
@@ -124,17 +124,14 @@ public class Grid {
             return false;
 
         Block b = blocks[row][col];
+
         if (b == null || b.isProjectilePassThrough()) {
             return true;
         }
 
-        if (b instanceof Brick) {
-            b.destroy();
-            blocks[row][col] = null;
+        b.takeDamage(1);
 
-        } else if (b instanceof Base) {
-            b.destroy();
-            base = null;
+        if (b.isDestroyed()) {
             blocks[row][col] = null;
         }
 
@@ -142,7 +139,7 @@ public class Grid {
     }
 
     public boolean isBaseDestroyed() {
-        return base == null || base.isDestroyed(); 
+        return base == null || base.isDestroyed();
     }
 
 }
