@@ -7,14 +7,14 @@ import grid.blocks.Steel;
 import grid.blocks.Tree;
 import grid.blocks.Water;
 
-public class Grid {
+public final class Grid {
 
     private int rows; // linhas do mapa
     private int cols; // colunas do mapa
-    private Block[][] blocks;
+    private final Block[][] blocks;
     private Base base;
 
-    // contrutor, inicia o mapa
+    // construtor, inicia o mapa
     public Grid() {
         this.rows = 17;
         this.cols = 13;
@@ -22,7 +22,7 @@ public class Grid {
         initMap();
     }
 
-    // métodos especiais, getters e setters
+    // getters e setters
     public int getRows() {
         return rows;
     }
@@ -48,16 +48,15 @@ public class Grid {
     }
 
     public Block getBlock(int row, int col) {
-        if (!isInside(row, col)) {
+        if (!isInside(row, col))
             return null;
-        }
         return blocks[row][col];
     }
 
     public void setBlock(int row, int col, Block block) {
-        if (!isInside(row, col)) {
+        if (!isInside(row, col))
             return;
-        }
+
         blocks[row][col] = block;
 
         if (block != null && block.isBase()) {
@@ -65,35 +64,40 @@ public class Grid {
         }
     }
 
-    // métodos
+    // monta o mapa
     public void initMap() {
-
-        for (int i = 0; i < rows; i++) {
-            for (int t = 0; t < cols; t++) {
-                blocks[i][t] = null;
+        // limpa
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                blocks[r][c] = null;
             }
         }
 
-        for (int i = 0; i < rows; i++) {
-            blocks[i][0] = new Steel(i, 0);
-            blocks[i][12] = new Steel(i, 12);
+        // bordas: aço
+        for (int r = 0; r < rows; r++) {
+            blocks[r][0] = new Steel(r, 0);
+            blocks[r][cols - 1] = new Steel(r, cols - 1);
+        }
+        for (int c = 0; c < cols; c++) {
+            blocks[0][c] = new Steel(0, c);
+            blocks[rows - 1][c] = new Steel(rows - 1, c);
         }
 
-        for (int i = 0; i < cols; i++) {
-            blocks[0][i] = new Steel(0, i);
-            blocks[16][i] = new Steel(16, i);
-
-        }
-
+        // blocos internos (exemplos)
         blocks[5][3] = new Brick(5, 3);
         blocks[5][4] = new Brick(5, 4);
+
         blocks[3][6] = new Water(3, 6);
+
         blocks[4][2] = new Tree(4, 2);
         blocks[4][3] = new Tree(4, 3);
+
         blocks[13][6] = new Brick(13, 6);
         blocks[15][8] = new Brick(15, 8);
         blocks[12][7] = new Brick(12, 7);
+        blocks[15][1] = new Brick(16, 2);
 
+        // base
         int baseRow = 14;
         int baseCol = 8;
         base = new Base(baseRow, baseCol);
@@ -105,11 +109,10 @@ public class Grid {
     }
 
     public boolean isWalkable(int row, int col) {
-        if (!isInside(row, col)) {
+        if (!isInside(row, col))
             return false;
-        }
         Block b = blocks[row][col];
-        return b == null || b.isWalkable(); // polimorfismo, pega de cada classe do bloco chamado
+        return b == null || b.isWalkable();
     }
 
     public boolean canProjectilePass(int row, int col) {
@@ -119,17 +122,28 @@ public class Grid {
         return b == null || b.isProjectilePassThrough();
     }
 
+    // mantém compatibilidade com código antigo
     public boolean handleProjectileHit(int row, int col) {
+        return handleProjectileHit(row, col, 1);
+    }
+
+    // dano configurável
+    public boolean handleProjectileHit(int row, int col, int damage) {
         if (!isInside(row, col))
             return false;
 
         Block b = blocks[row][col];
 
-        if (b == null || b.isProjectilePassThrough()) {
+        // vazio ou atravessável -> continua
+        if (b == null) {
+
             return true;
         }
-
-        b.takeDamage(1);
+        if (b.isProjectilePassThrough()){
+            return true;
+        }
+        // sólido -> toma dano, projétil para
+        b.takeDamage(damage);
 
         if (b.isDestroyed()) {
             blocks[row][col] = null;
@@ -141,5 +155,4 @@ public class Grid {
     public boolean isBaseDestroyed() {
         return base == null || base.isDestroyed();
     }
-
 }
