@@ -226,8 +226,8 @@ public class App {
     static BasicProjectile createShotFromTank(double tankX, double tankY, utils.Direction tankDir) {
         projectiles.Direction pd = toProjectileDirection(tankDir);
 
-        int startX = (int) tankX + pd.getDx();
-        int startY = (int) tankY + pd.getDy();
+        int startX = (int) tankX;
+        int startY = (int) tankY;
 
         return new BasicProjectile(startX, startY, pd);
     }
