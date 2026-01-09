@@ -4,6 +4,9 @@ public final class GameConfig {
     private GameConfig() {
     }
 
+    // Configuracao do ranking
+    public static final int MAX_ENTRIES = 10;
+
     // Configuracao do Jogador
     public static final int MAX_LIVES = 7;
     public static final int MAX_GUN_LEVEL = 3;
