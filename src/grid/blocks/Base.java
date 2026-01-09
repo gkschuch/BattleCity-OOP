@@ -3,6 +3,7 @@ package grid.blocks;
 public class Base extends Block {
 
     // contrutor
+    
     public Base(int row, int col) {
         super(row, col);
     }

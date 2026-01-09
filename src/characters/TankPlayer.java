@@ -5,14 +5,15 @@ import projectiles.BasicProjectile;
 import utils.GameConfig;
 
 public class TankPlayer extends Tank {
+    // atributos
 
     private final String playerName;
     private int score;
-    private int gunLevel; 
-
+    private int gunLevel;
     private Grid grid;
-
     private BasicProjectile lastShot;
+
+    // contrutor
 
     public TankPlayer(String name, double x, double y, int lives, double speed) {
         super(x, y, speed, lives);
@@ -21,9 +22,7 @@ public class TankPlayer extends Tank {
         this.gunLevel = 1;
     }
 
-    public void setGrid(Grid grid) {
-        this.grid = grid;
-    }
+    // métodos
 
     private projectiles.Direction toProjectileDirection(utils.Direction d) {
         if (d == utils.Direction.UP)
@@ -88,6 +87,8 @@ public class TankPlayer extends Tank {
         }
     }
 
+    // métodos especiais (getters e setters)
+    
     public int getScore() {
         return score;
     }
@@ -98,5 +99,9 @@ public class TankPlayer extends Tank {
 
     public int getGunLevel() {
         return gunLevel;
+    }
+
+    public void setGrid(Grid grid) {
+        this.grid = grid;
     }
 }

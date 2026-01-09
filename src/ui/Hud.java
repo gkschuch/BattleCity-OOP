@@ -5,6 +5,8 @@ import grid.Grid;
 
 public class Hud {
 
+    // métodos
+
     public void clear() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
