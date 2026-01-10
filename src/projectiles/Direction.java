@@ -1,12 +1,11 @@
 package projectiles;
 
-// Lista fixa de valores
-// Define as 4 direções possíveis
 public enum Direction {
 
     UP, DOWN, LEFT, RIGHT;
 
-    // Retorna quanto mover no eixo X para esta direção
+    // métodos especiais (getter e setters)
+    
     public int getDx() {
         return switch (this) {
             case LEFT -> -1;
@@ -15,7 +14,6 @@ public enum Direction {
         };
     }
 
-    // Retorna quanto mover no eixo Y para esta direção
     public int getDy() {
         return switch (this) {
             case UP -> -1;
@@ -23,5 +21,4 @@ public enum Direction {
             default -> 0;
         };
     }
-    // getDx() e getDy() convertem direção para números (+1, -1, 0)
 }
