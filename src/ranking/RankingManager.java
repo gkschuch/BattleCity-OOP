@@ -1,14 +1,16 @@
 package ranking;
 
-import java.util.ArrayList;
 import java.util.List;
 import utils.GameConfig;
 
 public class RankingManager {
     private List<RankingEntry> ranking;
+    private RankingFileHandler fileHandler;
 
     public RankingManager() {
-        this.ranking = new ArrayList<>();
+        this.fileHandler = new RankingFileHandler();
+        this.ranking = fileHandler.load();
+        sortRanking();
     }
 
     public void addEntry(String name, int score) {
@@ -18,6 +20,8 @@ public class RankingManager {
         if (ranking.size() > GameConfig.MAX_ENTRIES) {
             ranking.remove(ranking.size() - 1);
         }
+
+        fileHandler.save(ranking);
     }
 
     public void sortRanking() {
