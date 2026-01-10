@@ -1,13 +1,15 @@
 package characters.enemy;
 
 import utils.Direction;
+import utils.GameConfig;
+import characters.TankPlayer;
 
 public class ArmoredTank extends EnemyTank {
 
     // contrutor
 
-    public ArmoredTank(double x, double y) {
-        super(x, y, 4, 1.0, 300);
+    public ArmoredTank(double x, double y, TankPlayer player) {
+        super(x, y, GameConfig.LIVES_ARMORED, GameConfig.SPEED_ARMORED, GameConfig.SCORE_ARMORED, player);
     }
 
     // métodos

@@ -1,13 +1,15 @@
 package characters.enemy;
 
 import utils.Direction;
+import utils.GameConfig;
+import characters.TankPlayer;
 
 public class NormalTank extends EnemyTank {
 
     // contrutor
 
-    public NormalTank(double x, double y) {
-        super(x, y, 1, 1.0, 100);
+    public NormalTank(double x, double y, TankPlayer player) {
+        super(x, y, GameConfig.LIVES_NORMAL, GameConfig.SPEED_NORMAL, GameConfig.SCORE_NORMAL, player);
     }
 
     // métodos

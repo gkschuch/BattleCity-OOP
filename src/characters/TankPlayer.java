@@ -3,6 +3,7 @@ package characters;
 import grid.Grid;
 import projectiles.BasicProjectile;
 import utils.GameConfig;
+import ranking.RankingManager;
 
 public class TankPlayer extends Tank {
     // atributos
@@ -12,14 +13,20 @@ public class TankPlayer extends Tank {
     private int gunLevel;
     private Grid grid;
     private BasicProjectile lastShot;
+    private RankingManager rankingManager;
+
 
     // contrutor
 
-    public TankPlayer(String name, double x, double y, int lives, double speed) {
+    public TankPlayer(String name, double x, double y, int lives, double speed, RankingManager rankingManager) {
+        if (lives >= GameConfig.MAX_LIVES) {
+            lives = GameConfig.MAX_LIVES;
+        }
         super(x, y, speed, lives);
         this.playerName = name;
         this.score = 0;
         this.gunLevel = 1;
+        this.rankingManager = rankingManager;
     }
 
     // métodos
@@ -61,6 +68,7 @@ public class TankPlayer extends Tank {
         System.out.println("Player " + this.getPlayerName() + " was destroyed!");
         if (this.getLives() <= 0) {
             System.out.println("GAME OVER - Final Score: " + this.getScore());
+            this.rankingManager.addEntry(this.getPlayerName(), this.getScore());
         } else {
             System.out.println("Lives remaining: " + this.getLives());
         }
