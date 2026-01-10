@@ -2,18 +2,21 @@ package grid.blocks;
 
 public class Brick extends Block {
     
-    //contrutor, cria um tijolo em tal posição
+    //contrutor
+
     public Brick(int row, int col) {
         super(row, col);
     }
 
+    // métodos
+
     @Override
-    public boolean isWalkable(){    //falso, tanque não anda por cima do tijolo
+    public boolean isWalkable(){    
         return false;
     }
 
     @Override
-    public boolean isProjectilePassThrough(){   //falso, o tiro nao passa por um tijolo
+    public boolean isProjectilePassThrough(){   
         return false;
     }
     

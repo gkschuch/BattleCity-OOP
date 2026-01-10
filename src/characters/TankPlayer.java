@@ -1,40 +1,71 @@
 package characters;
 
+import grid.Grid;
+import projectiles.BasicProjectile;
 import utils.GameConfig;
 import ranking.RankingManager;
 
 public class TankPlayer extends Tank {
-    private String playerName;
+    // atributos
+
+    private final String playerName;
     private int score;
-    private int gunLevel; // Nível do tiro, evoluído via power-up de Estrela
+    private int gunLevel;
+    private Grid grid;
+    private BasicProjectile lastShot;
     private RankingManager rankingManager;
 
-    // Construtor do tanque do jogador
+
+    // contrutor
+
     public TankPlayer(String name, double x, double y, int lives, double speed, RankingManager rankingManager) {
         if (lives >= GameConfig.MAX_LIVES) {
             lives = GameConfig.MAX_LIVES;
         }
-        super(x, y, speed, lives); // Chama o construtor da classe pai (Tank)
+        super(x, y, speed, lives);
         this.playerName = name;
-        this.score = 0; // Comeca com uma pontuacao zerada
-        this.gunLevel = 1; // Nível inicial da arma
+        this.score = 0;
+        this.gunLevel = 1;
         this.rankingManager = rankingManager;
     }
 
-    // Implementa o disparo do jogador
-    @Override
-    public void shoot() {
-        // Na versao final cria um projetil
-        System.out.println(this.getPlayerName() + " is shooting with a gun level " + this.getGunLevel());
+    // métodos
+
+    private projectiles.Direction toProjectileDirection(utils.Direction d) {
+        if (d == utils.Direction.UP)
+            return projectiles.Direction.UP;
+        if (d == utils.Direction.DOWN)
+            return projectiles.Direction.DOWN;
+        if (d == utils.Direction.LEFT)
+            return projectiles.Direction.LEFT;
+        return projectiles.Direction.RIGHT;
     }
 
-    // O metodo e chamado toda a vez que o tanque e destruido
-    // Se nao tem mais vidas manda a mensagem de game over
-    // senao mostra o numero de vidas restante
+    @Override
+    public void shoot() {
+        if (grid == null) {
+            System.out.println("TankPlayer: grid nao configurado. Use player.setGrid(grid).");
+            return;
+        }
+
+        if (lastShot != null && lastShot.isActive())
+            return;
+
+        projectiles.Direction pd = toProjectileDirection(this.getDirection());
+
+        int startX = (int) this.getX() + pd.getDx(); // coluna
+        int startY = (int) this.getY() + pd.getDy(); // linha
+
+        BasicProjectile p = new BasicProjectile(startX, startY, pd);
+        p.setGrid(grid); // ponte com o mapa
+        p.start();
+
+        lastShot = p;
+    }
+
     @Override
     public void onDestroy() {
         System.out.println("Player " + this.getPlayerName() + " was destroyed!");
-
         if (this.getLives() <= 0) {
             System.out.println("GAME OVER - Final Score: " + this.getScore());
             this.rankingManager.addEntry(this.getPlayerName(), this.getScore());
@@ -43,16 +74,12 @@ public class TankPlayer extends Tank {
         }
     }
 
-    // Incrementa a pontuacao
     public void addScore(int points) {
         this.score += points;
     }
 
-    // Metodo para adicionar vida ao jogador
-    // Se ele chegar no numero maximo de cidas ele ganha pontos a mais
     public void addLives() {
         int currentLives = this.getLives();
-
         if (currentLives < GameConfig.MAX_LIVES) {
             this.setLives(currentLives + 1);
             System.out.println("Extra life obtained! Current lives: " + this.getLives());
@@ -62,17 +89,14 @@ public class TankPlayer extends Tank {
         }
     }
 
-    // Implementa a mecanica da estrela(Power up)
-    // Atualiza a arma
     public void upgradeGun() {
-        // So consegue upar ate o nivel 3
-        if (this.gunLevel <= GameConfig.MAX_GUN_LEVEL) {
+        if (this.gunLevel < GameConfig.MAX_GUN_LEVEL) {
             this.gunLevel++;
         }
     }
 
-    // Getters
-
+    // métodos especiais (getters e setters)
+    
     public int getScore() {
         return score;
     }
@@ -83,5 +107,9 @@ public class TankPlayer extends Tank {
 
     public int getGunLevel() {
         return gunLevel;
+    }
+
+    public void setGrid(Grid grid) {
+        this.grid = grid;
     }
 }

@@ -2,18 +2,21 @@ package grid.blocks;
 
 public class Water extends Block {
     
-    //contrutor, cria um tijolo em tal posição
+    //contrutor
+
     public Water(int row, int col) {
         super(row, col);
     }
 
+    // métodos
+    
     @Override
-    public boolean isWalkable(){    //falso, tanque não anda por cima da água
+    public boolean isWalkable(){    
         return false;
     }
 
     @Override
-    public boolean isProjectilePassThrough(){   //true, o tiro pode passar a água
+    public boolean isProjectilePassThrough(){   
         return true;
     } 
 }
