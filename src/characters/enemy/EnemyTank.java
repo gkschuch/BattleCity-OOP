@@ -1,15 +1,18 @@
 package characters.enemy;
 
 import characters.Tank;
+import characters.TankPlayer;
 
 public abstract class EnemyTank extends Tank implements Runnable {
     // Valor dos pontos de cada tanque ao ser destruido
     private int scoreValue;
+    private TankPlayer player;
 
     // Construtor base dos tanques inimigos
-    public EnemyTank(double x, double y, int lives, int speed, int scoreValue) {
+    public EnemyTank(double x, double y, int lives, int speed, int scoreValue, TankPlayer player) {
         super(x, y, lives, speed); // Inicializa atributos na classe pai (Tank)
         this.scoreValue = scoreValue;
+        this.player = player;
     }
 
     // Metodo abstrato para determinar o comportamento de cada tanque
@@ -44,5 +47,6 @@ public abstract class EnemyTank extends Tank implements Runnable {
     @Override
     public void onDestroy() {
         System.out.println("Enemy destroyed. Score: " + this.getScoreValue());
+        player.addScore(this.getScoreValue());
     }
 }

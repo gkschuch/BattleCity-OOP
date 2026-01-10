@@ -2,13 +2,14 @@ package characters.enemy;
 
 import utils.Direction;
 import utils.GameConfig;
+import characters.TankPlayer;
 
 public class FastTank extends EnemyTank {
 
     // Construtor do tanque rapido
     // 2 vidas, 10 de velocidade e 150 pontos
-    public FastTank(double x, double y) {
-        super(x, y, GameConfig.LIVES_FAST, GameConfig.SPEED_FAST, GameConfig.SCORE_FAST);
+    public FastTank(double x, double y, TankPlayer player) {
+        super(x, y, GameConfig.LIVES_FAST, GameConfig.SPEED_FAST, GameConfig.SCORE_FAST, player);
     }
 
     // Implementa o comportamento do tanque rapido

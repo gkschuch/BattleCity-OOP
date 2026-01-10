@@ -2,13 +2,14 @@ package characters.enemy;
 
 import utils.Direction;
 import utils.GameConfig;
+import characters.TankPlayer;
 
 public class ArmoredTank extends EnemyTank {
 
     // Construtor do tanque blindado
     // 4 vidas, 2 de velociade e 300 pontos
-    public ArmoredTank(double x, double y) {
-        super(x, y, GameConfig.LIVES_ARMORED, GameConfig.SPEED_ARMORED, GameConfig.SCORE_ARMORED);
+    public ArmoredTank(double x, double y, TankPlayer player) {
+        super(x, y, GameConfig.LIVES_ARMORED, GameConfig.SPEED_ARMORED, GameConfig.SCORE_ARMORED, player);
     }
 
     // Implementa o comportamento do tanque blindado

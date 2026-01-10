@@ -1,18 +1,21 @@
 package characters;
 
 import utils.GameConfig;
+import ranking.RankingManager;
 
 public class TankPlayer extends Tank {
     private String playerName;
     private int score;
     private int gunLevel; // Nível do tiro, evoluído via power-up de Estrela
+    private RankingManager rankingManager;
 
     // Construtor do tanque do jogador
-    public TankPlayer(String name, double x, double y, int lives, double speed) {
+    public TankPlayer(String name, double x, double y, int lives, double speed, RankingManager rankingManager) {
         super(x, y, speed, lives); // Chama o construtor da classe pai (Tank)
         this.playerName = name;
         this.score = 0; // Comeca com uma pontuacao zerada
         this.gunLevel = 1; // Nível inicial da arma
+        this.rankingManager = rankingManager;
     }
 
     // Implementa o disparo do jogador
@@ -31,6 +34,7 @@ public class TankPlayer extends Tank {
 
         if (this.getLives() <= 0) {
             System.out.println("GAME OVER - Final Score: " + this.getScore());
+            this.rankingManager.addEntry(this.getPlayerName(), this.getScore());
         } else {
             System.out.println("Lives remaining: " + this.getLives());
         }
