@@ -11,6 +11,9 @@ public class TankPlayer extends Tank {
 
     // Construtor do tanque do jogador
     public TankPlayer(String name, double x, double y, int lives, double speed, RankingManager rankingManager) {
+        if (lives >= GameConfig.MAX_LIVES) {
+            lives = GameConfig.MAX_LIVES;
+        }
         super(x, y, speed, lives); // Chama o construtor da classe pai (Tank)
         this.playerName = name;
         this.score = 0; // Comeca com uma pontuacao zerada
