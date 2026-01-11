@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import ui.Hud;
+import ranking.RankingManager;
 
 public class Game {
     // atributos
@@ -27,8 +28,9 @@ public class Game {
 
     public void run() {
         Grid grid = new Grid();
+        RankingManager rankingManager = new RankingManager();
 
-        TankPlayer player = new TankPlayer("Player1", 1, 1, 20, 1.0);
+        TankPlayer player = new TankPlayer("Player1", 1, 1, 20, 1.0, rankingManager);
         player.setX(1);
         player.setY(1);
         player.setDirection(utils.Direction.UP);
@@ -36,10 +38,10 @@ public class Game {
         Hud hud = new Hud();
 
         List<EnemyTank> enemies = new ArrayList<>();
-        enemies.add(new NormalTank(10, 2));
-        enemies.add(new FastTank(2, 2));
-        enemies.add(new ArmedTank(10, 14));
-        enemies.add(new ArmoredTank(2, 14));
+        enemies.add(new NormalTank(10, 2, player));
+        enemies.add(new FastTank(2, 2, player));
+        enemies.add(new ArmedTank(10, 14, player));
+        enemies.add(new ArmoredTank(2, 14, player));
 
         List<Shot> shots = Collections.synchronizedList(new ArrayList<>());
 
