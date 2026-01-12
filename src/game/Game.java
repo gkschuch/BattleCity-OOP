@@ -1,5 +1,6 @@
 package game;
 
+
 import characters.TankPlayer;
 import characters.enemy.ArmedTank;
 import characters.enemy.ArmoredTank;
@@ -10,12 +11,16 @@ import grid.Grid;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Scanner;
+import ranking.RankingManager;
 import ui.Hud;
+
 
 public class Game {
     // atributos
 
     private final InputHandler input;
+
 
     // construtor
 
@@ -23,51 +28,76 @@ public class Game {
         this.input = new InputHandler();
     }
 
+
     // métodos
 
-    public void run() {
-        Grid grid = new Grid();
+    private void spawnEnemiesByDifficulty(int difficulty, List<EnemyTank> enemies, TankPlayer player) {
+        enemies.clear();
 
-        TankPlayer player = new TankPlayer("Player1", 1, 1, 20, 1.0);
+        switch (difficulty) {
+            case 1 -> {
+                enemies.add(new NormalTank(10, 2, player));
+                enemies.add(new FastTank(2, 2, player));
+            }
+            case 2 -> {
+                enemies.add(new NormalTank(10, 2, player));
+                enemies.add(new FastTank(2, 2, player));
+                enemies.add(new ArmedTank(10, 14, player));
+            }
+            default -> {
+                enemies.add(new NormalTank(10, 2, player));
+                enemies.add(new FastTank(2, 2, player));
+                enemies.add(new ArmedTank(10, 14, player));
+                enemies.add(new ArmoredTank(2, 14, player));
+            }
+        }
+    }
+
+
+    public void run() {
+        Scanner sc = new Scanner(System.in);
+        GameSetup setup = new GameSetup(sc);
+
+        String playerName = setup.askPlayerName();
+        int difficulty = setup.askDifficulty();
+
+        Grid grid = new Grid();
+        Hud hud = new Hud();
+
+        RankingManager rankingManager = new RankingManager();
+
+        TankPlayer player = new TankPlayer(playerName, 1, 1, 20, 1.0, rankingManager);
         player.setX(1);
         player.setY(1);
         player.setDirection(utils.Direction.UP);
 
-        Hud hud = new Hud();
-
         List<EnemyTank> enemies = new ArrayList<>();
-        enemies.add(new NormalTank(10, 2));
-        enemies.add(new FastTank(2, 2));
-        enemies.add(new ArmedTank(10, 14));
-        enemies.add(new ArmoredTank(2, 14));
+        spawnEnemiesByDifficulty(difficulty, enemies, player);
 
         List<Shot> shots = Collections.synchronizedList(new ArrayList<>());
 
         input.start();
 
         long tick = 0;
+        boolean ended = false;
 
-        while (input.getRunning()) {
+        while (input.getRunning() && !ended) {
             tick++;
 
             char cmd = input.pollCommand();
 
-            if (cmd == 'q')
+            if (cmd == 'q') {
+                System.out.println("\nSaindo...");
                 break;
+            }
 
             switch (cmd) {
                 case 'w' -> MovementSystem.tryMovePlayer(grid, player, utils.Direction.UP, enemies);
-
                 case 's' -> MovementSystem.tryMovePlayer(grid, player, utils.Direction.DOWN, enemies);
-
                 case 'a' -> MovementSystem.tryMovePlayer(grid, player, utils.Direction.LEFT, enemies);
-
                 case 'd' -> MovementSystem.tryMovePlayer(grid, player, utils.Direction.RIGHT, enemies);
-
                 case 'f' -> ShotSystem.playerShoot(shots, grid, player);
-
-                default -> {
-                }
+                default -> { }
             }
 
             if (tick % 4 == 0) {
@@ -87,7 +117,7 @@ public class Game {
 
             ShotSystem.enemiesRandomShoot(shots, grid, enemies, 0.04);
 
-            game.CollisionSystem.handleShotsVsTanks(shots, enemies, player);
+            CollisionSystem.handleShotsVsTanks(shots, enemies, player);
 
             ShotSystem.cleanupShots(shots);
 
@@ -95,17 +125,17 @@ public class Game {
 
             if (grid.isBaseDestroyed()) {
                 System.out.println("\nGAME OVER: a base foi destruída.");
-                break;
+                ended = true;
             }
 
             if (player.getLives() <= 0) {
                 System.out.println("\nGAME OVER: você ficou sem vidas.");
-                break;
+                ended = true;
             }
 
             if (MovementSystem.countAlive(enemies) == 0) {
                 System.out.println("\nVOCE VENCEU: todos os inimigos foram destruídos.");
-                break;
+                ended = true;
             }
 
             try {
@@ -118,5 +148,10 @@ public class Game {
 
         input.stop();
         ShotSystem.stopAllShots(shots);
+
+        rankingManager.addEntry(player.getPlayerName(), player.getScore());
+        rankingManager.printRanking();
     }
+
+
 }

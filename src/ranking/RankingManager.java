@@ -4,9 +4,13 @@ import java.util.List;
 import utils.GameConfig;
 
 public class RankingManager {
+    // atributos
+
     private List<RankingEntry> ranking;
     private RankingFileHandler fileHandler;
 
+    // métodos
+    
     public RankingManager() {
         this.fileHandler = new RankingFileHandler();
         this.ranking = fileHandler.load();

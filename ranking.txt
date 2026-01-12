@@ -1,0 +1,5 @@
+Player1;1500
+tiago;500
+tiago;0
+gabriel;0
+Player1;0

@@ -5,8 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RankingFileHandler {
+    // atributo
+
     private static final String FILEMANE = "ranking.txt";
 
+    // métodos
+    
     public void save(List<RankingEntry> ranking) {
         try (PrintWriter writer = new PrintWriter(new FileWriter(FILEMANE))) {
             for (RankingEntry entry : ranking)

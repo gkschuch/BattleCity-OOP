@@ -1,8 +1,8 @@
 package characters.enemy;
 
+import characters.TankPlayer;
 import utils.Direction;
 import utils.GameConfig;
-import characters.TankPlayer;
 
 public class ArmoredTank extends EnemyTank {
 
