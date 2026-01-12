@@ -1,30 +1,30 @@
 package projectiles;
 
 public class BasicProjectile extends Projectiles {
-    // atributos
+	// atributos
 
-    private final int damage = 1;
+	private final int damage = 1;
 
-    // contrutor
+	// contrutor
 
-    public BasicProjectile(int startX, int startY, Direction direction) {
-        super(startX, startY, direction);
-    }
+	public BasicProjectile(int startX, int startY, Direction direction) {
+		super(startX, startY, direction);
+	}
 
-    // métodos
+	// métodos
 
-    @Override
-    protected void move() {
-        x += direction.getDx();
-        y += direction.getDy();
-    }
+	@Override
+	protected void move() {
+		x += direction.getDx();
+		y += direction.getDy();
+	}
 
-    @Override
-    public int getDamage() {
-        return damage;
-    }
+	@Override
+	public int getDamage() {
+		return damage;
+	}
 
-    public boolean checkCollision(int targetX, int targetY) {
-        return this.x == targetX && this.y == targetY;
-    }
+	public boolean checkCollision(int targetX, int targetY) {
+		return this.x == targetX && this.y == targetY;
+	}
 }

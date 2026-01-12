@@ -2,25 +2,25 @@ package grid.blocks;
 
 public class Base extends Block {
 
-    // contrutor
-    
-    public Base(int row, int col) {
-        super(row, col);
-    }
+	// contrutor
 
-    // métodos
-    @Override
-    public boolean isWalkable() {
-        return false;
-    }
+	public Base(int row, int col) {
+		super(row, col);
+	}
 
-    @Override
-    public boolean isProjectilePassThrough() {
-        return false;
-    }
+	// métodos
+	@Override
+	public boolean isWalkable() {
+		return false;
+	}
 
-    @Override
-    public boolean isBase() {
-        return true;
-    }
+	@Override
+	public boolean isProjectilePassThrough() {
+		return false;
+	}
+
+	@Override
+	public boolean isBase() {
+		return true;
+	}
 }

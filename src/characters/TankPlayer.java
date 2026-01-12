@@ -3,111 +3,96 @@ package characters;
 import grid.Grid;
 import projectiles.BasicProjectile;
 import ranking.RankingManager;
+import utils.Direction_enum;
 import utils.GameConfig;
 
 public class TankPlayer extends Tank {
-    // atributos
+	// atributos
 
-    private final String playerName;
-    private int score;
-    private int gunLevel;
-    private Grid grid;
-    private BasicProjectile lastShot;
-    private RankingManager rankingManager;
+	private final String          playerName;
+	private       int             score;
+	private       int             gunLevel;
+	private       Grid            grid;
+	private       BasicProjectile lastShot;
+	private       RankingManager  rankingManager;
 
-    // contrutor
+	// contrutor
 
-    public TankPlayer(String name, double x, double y, int lives, double speed, RankingManager rankingManager) {
-        if (lives >= GameConfig.MAX_LIVES) {
-            lives = GameConfig.MAX_LIVES;
-        }
-        super(x, y, speed, lives);
-        this.playerName = name;
-        this.score = 0;
-        this.gunLevel = 1;
-        this.rankingManager = rankingManager;
-    }
+	public TankPlayer(String name, double x, double y, int lives, double speed, RankingManager rankingManager) {
+		super(x, y, speed, (lives >= GameConfig.MAX_LIVES) ? GameConfig.MAX_LIVES : lives);
+		this.playerName     = name;
+		this.score          = 0;
+		this.gunLevel       = 1;
+		this.rankingManager = rankingManager;
+	}
 
-    // métodos
+	// métodos
 
-    private projectiles.Direction toProjectileDirection(utils.Direction d) {
-        if (d == utils.Direction.UP)
-            return projectiles.Direction.UP;
-        if (d == utils.Direction.DOWN)
-            return projectiles.Direction.DOWN;
-        if (d == utils.Direction.LEFT)
-            return projectiles.Direction.LEFT;
-        return projectiles.Direction.RIGHT;
-    }
+	@Override
+	public void updateBehavior() {
+		// comportamento automático do player na thread (pode ser vazio
+		// ou usado para regenerar escudo/recarregar tiro) [cite: 102]
+	}
 
-    @Override
-    public void shoot() {
-        if (grid == null) {
-            System.out.println("TankPlayer: grid nao configurado. Use player.setGrid(grid).");
-            return;
-        }
+	@Override
+	public void shoot() {
+		if ( grid == null ) {
+			System.out.println("TankPlayer: grid nao configurado. Use player.setGrid(grid).");
+			return;
+		}
 
-        if (lastShot != null && lastShot.isActive())
-            return;
+		if ( lastShot != null && lastShot.isActive() )
+			return;
 
-        projectiles.Direction pd = toProjectileDirection(this.getDirection());
+		projectiles.Direction pd = toProjectileDirection(this.getDirection());
 
-        int startX = (int) this.getX() + pd.getDx(); // coluna
-        int startY = (int) this.getY() + pd.getDy(); // linha
+		int startX = ( int ) this.getX() + pd.getDx();
+		int startY = ( int ) this.getY() + pd.getDy();
 
-        BasicProjectile p = new BasicProjectile(startX, startY, pd);
-        p.setGrid(grid); // ponte com o mapa
-        p.start();
+		BasicProjectile p = new BasicProjectile(startX, startY, pd);
+		p.setGrid(grid);
+		p.start();
 
-        lastShot = p;
-    }
+		lastShot = p;
+	}
 
-    @Override
-    public void onDestroy() {
-        System.out.println("Player " + this.getPlayerName() + " was destroyed!");
-        if (this.getLives() <= 0) {
-            System.out.println("GAME OVER - Final Score: " + this.getScore());
-        } else {
-            System.out.println("Lives remaining: " + this.getLives());
-        }
-    }
+	private projectiles.Direction toProjectileDirection(Direction_enum d) {
+		if ( d == Direction_enum.UP )
+			return projectiles.Direction.UP;
+		if ( d == Direction_enum.DOWN )
+			return projectiles.Direction.DOWN;
+		if ( d == Direction_enum.LEFT )
+			return projectiles.Direction.LEFT;
+		return projectiles.Direction.RIGHT;
+	}
 
-    public void addScore(int points) {
-        this.score += points;
-    }
+	@Override
+	public void onDestroy() {
+		System.out.println("Player " + this.getPlayerName() + " was destroyed!");
+		if ( this.getLives() <= 0 ) {
+			System.out.println("GAME OVER - Final Score: " + this.getScore());
+		} else {
+			System.out.println("Lives remaining: " + this.getLives());
+		}
+	}
 
-    public void addLives() {
-        int currentLives = this.getLives();
-        if (currentLives < GameConfig.MAX_LIVES) {
-            this.setLives(currentLives + 1);
-            System.out.println("Extra life obtained! Current lives: " + this.getLives());
-        } else {
-            this.addScore(GameConfig.SCORE_EXTRA_LIFE);
-            System.out.println("Max lives reached! Bonus points awarded instead.");
-        }
-    }
+	public void addScore(int points) {
+		this.score += points;
+	}
 
-    public void upgradeGun() {
-        if (this.gunLevel < GameConfig.MAX_GUN_LEVEL) {
-            this.gunLevel++;
-        }
-    }
+	public int getScore() {
+		return score;
+	}
 
-    // métodos especiais (getters e setters)
+	public String getPlayerName() {
+		return playerName;
+	}
 
-    public int getScore() {
-        return score;
-    }
+	public int getGunLevel() {
+		return gunLevel;
+	}
 
-    public String getPlayerName() {
-        return playerName;
-    }
-
-    public int getGunLevel() {
-        return gunLevel;
-    }
-
-    public void setGrid(Grid grid) {
-        this.grid = grid;
-    }
+	public void setGrid(Grid grid) {
+		this.grid = grid;
+	}
 }

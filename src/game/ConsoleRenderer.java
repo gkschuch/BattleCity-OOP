@@ -4,90 +4,91 @@ import characters.TankPlayer;
 import characters.enemy.EnemyTank;
 import grid.Grid;
 import grid.blocks.Block;
+
 import java.util.List;
+
 import ui.Hud;
 
 public class ConsoleRenderer {
-    // construtor
+	// construtor
 
-    private ConsoleRenderer() {
-    }
+	private ConsoleRenderer() {
+	}
 
-    // métodos
+	// métodos
 
-    public static void render(Hud hud, Grid grid, TankPlayer player, List<EnemyTank> enemies, List<Shot> shots) {
-        hud.clear();
-        hud.draw(player, grid);
+	public static void render(Hud hud, Grid grid, TankPlayer player, List<EnemyTank> enemies, List<Shot> shots) {
+		hud.clear();
+		hud.draw(player, grid);
 
-        System.out
-                .println("Legenda: P=player E=inimigo *=tiro X=base x=base destruida T=arvore ~=agua #=parede .=vazio");
-        drawWorld(grid, player, enemies, shots);
-    }
+		System.out.println("Legenda: P=player E=inimigo *=tiro X=base x=base destruida T=arvore ~=agua #=parede .=vazio");
+		drawWorld(grid, player, enemies, shots);
+	}
 
-    public static void drawWorld(Grid grid, TankPlayer player, List<EnemyTank> enemies, List<Shot> shots) {
-        int pr = (int) player.getY();
-        int pc = (int) player.getX();
+	public static void drawWorld(Grid grid, TankPlayer player, List<EnemyTank> enemies, List<Shot> shots) {
+		int pr = ( int ) player.getY();
+		int pc = ( int ) player.getX();
 
-        for (int r = 0; r < grid.getRows(); r++) {
-            StringBuilder sb = new StringBuilder();
+		for ( int r = 0; r < grid.getRows(); r++ ) {
+			StringBuilder sb = new StringBuilder();
 
-            for (int c = 0; c < grid.getCols(); c++) {
-                char ch;
+			for ( int c = 0; c < grid.getCols(); c++ ) {
+				char ch;
 
-                if (r == pr && c == pc)
-                    ch = 'P';
-                else if (MovementSystem.isEnemyAt(enemies, r, c))
-                    ch = 'E';
-                else if (isShotAt(shots, r, c))
-                    ch = '*';
-                else
-                    ch = charFor(grid.getBlock(r, c));
+				if ( r == pr && c == pc )
+					ch = 'P';
+				else if ( MovementSystem.isEnemyAt(enemies, r, c) )
+					ch = 'E';
+				else if ( isShotAt(shots, r, c) )
+					ch = '*';
+				else
+					ch = charFor(grid.getBlock(r, c));
 
-                sb.append(ch);
-            }
+				sb.append(ch);
+			}
 
-            System.out.println(sb.toString());
-        }
-    }
+			System.out.println(sb.toString());
+		}
+	}
 
-    private static boolean isShotAt(List<Shot> shots, int row, int col) {
-        synchronized (shots) {
-            for (int i = 0; i < shots.size(); i++) {
-                Shot s = shots.get(i);
+	private static boolean isShotAt(List<Shot> shots, int row, int col) {
+		synchronized ( shots ) {
+			for ( int i = 0; i < shots.size(); i++ ) {
+				Shot s = shots.get(i);
 
-                if (s == null || s.p == null)
-                    continue;
+				if ( s == null || s.p == null )
+					continue;
 
-                if (s.p.isActive() && s.p.getY() == row && s.p.getX() == col)
-                    return true;
-            }
-        }
+				if ( s.p.isActive() && s.p.getY() == row && s.p.getX() == col )
+					return true;
+			}
+		}
 
-        return false;
-    }
+		return false;
+	}
 
-    private static char charFor(Block b) {
-        if (b == null)
-            return '.';
+	private static char charFor(Block b) {
+		if ( b == null )
+			return '.';
 
-        if (b.isBase()) {
-            if (b.isDestroyed())
-                return 'x';
-            else
-                return 'X';
-        }
+		if ( b.isBase() ) {
+			if ( b.isDestroyed() )
+				return 'x';
+			else
+				return 'X';
+		}
 
-        if (b.isWalkable()) {
-            if (b.isProjectilePassThrough())
-                return 'T';
-            else
-                return '.';
-        } else {
-            if (b.isProjectilePassThrough())
-                return '~';
-            else
-                return '#';
-        }
-    }
+		if ( b.isWalkable() ) {
+			if ( b.isProjectilePassThrough() )
+				return 'T';
+			else
+				return '.';
+		} else {
+			if ( b.isProjectilePassThrough() )
+				return '~';
+			else
+				return '#';
+		}
+	}
 
 }

@@ -1,25 +1,25 @@
 package ranking;
 
 public class RankingEntry {
-    //atributos
+	//atributos
 
-    private String name;
-    private int score;
+	private String name;
+	private int    score;
 
-    // contrutor
+	// contrutor
 
-    public RankingEntry(String name, int score) {
-        this.name = name;
-        this.score = score;
-    }
+	public RankingEntry(String name, int score) {
+		this.name  = name;
+		this.score = score;
+	}
 
-    // métodos especiais (getters e setters)
-    
-    public String getName() {
-        return name;
-    }
+	// métodos especiais (getters e setters)
 
-    public int getScore() {
-        return score;
-    }
+	public String getName() {
+		return name;
+	}
+
+	public int getScore() {
+		return score;
+	}
 }

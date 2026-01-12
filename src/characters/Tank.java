@@ -2,105 +2,142 @@ package characters;
 
 import utils.*;
 
-public abstract class Tank implements Movable, Destructible {
-    // atributos
-    
-    private volatile int lives;
-    private double speed;
-    private Direction direction;
-    private boolean invulnerable;
-    private double x, y;
+public abstract class Tank implements Movable, Destructible, Runnable {
+	// atributos
 
-    //contrutor
+	private int       lives;
+	private double         speed;
+	private Direction_enum direction;
+	private boolean        invulnerable;
+	private double    x, y;
+	protected          Thread  thread;
+	protected volatile boolean active = false;
 
-    public Tank(double x, double y, double speed, int lives) {
-        this.x = x;
-        this.y = y;
-        this.speed = speed;
-        this.direction = Direction.UP;
-        this.lives = lives;
-    }
+	// contrutor
 
-    // métodos
+	public Tank(double x, double y, double speed, int lives) {
+		this.x         = x;
+		this.y         = y;
+		this.speed     = speed;
+		this.direction = Direction_enum.UP;
+		this.lives     = lives;
+	}
 
-    public abstract void shoot();
+	// métodos
 
-    @Override
-    public void takeDamage(int damage) {
-        if (!invulnerable) {
-            int newLives = this.getLives() - damage;
-            this.setLives(Math.max(0, newLives));
+	public abstract void shoot();
 
-            if (isDestroyed()) {
-                this.onDestroy();
-            }
-        }
-    }
+	public abstract void updateBehavior();
 
-    @Override
-    public void move() {
-        this.x += direction.getDx() * speed;
-        this.y += direction.getDy() * speed;
+	public void start() {
+		if ( !active ) {
+			active = true;
+			thread = new Thread(this);
+			thread.start();
+		}
+	}
 
-        System.out.println("Moving to: " + x + ", " + y);
-    }
+	public void stop() {
+		active = false;
+		if ( thread != null ) {
+			thread.interrupt();
+		}
+	}
 
-    @Override
-    public boolean isDestroyed() {
-        return this.lives <= 0;
-    }
+	@Override
+	public void run() {
+		while ( active && !isDestroyed() ) {
+			updateBehavior();
 
-    public void toggleInvulnerability() {
-        this.invulnerable = !this.invulnerable;
-    }
+			try {
+				long sleepTime = ( long ) (1000 / Math.max(1, speed));
+				Thread.sleep(sleepTime);
+			} catch ( InterruptedException e ) {
+				Thread.currentThread().interrupt();
+				break;
+			}
+		}
+		active = false;
+	}
 
-    public boolean isInvulnerable() {
-        return invulnerable;
-    }
+	@Override
+	public void takeDamage(int damage) {
+		if ( !invulnerable ) {
+			int newLives = this.getLives() - damage;
+			this.setLives(Math.max(0, newLives));
 
-    // métodos especiais (getters e setters)
+			if ( isDestroyed() ) {
+				this.onDestroy();
+				this.stop();
+			}
+		}
+	}
 
-    public int getLives() {
-        return lives;
-    }
+	@Override
+	public void move() {
+		this.x += direction.getDx() * speed;
+		this.y += direction.getDy() * speed;
 
-    public double getSpeed() {
-        return speed;
-    }
+		System.out.println("Moving to: " + x + ", " + y);
+	}
 
-    public Direction getDirection() {
-        return direction;
-    }
+	@Override
+	public boolean isDestroyed() {
+		return this.lives <= 0;
+	}
 
-    public void setLives(int lives) {
-        this.lives = lives;
-    }
+	public void toggleInvulnerability() {
+		this.invulnerable = !this.invulnerable;
+	}
 
-    public void setSpeed(double speed) {
-        this.speed = speed;
-    }
+	public boolean isInvulnerable() {
+		return invulnerable;
+	}
 
-    public void setDirection(Direction direction) {
-        this.direction = direction;
-    }
 
-    @Override
-    public double getX() {
-        return x;
-    }
+	// métodos especiais (getters e setters)
 
-    @Override
-    public double getY() {
-        return y;
-    }
+	public int getLives() {
+		return lives;
+	}
 
-    @Override
-    public void setX(double x) {
-        this.x = x;
-    }
+	public double getSpeed() {
+		return speed;
+	}
 
-    @Override
-    public void setY(double y) {
-        this.y = y;
-    }
+	public Direction_enum getDirection() {
+		return direction;
+	}
+
+	public void setLives(int lives) {
+		this.lives = lives;
+	}
+
+	public void setSpeed(double speed) {
+		this.speed = speed;
+	}
+
+	public void setDirection(Direction_enum direction) {
+		this.direction = direction;
+	}
+
+	@Override
+	public double getX() {
+		return x;
+	}
+
+	@Override
+	public double getY() {
+		return y;
+	}
+
+	@Override
+	public void setX(double x) {
+		this.x = x;
+	}
+
+	@Override
+	public void setY(double y) {
+		this.y = y;
+	}
 }
