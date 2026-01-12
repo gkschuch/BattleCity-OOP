@@ -1,34 +1,35 @@
 package game;
 
 import projectiles.BasicProjectile;
+import utils.Direction_enum;
 
 public class ShotFactory {
-    // construtor
+	// construtor
 
-    private ShotFactory() {
-    }
+	private ShotFactory() {
+	}
 
-    // métodos
+	// métodos
 
-    public static BasicProjectile createShotFromTank(double tankX, double tankY, utils.Direction tankDir) {
-        projectiles.Direction pd = toProjectileDirection(tankDir);
+	public static BasicProjectile createShotFromTank(double tankX, double tankY, Direction_enum tankDir) {
+		projectiles.Direction pd = toProjectileDirection(tankDir);
 
-        int startX = (int) tankX;
-        int startY = (int) tankY;
+		int startX = ( int ) tankX;
+		int startY = ( int ) tankY;
 
-        return new BasicProjectile(startX, startY, pd);
-    }
+		return new BasicProjectile(startX, startY, pd);
+	}
 
-    public static projectiles.Direction toProjectileDirection(utils.Direction d) {
-        if (d == null)
-            return projectiles.Direction.RIGHT;
+	public static projectiles.Direction toProjectileDirection(Direction_enum d) {
+		if ( d == null )
+			return projectiles.Direction.RIGHT;
 
-        return switch (d) {
-            case UP -> projectiles.Direction.UP;
-            case DOWN -> projectiles.Direction.DOWN;
-            case LEFT -> projectiles.Direction.LEFT;
-            default -> projectiles.Direction.RIGHT;
-        };
-    }
+		return switch ( d ) {
+			case UP -> projectiles.Direction.UP;
+			case DOWN -> projectiles.Direction.DOWN;
+			case LEFT -> projectiles.Direction.LEFT;
+			default -> projectiles.Direction.RIGHT;
+		};
+	}
 
 }

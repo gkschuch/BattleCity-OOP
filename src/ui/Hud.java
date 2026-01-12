@@ -5,27 +5,23 @@ import grid.Grid;
 
 public class Hud {
 
-    // métodos
+	// métodos
 
-    public void clear() {
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-    }
+	public void clear() {
+		System.out.print("\033[H\033[2J");
+		System.out.flush();
+	}
 
-    public void draw(TankPlayer p, Grid g) {
-        System.out.println(
-                "Player: " + p.getPlayerName()
-                        + " | Vidas: " + p.getLives()
-                        + " | Score: " + p.getScore()
-                        + " | Arma: " + p.getGunLevel());
+	public void draw(TankPlayer p, Grid g) {
+		System.out.println("Player: " + p.getPlayerName() + " | Vidas: " + p.getLives() + " | Score: " + p.getScore() + " | Arma: " + p.getGunLevel());
 
-        if (g.isBaseDestroyed()) {
-            System.out.println("Base: DESTRUIDA");
-        } else {
-            System.out.println("Base: OK");
-        }
+		if ( g.isBaseDestroyed() ) {
+			System.out.println("Base: DESTRUIDA");
+		} else {
+			System.out.println("Base: OK");
+		}
 
-        System.out.println("Controles: W/A/S/D mover | F atirar | Q sair");
-        System.out.println();
-    }
+		System.out.println("Controles: W/A/S/D mover | F atirar | Q sair");
+		System.out.println();
+	}
 }

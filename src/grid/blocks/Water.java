@@ -1,22 +1,22 @@
 package grid.blocks;
 
 public class Water extends Block {
-    
-    //contrutor
 
-    public Water(int row, int col) {
-        super(row, col);
-    }
+	//contrutor
 
-    // métodos
-    
-    @Override
-    public boolean isWalkable(){    
-        return false;
-    }
+	public Water(int row, int col) {
+		super(row, col);
+	}
 
-    @Override
-    public boolean isProjectilePassThrough(){   
-        return true;
-    } 
+	// métodos
+
+	@Override
+	public boolean isWalkable() {
+		return false;
+	}
+
+	@Override
+	public boolean isProjectilePassThrough() {
+		return true;
+	}
 }

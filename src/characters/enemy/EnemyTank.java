@@ -5,28 +5,33 @@ import characters.TankPlayer;
 
 public abstract class EnemyTank extends Tank {
 
-    private final int scoreValue;
-    private TankPlayer player;
+	private final int        scoreValue;
+	private       TankPlayer player;
 
-    // contrutor
+	// contrutor
 
-    public EnemyTank(double x, double y, int lives, int speed, int scoreValue, TankPlayer player) {
-        super(x, y, speed, lives);
-        this.scoreValue = scoreValue;
-        this.player = player;
-    }
+	public EnemyTank(double x, double y, int lives, int speed, int scoreValue, TankPlayer player) {
+		super(x, y, speed, lives);
+		this.scoreValue = scoreValue;
+		this.player     = player;
+	}
 
-    // métodos
+	// métodos
 
-    public abstract void updateIA();
+	@Override
+	public void updateBehavior() {
+		this.updateIA();
+	}
 
-    public int getScoreValue() {
-        return scoreValue;
-    }
+	public abstract void updateIA();
 
-    @Override
-    public void onDestroy() {
-        System.out.println("Enemy destroyed. Score: " + this.getScoreValue());
-        player.addScore(this.getScoreValue());
-    }
+	public int getScoreValue() {
+		return scoreValue;
+	}
+
+	@Override
+	public void onDestroy() {
+		System.out.println("Enemy destroyed. Score: " + this.getScoreValue());
+		player.addScore(this.getScoreValue());
+	}
 }

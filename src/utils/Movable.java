@@ -2,16 +2,16 @@ package utils;
 
 public interface Movable {
 
-    // metodo para realizar o movimento
-    void move();
-    
-    // metodos para acessar as coordenadas
-    double getX();
+	// metodo para realizar o movimento
+	void move();
 
-    double getY();
+	// metodos para acessar as coordenadas
+	double getX();
 
-    // metoos para modificar a coordenada
-    void setX(double x);
+	double getY();
 
-    void setY(double y);
+	// metoos para modificar a coordenada
+	void setX(double x);
+
+	void setY(double y);
 }

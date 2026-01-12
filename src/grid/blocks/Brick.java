@@ -1,23 +1,22 @@
 package grid.blocks;
 
 public class Brick extends Block {
-    
-    //contrutor
 
-    public Brick(int row, int col) {
-        super(row, col);
-    }
+	//contrutor
 
-    // métodos
+	public Brick(int row, int col) {
+		super(row, col);
+	}
 
-    @Override
-    public boolean isWalkable(){    
-        return false;
-    }
+	// métodos
 
-    @Override
-    public boolean isProjectilePassThrough(){   
-        return false;
-    }
-    
+	@Override
+	public boolean isWalkable() {
+		return false;
+	}
+
+	@Override
+	public boolean isProjectilePassThrough() {
+		return false;
+	}
 }
