@@ -5,22 +5,22 @@ import utils.*;
 public abstract class Tank implements Movable, Destructible, Runnable {
 	// atributos
 
-	private int       lives;
-	private double         speed;
-	private Direction_enum direction;
-	private boolean        invulnerable;
-	private double    x, y;
-	protected          Thread  thread;
+	private int lives;
+	private double speed;
+	private Direction direction;
+	private boolean invulnerable;
+	private double x, y;
+	protected Thread thread;
 	protected volatile boolean active = false;
 
 	// contrutor
 
 	public Tank(double x, double y, double speed, int lives) {
-		this.x         = x;
-		this.y         = y;
-		this.speed     = speed;
-		this.direction = Direction_enum.UP;
-		this.lives     = lives;
+		this.x = x;
+		this.y = y;
+		this.speed = speed;
+		this.direction = Direction.UP;
+		this.lives = lives;
 	}
 
 	// métodos
@@ -30,7 +30,7 @@ public abstract class Tank implements Movable, Destructible, Runnable {
 	public abstract void updateBehavior();
 
 	public void start() {
-		if ( !active ) {
+		if (!active) {
 			active = true;
 			thread = new Thread(this);
 			thread.start();
@@ -39,20 +39,20 @@ public abstract class Tank implements Movable, Destructible, Runnable {
 
 	public void stop() {
 		active = false;
-		if ( thread != null ) {
+		if (thread != null) {
 			thread.interrupt();
 		}
 	}
 
 	@Override
 	public void run() {
-		while ( active && !isDestroyed() ) {
+		while (active && !isDestroyed()) {
 			updateBehavior();
 
 			try {
-				long sleepTime = ( long ) (1000 / Math.max(1, speed));
+				long sleepTime = (long) (1000 / Math.max(1, speed));
 				Thread.sleep(sleepTime);
-			} catch ( InterruptedException e ) {
+			} catch (InterruptedException e) {
 				Thread.currentThread().interrupt();
 				break;
 			}
@@ -62,11 +62,11 @@ public abstract class Tank implements Movable, Destructible, Runnable {
 
 	@Override
 	public void takeDamage(int damage) {
-		if ( !invulnerable ) {
+		if (!invulnerable) {
 			int newLives = this.getLives() - damage;
 			this.setLives(Math.max(0, newLives));
 
-			if ( isDestroyed() ) {
+			if (isDestroyed()) {
 				this.onDestroy();
 				this.stop();
 			}
@@ -94,7 +94,6 @@ public abstract class Tank implements Movable, Destructible, Runnable {
 		return invulnerable;
 	}
 
-
 	// métodos especiais (getters e setters)
 
 	public int getLives() {
@@ -105,7 +104,7 @@ public abstract class Tank implements Movable, Destructible, Runnable {
 		return speed;
 	}
 
-	public Direction_enum getDirection() {
+	public Direction getDirection() {
 		return direction;
 	}
 
@@ -117,7 +116,7 @@ public abstract class Tank implements Movable, Destructible, Runnable {
 		this.speed = speed;
 	}
 
-	public void setDirection(Direction_enum direction) {
+	public void setDirection(Direction direction) {
 		this.direction = direction;
 	}
 
@@ -131,12 +130,10 @@ public abstract class Tank implements Movable, Destructible, Runnable {
 		return y;
 	}
 
-	@Override
 	public void setX(double x) {
 		this.x = x;
 	}
 
-	@Override
 	public void setY(double y) {
 		this.y = y;
 	}

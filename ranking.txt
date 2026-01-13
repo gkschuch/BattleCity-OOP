@@ -1,8 +1,8 @@
 Player1;1500
 tiago;900
 tiago;500
+Gabriel;500
 titiago;200
-Player1;0
 tiago;0
 a;0
 oi;0

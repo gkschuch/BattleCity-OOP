@@ -2,28 +2,25 @@ package characters;
 
 import grid.Grid;
 import projectiles.BasicProjectile;
-import ranking.RankingManager;
-import utils.Direction_enum;
+import utils.Direction;
 import utils.GameConfig;
 
 public class TankPlayer extends Tank {
 	// atributos
 
-	private final String          playerName;
-	private       int             score;
-	private       int             gunLevel;
-	private       Grid            grid;
-	private       BasicProjectile lastShot;
-	private       RankingManager  rankingManager;
+	private final String playerName;
+	private int score;
+	private int gunLevel;
+	private Grid grid;
+	private BasicProjectile lastShot;
 
 	// contrutor
 
-	public TankPlayer(String name, double x, double y, int lives, double speed, RankingManager rankingManager) {
+	public TankPlayer(String name, double x, double y, int lives, double speed) {
 		super(x, y, speed, (lives >= GameConfig.MAX_LIVES) ? GameConfig.MAX_LIVES : lives);
-		this.playerName     = name;
-		this.score          = 0;
-		this.gunLevel       = 1;
-		this.rankingManager = rankingManager;
+		this.playerName = name;
+		this.score = 0;
+		this.gunLevel = 1;
 	}
 
 	// métodos
@@ -36,18 +33,18 @@ public class TankPlayer extends Tank {
 
 	@Override
 	public void shoot() {
-		if ( grid == null ) {
+		if (grid == null) {
 			System.out.println("TankPlayer: grid nao configurado. Use player.setGrid(grid).");
 			return;
 		}
 
-		if ( lastShot != null && lastShot.isActive() )
+		if (lastShot != null && lastShot.isActive())
 			return;
 
-		projectiles.Direction pd = toProjectileDirection(this.getDirection());
+		Direction pd = this.getDirection();
 
-		int startX = ( int ) this.getX() + pd.getDx();
-		int startY = ( int ) this.getY() + pd.getDy();
+		int startX = (int) this.getX() + pd.getDx();
+		int startY = (int) this.getY() + pd.getDy();
 
 		BasicProjectile p = new BasicProjectile(startX, startY, pd);
 		p.setGrid(grid);
@@ -56,20 +53,10 @@ public class TankPlayer extends Tank {
 		lastShot = p;
 	}
 
-	private projectiles.Direction toProjectileDirection(Direction_enum d) {
-		if ( d == Direction_enum.UP )
-			return projectiles.Direction.UP;
-		if ( d == Direction_enum.DOWN )
-			return projectiles.Direction.DOWN;
-		if ( d == Direction_enum.LEFT )
-			return projectiles.Direction.LEFT;
-		return projectiles.Direction.RIGHT;
-	}
-
 	@Override
 	public void onDestroy() {
 		System.out.println("Player " + this.getPlayerName() + " was destroyed!");
-		if ( this.getLives() <= 0 ) {
+		if (this.getLives() <= 0) {
 			System.out.println("GAME OVER - Final Score: " + this.getScore());
 		} else {
 			System.out.println("Lives remaining: " + this.getLives());

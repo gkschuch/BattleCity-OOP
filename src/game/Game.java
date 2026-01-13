@@ -1,11 +1,7 @@
 package game;
 
 import characters.TankPlayer;
-import characters.enemy.ArmedTank;
-import characters.enemy.ArmoredTank;
-import characters.enemy.EnemyTank;
-import characters.enemy.FastTank;
-import characters.enemy.NormalTank;
+import characters.enemy.*;
 import grid.Grid;
 
 import java.util.ArrayList;
@@ -15,7 +11,7 @@ import java.util.Scanner;
 
 import ranking.RankingManager;
 import ui.Hud;
-import utils.Direction_enum;
+import utils.Direction;
 
 public class Game {
 	// atributos
@@ -38,7 +34,7 @@ public class Game {
 	private void spawnEnemiesByDifficulty(int difficulty, List<EnemyTank> enemies, TankPlayer player) {
 		enemies.clear();
 
-		switch ( difficulty ) {
+		switch (difficulty) {
 			case 1 -> {
 				enemies.add(new NormalTank(10, 2, player));
 				enemies.add(new FastTank(2, 2, player));
@@ -57,29 +53,29 @@ public class Game {
 		}
 
 		// começa a thread de cada inimigo assim que eles nascem
-		for ( EnemyTank e : enemies ) {
-			if ( e != null ) {
+		for (EnemyTank e : enemies) {
+			if (e != null) {
 				e.start();
 			}
 		}
 	}
 
 	public void run() {
-		Scanner   sc    = new Scanner(System.in);
+		Scanner sc = new Scanner(System.in);
 		GameSetup setup = new GameSetup(sc);
 
 		String playerName = setup.askPlayerName();
-		int    difficulty = setup.askDifficulty();
+		int difficulty = setup.askDifficulty();
 
 		Grid grid = new Grid();
-		Hud  hud  = new Hud();
+		Hud hud = new Hud();
 
 		RankingManager rankingManager = new RankingManager();
 
-		TankPlayer player = new TankPlayer(playerName, 1, 1, 20, 1.0, rankingManager);
+		TankPlayer player = new TankPlayer(playerName, 1, 1, 20, 1.0);
 		player.setX(1);
 		player.setY(1);
-		player.setDirection(Direction_enum.UP);
+		player.setDirection(Direction.UP);
 
 		// inicia a thread do jogador
 		player.start();
@@ -91,35 +87,34 @@ public class Game {
 
 		input.start();
 
-		long    tick  = 0;
+		long tick = 0;
 		boolean ended = false;
 
-
-		while ( input.getRunning() && !ended ) {
+		while (input.getRunning() && !ended) {
 			tick++;
 
 			char cmd = input.pollCommand();
 
-			if ( cmd == 'q' ) {
+			if (cmd == 'q') {
 				System.out.println("\nSaindo...");
 				break;
 			}
 
-			switch ( cmd ) {
+			switch (cmd) {
 				case 'w' -> {
 
-					MovementSystem.tryMovePlayer(grid, player, Direction_enum.UP, enemies);
+					MovementSystem.tryMovePlayer(grid, player, Direction.UP, enemies);
 
 				}
 				case 's' -> {
-					MovementSystem.tryMovePlayer(grid, player, Direction_enum.DOWN, enemies);
+					MovementSystem.tryMovePlayer(grid, player, Direction.DOWN, enemies);
 
 				}
 				case 'a' -> {
-					MovementSystem.tryMovePlayer(grid, player, Direction_enum.LEFT, enemies);
+					MovementSystem.tryMovePlayer(grid, player, Direction.LEFT, enemies);
 				}
 				case 'd' -> {
-					MovementSystem.tryMovePlayer(grid, player, Direction_enum.RIGHT, enemies);
+					MovementSystem.tryMovePlayer(grid, player, Direction.RIGHT, enemies);
 				}
 				case 'f' -> {
 					ShotSystem.playerShoot(shots, grid, player);
@@ -128,12 +123,11 @@ public class Game {
 				}
 			}
 
-
-			if ( tick % 4 == 0 ) {
-				for ( int i = 0; i < enemies.size(); i++ ) {
+			if (tick % 4 == 0) {
+				for (int i = 0; i < enemies.size(); i++) {
 					EnemyTank e = enemies.get(i);
 
-					if ( e == null || e.isDestroyed() )
+					if (e == null || e.isDestroyed())
 						continue;
 
 					MovementSystem.stepEnemy(grid, e, player, enemies);
@@ -149,25 +143,24 @@ public class Game {
 			clearScreen();
 			ConsoleRenderer.render(hud, grid, player, enemies, shots);
 
-
-			if ( grid.isBaseDestroyed() ) {
+			if (grid.isBaseDestroyed()) {
 				System.out.println("\nGAME OVER: a base foi destruída.");
 				ended = true;
 			}
 
-			if ( player.getLives() <= 0 ) {
+			if (player.getLives() <= 0) {
 				System.out.println("\nGAME OVER: você ficou sem vidas.");
 				ended = true;
 			}
 
-			if ( MovementSystem.countAlive(enemies) == 0 ) {
+			if (MovementSystem.countAlive(enemies) == 0) {
 				System.out.println("\nVOCE VENCEU: todos os inimigos foram destruídos.");
 				ended = true;
 			}
 
 			try {
 				Thread.sleep(80);
-			} catch ( InterruptedException ex ) {
+			} catch (InterruptedException ex) {
 				Thread.currentThread().interrupt();
 				break;
 			}
@@ -177,8 +170,8 @@ public class Game {
 		ShotSystem.stopAllShots(shots);
 
 		player.stop();
-		for ( EnemyTank e : enemies ) {
-			if ( e != null ) {
+		for (EnemyTank e : enemies) {
+			if (e != null) {
 				e.stop();
 			}
 		}

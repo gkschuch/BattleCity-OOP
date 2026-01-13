@@ -2,7 +2,7 @@ package utils;
 
 import java.util.Random;
 
-public enum Direction_enum {
+public enum Direction {
 	UP(0, -1), DOWN(0, 1), LEFT(-1, 0), RIGHT(1, 0);
 
 	// atributos
@@ -11,15 +11,15 @@ public enum Direction_enum {
 
 	// contrutor
 
-	Direction_enum(int dx, int dy) {
+	Direction(int dx, int dy) {
 		this.dx = dx;
 		this.dy = dy;
 	}
 
 	// métodos
 
-	public static Direction_enum getRandom() {
-		Direction_enum[] values = Direction_enum.values();
+	public static Direction getRandom() {
+		Direction[] values = Direction.values();
 		return values[new Random().nextInt(values.length)];
 	}
 

@@ -1,7 +1,7 @@
 package characters.enemy;
 
 import characters.TankPlayer;
-import utils.Direction_enum;
+import utils.Direction;
 import utils.GameConfig;
 
 public class ArmoredTank extends EnemyTank {
@@ -16,8 +16,8 @@ public class ArmoredTank extends EnemyTank {
 
 	@Override
 	public void updateIA() {
-		if ( Math.random() > 0.5 )
-			setDirection(Direction_enum.getRandom());
+		if (Math.random() > 0.5)
+			setDirection(Direction.getRandom());
 	}
 
 	@Override

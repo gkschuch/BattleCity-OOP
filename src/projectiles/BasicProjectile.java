@@ -1,5 +1,7 @@
 package projectiles;
 
+import utils.Direction;
+
 public class BasicProjectile extends Projectiles {
 	// atributos
 

@@ -10,8 +10,4 @@ public interface Movable {
 
 	double getY();
 
-	// metoos para modificar a coordenada
-	void setX(double x);
-
-	void setY(double y);
 }

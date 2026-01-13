@@ -1,22 +1,23 @@
 package projectiles;
 
 import grid.Grid;
+import utils.Direction;
 
 public abstract class Projectiles implements Runnable {
 	// atributos
 
-	protected int       x;
-	protected int       y;
+	protected int x;
+	protected int y;
 	protected Direction direction;
-	protected boolean   active = true;
-	protected Thread    thread;
-	protected Grid      grid;
+	protected boolean active = true;
+	protected Thread thread;
+	protected Grid grid;
 
 	// contrutor
 
 	public Projectiles(int startX, int startY, Direction direction) {
-		this.x         = startX;
-		this.y         = startY;
+		this.x = startX;
+		this.y = startY;
 		this.direction = direction;
 	}
 
@@ -31,17 +32,17 @@ public abstract class Projectiles implements Runnable {
 
 	@Override
 	public void run() {
-		while ( active ) {
+		while (active) {
 			move();
 
-			if ( grid != null ) {
-				if ( !grid.isInside(y, x) ) {
+			if (grid != null) {
+				if (!grid.isInside(y, x)) {
 					deactivate();
 					break;
 				}
 
 				boolean canContinue = grid.handleProjectileHit(y, x, getDamage());
-				if ( !canContinue ) {
+				if (!canContinue) {
 					deactivate();
 					break;
 				}
@@ -49,7 +50,7 @@ public abstract class Projectiles implements Runnable {
 
 			try {
 				Thread.sleep(200);
-			} catch ( InterruptedException e ) {
+			} catch (InterruptedException e) {
 				break;
 			}
 		}
@@ -57,7 +58,7 @@ public abstract class Projectiles implements Runnable {
 
 	public void deactivate() {
 		active = false;
-		if ( thread != null )
+		if (thread != null)
 			thread.interrupt();
 	}
 

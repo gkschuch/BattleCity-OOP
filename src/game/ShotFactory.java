@@ -1,7 +1,7 @@
 package game;
 
 import projectiles.BasicProjectile;
-import utils.Direction_enum;
+import utils.Direction;
 
 public class ShotFactory {
 	// construtor
@@ -11,25 +11,13 @@ public class ShotFactory {
 
 	// métodos
 
-	public static BasicProjectile createShotFromTank(double tankX, double tankY, Direction_enum tankDir) {
-		projectiles.Direction pd = toProjectileDirection(tankDir);
+	public static BasicProjectile createShotFromTank(double tankX, double tankY, Direction tankDir) {
+		Direction pd = tankDir;
 
-		int startX = ( int ) tankX;
-		int startY = ( int ) tankY;
+		int startX = (int) tankX;
+		int startY = (int) tankY;
 
 		return new BasicProjectile(startX, startY, pd);
-	}
-
-	public static projectiles.Direction toProjectileDirection(Direction_enum d) {
-		if ( d == null )
-			return projectiles.Direction.RIGHT;
-
-		return switch ( d ) {
-			case UP -> projectiles.Direction.UP;
-			case DOWN -> projectiles.Direction.DOWN;
-			case LEFT -> projectiles.Direction.LEFT;
-			default -> projectiles.Direction.RIGHT;
-		};
 	}
 
 }
