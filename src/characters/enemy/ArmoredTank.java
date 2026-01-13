@@ -16,11 +16,16 @@ public class ArmoredTank extends EnemyTank {
 
 	@Override
 	public void updateIA() {
+		if (this.isFrozen())
+			return;
+
 		if (Math.random() > 0.5)
 			setDirection(Direction.getRandom());
 	}
 
 	@Override
 	public void shoot() {
+		if (this.isFrozen())
+			return;
 	}
 }

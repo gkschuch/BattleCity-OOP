@@ -31,5 +31,6 @@ public final class GameConfig {
 
 	// POWER-UPS
 	public static final int HELMET_DURATION_MS = 8000;
+	public static final int CLOCK_DURATION_MS = 7000;
 
 }
