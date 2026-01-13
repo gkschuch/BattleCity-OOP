@@ -27,7 +27,6 @@ public class FreezeEnemiesTask implements Runnable {
                 enemyTank.setFrozen(false);
             }
         }
-
     }
 
 }
