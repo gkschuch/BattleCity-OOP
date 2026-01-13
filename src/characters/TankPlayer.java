@@ -67,6 +67,12 @@ public class TankPlayer extends Tank {
 		this.score += points;
 	}
 
+	public void upgradeGunLevel() {
+		if (this.getGunLevel() < GameConfig.MAX_GUN_LEVEL) {
+			this.gunLevel++;
+		}
+	}
+
 	public int getScore() {
 		return score;
 	}
