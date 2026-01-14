@@ -63,7 +63,10 @@ public class MovementSystem {
 			player.takeDamage(1);
 			return;
 		}
-
+		Block targetBlock = grid.getBlock(newRow, newCol);
+		if (targetBlock != null) {
+			targetBlock.onEnemyStep(e, grid);
+		}
 		e.setY(newRow);
 		e.setX(newCol);
 	}

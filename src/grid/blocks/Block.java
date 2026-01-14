@@ -1,10 +1,11 @@
 package grid.blocks;
 
 import characters.TankPlayer;
+import characters.enemy.EnemyTank;
 import grid.Grid;
 import utils.Destructible;
 
-public class Block implements Destructible {
+public abstract class Block implements Destructible {
 	protected int row;
 	protected int col;
 	protected int health;
@@ -45,6 +46,10 @@ public class Block implements Destructible {
 
 	public void onPlayerStep(TankPlayer player, Grid grid) {
 		// Todos os blocos nao fazem nada, so os powerUps
+	}
+
+	public void onEnemyStep(EnemyTank enemy, Grid grid) {
+		// Todos os blocos nao fazem nada
 	}
 
 	public boolean isWalkable() {
