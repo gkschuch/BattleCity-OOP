@@ -10,7 +10,6 @@ public class LifePowerUp extends PowerUp {
     @Override
     public void applyEffect(TankPlayer player) {
         player.addLives();
-        this.deactivate();
     }
 
 }

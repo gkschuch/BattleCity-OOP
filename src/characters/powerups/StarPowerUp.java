@@ -10,7 +10,6 @@ public class StarPowerUp extends PowerUp {
     @Override
     public void applyEffect(TankPlayer player) {
         player.upgradeGunLevel();
-        deactivate();
     }
 
 }

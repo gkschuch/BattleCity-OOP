@@ -1,4 +1,4 @@
-package characters.powerups;
+package characters.powerups.clock;
 
 import characters.enemy.EnemyTank;
 import utils.GameConfig;

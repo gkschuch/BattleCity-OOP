@@ -15,8 +15,6 @@ public class BombPowerUp extends PowerUp {
 
     @Override
     public void applyEffect(TankPlayer player) {
-        this.deactivate();
-
         for (EnemyTank enemyTank : enemies) {
             enemyTank.takeDamage(99999);
         }

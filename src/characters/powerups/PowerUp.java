@@ -1,39 +1,31 @@
 package characters.powerups;
 
 import characters.TankPlayer;
+import grid.Grid;
+import grid.blocks.Block;
 import utils.Collectable;
 
-public abstract class PowerUp implements Collectable {
-    private int x;
-    private int y;
-    private boolean active;
+public abstract class PowerUp extends Block implements Collectable {
     private PowerUpType powerUpType;
 
     public PowerUp(int x, int y, PowerUpType powerUpType) {
-        this.x = x;
-        this.y = y;
-        this.active = true;
+        super(x, y);
         this.powerUpType = powerUpType;
     }
 
     @Override
+    public boolean isWalkable() {
+        return true;
+    }
+
+    @Override
+    public void onPlayerStep(TankPlayer player, Grid grid) {
+        this.applyEffect(player);
+        grid.setBlock(this.getRow(), this.getCol(), null);
+    }
+
+    @Override
     public abstract void applyEffect(TankPlayer player);
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void deactivate() {
-        this.active = false;
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
 
     public PowerUpType getPowerUpType() {
         return powerUpType;

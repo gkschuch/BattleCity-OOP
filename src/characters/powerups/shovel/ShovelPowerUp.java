@@ -15,8 +15,6 @@ public class ShovelPowerUp extends PowerUp {
 
     @Override
     public void applyEffect(TankPlayer player) {
-        this.deactivate();
-
         Thread shovelThread = new Thread(new ShovelTask(grid));
         shovelThread.start();
     }

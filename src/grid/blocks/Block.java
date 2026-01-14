@@ -1,11 +1,13 @@
 package grid.blocks;
 
+import characters.TankPlayer;
+import grid.Grid;
 import utils.Destructible;
 
 public class Block implements Destructible {
-	protected int     row;
-	protected int     col;
-	protected int     health;
+	protected int row;
+	protected int col;
+	protected int health;
 	protected boolean destroyed; // diz se o bloco existe
 
 	// construtor
@@ -13,7 +15,7 @@ public class Block implements Destructible {
 	public Block(int row, int col) {
 		this.setRow(row);
 		this.setCol(col);
-		this.health    = 1;
+		this.health = 1;
 		this.destroyed = false;
 	}
 
@@ -21,11 +23,11 @@ public class Block implements Destructible {
 
 	@Override
 	public void takeDamage(int damage) {
-		if ( destroyed )
+		if (destroyed)
 			return;
 
 		this.health -= damage;
-		if ( this.health <= 0 ) {
+		if (this.health <= 0) {
 			onDestroy();
 		}
 	}
@@ -39,6 +41,10 @@ public class Block implements Destructible {
 	public void onDestroy() {
 		this.destroyed = true;
 		System.out.println("Block destroyed in: [" + row + "," + col + "]");
+	}
+
+	public void onPlayerStep(TankPlayer player, Grid grid) {
+		// Todos os blocos nao fazem nada, so os powerUps
 	}
 
 	public boolean isWalkable() {

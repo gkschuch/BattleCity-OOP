@@ -1,7 +1,9 @@
-package characters.powerups;
+package characters.powerups.clock;
 
 import characters.TankPlayer;
 import characters.enemy.EnemyTank;
+import characters.powerups.PowerUp;
+import characters.powerups.PowerUpType;
 import java.util.List;
 
 public class ClockPowerUp extends PowerUp {
@@ -14,8 +16,6 @@ public class ClockPowerUp extends PowerUp {
 
     @Override
     public void applyEffect(TankPlayer player) {
-        this.deactivate();
-
         Thread freezeThread = new Thread(new FreezeEnemiesTask(enemies));
         freezeThread.start();
     }
