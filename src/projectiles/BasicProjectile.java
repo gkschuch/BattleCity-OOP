@@ -3,14 +3,10 @@ package projectiles;
 import utils.Direction;
 
 public class BasicProjectile extends Projectiles {
-	// atributos
-
-	private final int damage = 1;
-
 	// contrutor
 
-	public BasicProjectile(int startX, int startY, Direction direction) {
-		super(startX, startY, direction);
+	public BasicProjectile(int startX, int startY, Direction direction, int damage) {
+		super(startX, startY, direction, damage);
 	}
 
 	// métodos

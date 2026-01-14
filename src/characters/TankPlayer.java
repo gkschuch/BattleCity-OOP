@@ -46,7 +46,7 @@ public class TankPlayer extends Tank {
 		int startX = (int) this.getX() + pd.getDx();
 		int startY = (int) this.getY() + pd.getDy();
 
-		BasicProjectile p = new BasicProjectile(startX, startY, pd);
+		BasicProjectile p = new BasicProjectile(startX, startY, pd, getGunLevel());
 		p.setGrid(grid);
 		p.start();
 

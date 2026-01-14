@@ -8,6 +8,7 @@ public abstract class Projectiles implements Runnable {
 
 	protected int x;
 	protected int y;
+	protected int damage;
 	protected Direction direction;
 	protected boolean active = true;
 	protected Thread thread;
@@ -15,10 +16,11 @@ public abstract class Projectiles implements Runnable {
 
 	// contrutor
 
-	public Projectiles(int startX, int startY, Direction direction) {
+	public Projectiles(int startX, int startY, Direction direction, int damage) {
 		this.x = startX;
 		this.y = startY;
 		this.direction = direction;
+		this.damage = damage;
 	}
 
 	// métodos
@@ -69,7 +71,7 @@ public abstract class Projectiles implements Runnable {
 	}
 
 	public int getDamage() {
-		return 1;
+		return damage;
 	}
 
 	public int getX() {
