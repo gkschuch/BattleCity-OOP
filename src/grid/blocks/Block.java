@@ -1,11 +1,14 @@
 package grid.blocks;
 
+import characters.TankPlayer;
+import characters.enemy.EnemyTank;
+import grid.Grid;
 import utils.Destructible;
 
-public class Block implements Destructible {
-	protected int     row;
-	protected int     col;
-	protected int     health;
+public abstract class Block implements Destructible {
+	protected int row;
+	protected int col;
+	protected int health;
 	protected boolean destroyed; // diz se o bloco existe
 
 	// construtor
@@ -13,7 +16,7 @@ public class Block implements Destructible {
 	public Block(int row, int col) {
 		this.setRow(row);
 		this.setCol(col);
-		this.health    = 1;
+		this.health = 1;
 		this.destroyed = false;
 	}
 
@@ -21,11 +24,11 @@ public class Block implements Destructible {
 
 	@Override
 	public void takeDamage(int damage) {
-		if ( destroyed )
+		if (destroyed)
 			return;
 
 		this.health -= damage;
-		if ( this.health <= 0 ) {
+		if (this.health <= 0) {
 			onDestroy();
 		}
 	}
@@ -41,6 +44,14 @@ public class Block implements Destructible {
 		System.out.println("Block destroyed in: [" + row + "," + col + "]");
 	}
 
+	public void onPlayerStep(TankPlayer player, Grid grid) {
+		// Todos os blocos nao fazem nada, so os powerUps
+	}
+
+	public void onEnemyStep(EnemyTank enemy, Grid grid) {
+		// Todos os blocos nao fazem nada
+	}
+
 	public boolean isWalkable() {
 		return false;
 	}
@@ -54,6 +65,15 @@ public class Block implements Destructible {
 	}
 
 	// métodos especiais (getters e setters)
+
+	public char getIcon() {
+		if (this.isBase())
+			return this.isDestroyed() ? 'x' : 'X';
+		if (this.isWalkable())
+			return this.isProjectilePassThrough() ? 'T' : '.';
+		else
+			return this.isProjectilePassThrough() ? '~' : '#';
+	}
 
 	public int getRow() {
 		return this.row;

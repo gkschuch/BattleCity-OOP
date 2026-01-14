@@ -62,15 +62,16 @@ public abstract class Tank implements Movable, Destructible, Runnable {
 
 	@Override
 	public void takeDamage(int damage) {
-		if (!invulnerable) {
-			int newLives = this.getLives() - damage;
-			this.setLives(Math.max(0, newLives));
+		if (this.invulnerable)
+			return;
+		int newLives = this.getLives() - damage;
+		this.setLives(Math.max(0, newLives));
 
-			if (isDestroyed()) {
-				this.onDestroy();
-				this.stop();
-			}
-		}
+		if (!this.isDestroyed())
+			return;
+
+		this.onDestroy();
+		this.stop();
 	}
 
 	@Override
@@ -84,10 +85,6 @@ public abstract class Tank implements Movable, Destructible, Runnable {
 	@Override
 	public boolean isDestroyed() {
 		return this.lives <= 0;
-	}
-
-	public void toggleInvulnerability() {
-		this.invulnerable = !this.invulnerable;
 	}
 
 	public boolean isInvulnerable() {
@@ -118,6 +115,10 @@ public abstract class Tank implements Movable, Destructible, Runnable {
 
 	public void setDirection(Direction direction) {
 		this.direction = direction;
+	}
+
+	public void setInvulnerable(boolean invulnerable) {
+		this.invulnerable = invulnerable;
 	}
 
 	@Override

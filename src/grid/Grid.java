@@ -1,25 +1,20 @@
 package grid;
 
-import grid.blocks.Base;
-import grid.blocks.Block;
-import grid.blocks.Brick;
-import grid.blocks.Steel;
-import grid.blocks.Tree;
-import grid.blocks.Water;
+import grid.blocks.*;
 
 public final class Grid {
 	// atributos
 
-	private       int       rows;
-	private       int       cols;
+	private int rows;
+	private int cols;
 	private final Block[][] blocks;
-	private       Base      base;
+	private Base base;
 
 	// construtor
 
 	public Grid() {
-		this.rows   = 17;
-		this.cols   = 13;
+		this.rows = 17;
+		this.cols = 13;
 		this.blocks = new Block[rows][cols];
 		initMap();
 	}
@@ -27,18 +22,18 @@ public final class Grid {
 	// métodos
 
 	public void initMap() {
-		for ( int r = 0; r < rows; r++ ) {
-			for ( int c = 0; c < cols; c++ ) {
+		for (int r = 0; r < rows; r++) {
+			for (int c = 0; c < cols; c++) {
 				blocks[r][c] = null;
 			}
 		}
 
-		for ( int r = 0; r < rows; r++ ) {
-			blocks[r][0]        = new Steel(r, 0);
+		for (int r = 0; r < rows; r++) {
+			blocks[r][0] = new Steel(r, 0);
 			blocks[r][cols - 1] = new Steel(r, cols - 1);
 		}
-		for ( int c = 0; c < cols; c++ ) {
-			blocks[0][c]        = new Steel(0, c);
+		for (int c = 0; c < cols; c++) {
+			blocks[0][c] = new Steel(0, c);
 			blocks[rows - 1][c] = new Steel(rows - 1, c);
 		}
 
@@ -57,15 +52,14 @@ public final class Grid {
 		blocks[12][7] = new Brick(12, 7);
 		blocks[15][1] = new Brick(16, 2);
 
-		// fechando a base com metal pra testes
-		blocks[13][8] = new Steel(13, 8);
-		blocks[15][8] = new Steel(15, 8);
-		blocks[14][7] = new Steel(14, 7);
-		blocks[14][9] = new Steel(14, 9);
+		blocks[13][8] = new Brick(13, 8);
+		blocks[15][8] = new Brick(15, 8);
+		blocks[14][7] = new Brick(14, 7);
+		blocks[14][9] = new Brick(14, 9);
 
 		int baseRow = 14;
 		int baseCol = 8;
-		base                     = new Base(baseRow, baseCol);
+		base = new Base(baseRow, baseCol);
 		blocks[baseRow][baseCol] = base;
 	}
 
@@ -74,14 +68,14 @@ public final class Grid {
 	}
 
 	public boolean isWalkable(int row, int col) {
-		if ( !isInside(row, col) )
+		if (!isInside(row, col))
 			return false;
 		Block b = blocks[row][col];
 		return b == null || b.isWalkable();
 	}
 
 	public boolean canProjectilePass(int row, int col) {
-		if ( !isInside(row, col) )
+		if (!isInside(row, col))
 			return false;
 		Block b = blocks[row][col];
 		return b == null || b.isProjectilePassThrough();
@@ -94,22 +88,22 @@ public final class Grid {
 
 	// dano configurável
 	public boolean handleProjectileHit(int row, int col, int damage) {
-		if ( !isInside(row, col) )
+		if (!isInside(row, col))
 			return false;
 
 		Block b = blocks[row][col];
 
 		// vazio ou atravessável -> continua
-		if ( b == null ) {
+		if (b == null) {
 			return true;
 		}
-		if ( b.isProjectilePassThrough() ) {
+		if (b.isProjectilePassThrough()) {
 			return true;
 		}
 		// sólido -> toma dano, projétil para
 		b.takeDamage(damage);
 
-		if ( b.isDestroyed() ) {
+		if (b.isDestroyed()) {
 			blocks[row][col] = null;
 		}
 
@@ -145,20 +139,20 @@ public final class Grid {
 		this.base = base;
 	}
 
-	public Block getBlock(int row, int col) {
-		if ( !isInside(row, col) )
+	public synchronized Block getBlock(int row, int col) {
+		if (!isInside(row, col))
 			return null;
 		return blocks[row][col];
 	}
 
-	public void setBlock(int row, int col, Block block) {
-		if ( !isInside(row, col) )
+	public synchronized void setBlock(int row, int col, Block block) {
+		if (!isInside(row, col))
 			return;
 
 		blocks[row][col] = block;
 
-		if ( block != null && block.isBase() ) {
-			base = ( Base ) block;
+		if (block != null && block.isBase()) {
+			base = (Base) block;
 		}
 	}
 }

@@ -17,7 +17,7 @@ public class ShotFactory {
 		int startX = (int) tankX;
 		int startY = (int) tankY;
 
-		return new BasicProjectile(startX, startY, pd);
+		return new BasicProjectile(startX, startY, pd, 1);
 	}
 
 }

@@ -3,6 +3,7 @@ package game;
 import characters.TankPlayer;
 import characters.enemy.EnemyTank;
 import grid.Grid;
+import grid.blocks.Block;
 import utils.Direction;
 
 import java.util.List;
@@ -33,6 +34,11 @@ public class MovementSystem {
 		if (isEnemyAt(enemies, newRow, newCol))
 			return;
 
+		Block targetBlock = grid.getBlock(newRow, newCol);
+		if (targetBlock != null) {
+			targetBlock.onPlayerStep(p, grid);
+		}
+
 		p.setY(newRow);
 		p.setX(newCol);
 	}
@@ -57,7 +63,10 @@ public class MovementSystem {
 			player.takeDamage(1);
 			return;
 		}
-
+		Block targetBlock = grid.getBlock(newRow, newCol);
+		if (targetBlock != null) {
+			targetBlock.onEnemyStep(e, grid);
+		}
 		e.setY(newRow);
 		e.setX(newCol);
 	}

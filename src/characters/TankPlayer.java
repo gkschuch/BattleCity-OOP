@@ -46,7 +46,7 @@ public class TankPlayer extends Tank {
 		int startX = (int) this.getX() + pd.getDx();
 		int startY = (int) this.getY() + pd.getDy();
 
-		BasicProjectile p = new BasicProjectile(startX, startY, pd);
+		BasicProjectile p = new BasicProjectile(startX, startY, pd, getGunLevel());
 		p.setGrid(grid);
 		p.start();
 
@@ -63,8 +63,26 @@ public class TankPlayer extends Tank {
 		}
 	}
 
+	public void addLives() {
+		int currentLives = this.getLives();
+
+		if (currentLives < GameConfig.MAX_LIVES) {
+			this.setLives(currentLives + 1);
+			System.out.println("Extra life obtained! Current lives: " + this.getLives());
+		} else {
+			this.addScore(GameConfig.SCORE_EXTRA_LIFE);
+			System.out.println("Max lives reached! Bonus points awarded instead.");
+		}
+	}
+
 	public void addScore(int points) {
 		this.score += points;
+	}
+
+	public void upgradeGunLevel() {
+		if (this.getGunLevel() < GameConfig.MAX_GUN_LEVEL) {
+			this.gunLevel++;
+		}
 	}
 
 	public int getScore() {
