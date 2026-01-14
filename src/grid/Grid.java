@@ -139,13 +139,13 @@ public final class Grid {
 		this.base = base;
 	}
 
-	public Block getBlock(int row, int col) {
+	public synchronized Block getBlock(int row, int col) {
 		if (!isInside(row, col))
 			return null;
 		return blocks[row][col];
 	}
 
-	public void setBlock(int row, int col, Block block) {
+	public synchronized void setBlock(int row, int col, Block block) {
 		if (!isInside(row, col))
 			return;
 

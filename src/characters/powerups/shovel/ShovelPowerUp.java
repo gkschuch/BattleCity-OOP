@@ -18,5 +18,4 @@ public class ShovelPowerUp extends PowerUp {
         Thread shovelThread = new Thread(new ShovelTask(grid));
         shovelThread.start();
     }
-
 }

@@ -25,6 +25,11 @@ public abstract class PowerUp extends Block implements Collectable {
     }
 
     @Override
+    public char getIcon() {
+        return '?';
+    }
+
+    @Override
     public abstract void applyEffect(TankPlayer player);
 
     public PowerUpType getPowerUpType() {

@@ -83,6 +83,10 @@ public class Game {
 		List<EnemyTank> enemies = new ArrayList<>();
 		spawnEnemiesByDifficulty(difficulty, enemies, player);
 
+		PowerUpSpawner spawner = new PowerUpSpawner(grid, enemies);
+		Thread spawnerThread = new Thread(spawner);
+		spawnerThread.start();
+
 		List<Shot> shots = Collections.synchronizedList(new ArrayList<>());
 
 		input.start();
@@ -102,13 +106,10 @@ public class Game {
 
 			switch (cmd) {
 				case 'w' -> {
-
 					MovementSystem.tryMovePlayer(grid, player, Direction.UP, enemies);
-
 				}
 				case 's' -> {
 					MovementSystem.tryMovePlayer(grid, player, Direction.DOWN, enemies);
-
 				}
 				case 'a' -> {
 					MovementSystem.tryMovePlayer(grid, player, Direction.LEFT, enemies);
@@ -168,6 +169,9 @@ public class Game {
 
 		input.stop();
 		ShotSystem.stopAllShots(shots);
+
+		spawner.stop();
+		spawnerThread.interrupt();
 
 		player.stop();
 		for (EnemyTank e : enemies) {

@@ -61,6 +61,15 @@ public class Block implements Destructible {
 
 	// métodos especiais (getters e setters)
 
+	public char getIcon() {
+		if (this.isBase())
+			return this.isDestroyed() ? 'x' : 'X';
+		if (this.isWalkable())
+			return this.isProjectilePassThrough() ? 'T' : '.';
+		else
+			return this.isProjectilePassThrough() ? '~' : '#';
+	}
+
 	public int getRow() {
 		return this.row;
 	}
