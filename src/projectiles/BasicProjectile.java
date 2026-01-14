@@ -1,28 +1,32 @@
 package projectiles;
 
 import utils.Direction;
+import projectiles.strategy.MoveStrategy;
 
 public class BasicProjectile extends Projectiles {
-	// contrutor
 
-	public BasicProjectile(int startX, int startY, Direction direction, int damage) {
-		super(startX, startY, direction, damage);
-	}
+    // Construtor original (mantém compatibilidade)
+    public BasicProjectile(int startX, int startY, Direction direction, int damage) {
+        super(startX, startY, direction, damage);
+    }
 
-	// métodos
+    // Construtor com Strategy personalizado
+    public BasicProjectile(int startX, int startY, Direction direction, MoveStrategy strategy) {
+        super(startX, startY, direction, strategy);
+    }
 
-	@Override
-	protected void move() {
-		x += direction.getDx();
-		y += direction.getDy();
-	}
+    @Override
+    public int getDamage() {
+        return super.getDamage();
+    }
 
-	@Override
-	public int getDamage() {
-		return damage;
-	}
+    public boolean checkCollision(int targetX, int targetY) {
+        return this.getX() == targetX && this.getY() == targetY;
+    }
 
-	public boolean checkCollision(int targetX, int targetY) {
-		return this.x == targetX && this.y == targetY;
-	}
+    // Método para debug/informação
+    public String getInfo() {
+        return String.format("BasicProjectile[Pos:(%d,%d), Dano:%d, Estratégia:%s]",
+                getX(), getY(), getDamage(), getMoveStrategy().getStrategyName());
+    }
 }
