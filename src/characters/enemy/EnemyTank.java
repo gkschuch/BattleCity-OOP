@@ -12,6 +12,7 @@ public abstract class EnemyTank extends Tank {
 	// contrutor
 
 	public EnemyTank(double x, double y, int lives, int speed, int scoreValue, TankPlayer player) {
+
 		super(x, y, speed, lives);
 		this.scoreValue = scoreValue;
 		this.player = player;
