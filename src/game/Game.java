@@ -1,30 +1,24 @@
 package game;
 
 import characters.TankPlayer;
-import characters.enemy.*;
 import grid.Grid;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 import java.util.Scanner;
 
-import ranking.RankingManager;
 import ui.Hud;
 import utils.Direction;
 
 public class Game {
 	// atributos
-
-	private final InputHandler input;
-	private Random random = new Random();
+	private final InputHandler input = new InputHandler();
+	private final EnemyManager enemyManager = new EnemyManager();
+	private final GameStateManager stateManager = new GameStateManager();
+	private final List<Shot> shots = Collections.synchronizedList(new ArrayList<>());
 
 	// construtor
-
-	public Game(GameSetup setup) {
-		this.input = new InputHandler();
-	}
 
 	// métodos
 
@@ -33,171 +27,33 @@ public class Game {
 		System.out.flush();
 	}
 
-	private void spawnEnemiesByDifficulty(int difficulty, List<EnemyTank> enemies, TankPlayer player, Grid grid) {
-		enemies.clear();
-
-		int r, c;
-		switch (difficulty) {
-			case 1 -> {
-				do {
-					r = random.nextInt(grid.getRows());
-					c = random.nextInt(grid.getRows());
-				} while (grid.getBlock(r, c) != null);
-				enemies.add(new NormalTank(r, c, player));
-				do {
-					r = random.nextInt(grid.getRows());
-					c = random.nextInt(grid.getRows());
-				} while (grid.getBlock(r, c) != null);
-				enemies.add(new FastTank(r, c, player));
-			}
-			case 2 -> {
-				do {
-					r = random.nextInt(grid.getRows());
-					c = random.nextInt(grid.getRows());
-				} while (grid.getBlock(r, c) != null);
-				enemies.add(new NormalTank(r, c, player));
-				do {
-					r = random.nextInt(grid.getRows());
-					c = random.nextInt(grid.getRows());
-				} while (grid.getBlock(r, c) != null);
-				enemies.add(new FastTank(r, c, player));
-				do {
-					r = random.nextInt(grid.getRows());
-					c = random.nextInt(grid.getRows());
-				} while (grid.getBlock(r, c) != null);
-				enemies.add(new ArmedTank(r, c, player));
-			}
-			default -> {
-				do {
-					r = random.nextInt(grid.getRows());
-					c = random.nextInt(grid.getRows());
-				} while (grid.getBlock(r, c) != null);
-				enemies.add(new NormalTank(r, c, player));
-				do {
-					r = random.nextInt(grid.getRows());
-					c = random.nextInt(grid.getRows());
-				} while (grid.getBlock(r, c) != null);
-				enemies.add(new FastTank(r, c, player));
-				do {
-					r = random.nextInt(grid.getRows());
-					c = random.nextInt(grid.getRows());
-				} while (grid.getBlock(r, c) != null);
-				enemies.add(new ArmedTank(r, c, player));
-				do {
-					r = random.nextInt(grid.getRows());
-					c = random.nextInt(grid.getRows());
-				} while (grid.getBlock(r, c) != null);
-				enemies.add(new ArmoredTank(r, c, player));
-			}
-		}
-
-		// começa a thread de cada inimigo assim que eles nascem
-		for (EnemyTank e : enemies) {
-			if (e != null) {
-				e.start();
-			}
-		}
-	}
-
 	public void run() {
-		Scanner sc = new Scanner(System.in);
-		GameSetup setup = new GameSetup(sc);
-
+		GameSetup setup = new GameSetup(new Scanner(System.in));
 		String playerName = setup.askPlayerName();
-		String mapFile = setup.askMapChoice();
+		Grid grid = new Grid(setup.askMapChoice());
 		int difficulty = setup.askDifficulty();
 
-		Grid grid = new Grid(mapFile);
-		Hud hud = new Hud();
-
-		RankingManager rankingManager = new RankingManager();
-
 		TankPlayer player = new TankPlayer(playerName, 1, 1, 20, 1.0);
-		player.setX(1);
-		player.setY(1);
-		player.setDirection(Direction.UP);
-
-		// inicia a thread do jogador
 		player.start();
 
-		List<EnemyTank> enemies = new ArrayList<>();
-		spawnEnemiesByDifficulty(difficulty, enemies, player, grid);
-
-		PowerUpSpawner spawner = new PowerUpSpawner(grid, enemies);
+		enemyManager.spawnEnemies(difficulty, player, grid);
+		PowerUpSpawner spawner = new PowerUpSpawner(grid, enemyManager.getEnemies());
 		Thread spawnerThread = new Thread(spawner);
 		spawnerThread.start();
 
-		List<Shot> shots = Collections.synchronizedList(new ArrayList<>());
-
 		input.start();
-
 		long tick = 0;
-		boolean ended = false;
-
-		while (input.getRunning() && !ended) {
+		while (input.getRunning()) {
 			tick++;
+			handleInput(player, grid);
 
-			char cmd = input.pollCommand();
-
-			if (cmd == 'q') {
-				System.out.println("\nSaindo...");
-				break;
-			}
-
-			switch (cmd) {
-				case 'w' -> {
-					MovementSystem.tryMovePlayer(grid, player, Direction.UP, enemies);
-				}
-				case 's' -> {
-					MovementSystem.tryMovePlayer(grid, player, Direction.DOWN, enemies);
-				}
-				case 'a' -> {
-					MovementSystem.tryMovePlayer(grid, player, Direction.LEFT, enemies);
-				}
-				case 'd' -> {
-					MovementSystem.tryMovePlayer(grid, player, Direction.RIGHT, enemies);
-				}
-				case 'f' -> {
-					ShotSystem.playerShoot(shots, grid, player);
-				}
-				default -> {
-				}
-			}
-
-			if (tick % 4 == 0) {
-				for (int i = 0; i < enemies.size(); i++) {
-					EnemyTank e = enemies.get(i);
-
-					if (e == null || e.isDestroyed())
-						continue;
-
-					MovementSystem.stepEnemy(grid, e, player, enemies);
-				}
-			}
-
-			ShotSystem.enemiesRandomShoot(shots, grid, enemies, 0.04);
-
-			CollisionSystem.handleShotsVsTanks(shots, enemies, player);
-
-			ShotSystem.cleanupShots(shots);
+			updateWorld(grid, player, tick);
 
 			clearScreen();
-			ConsoleRenderer.render(hud, grid, player, enemies, shots);
+			ConsoleRenderer.render(new Hud(), grid, player, enemyManager.getEnemies(), shots);
 
-			if (grid.isBaseDestroyed()) {
-				System.out.println("\nGAME OVER: a base foi destruída.");
-				ended = true;
-			}
-
-			if (player.getLives() <= 0) {
-				System.out.println("\nGAME OVER: você ficou sem vidas.");
-				ended = true;
-			}
-
-			if (MovementSystem.countAlive(enemies) == 0) {
-				System.out.println("\nVOCE VENCEU: todos os inimigos foram destruídos.");
-				ended = true;
-			}
+			if (stateManager.isGameOver(grid, player, enemyManager.countAlive()))
+				break;
 
 			try {
 				Thread.sleep(80);
@@ -207,20 +63,51 @@ public class Game {
 			}
 		}
 
-		input.stop();
-		ShotSystem.stopAllShots(shots);
+		cleanup(player, spawner);
+		stateManager.finalizeGame(player);
+	}
 
-		spawner.stop();
-		spawnerThread.interrupt();
+	private void handleInput(TankPlayer player, Grid grid) {
+		char cmd = input.pollCommand();
 
-		player.stop();
-		for (EnemyTank e : enemies) {
-			if (e != null) {
-				e.stop();
-			}
+		if (cmd == 'q') {
+			System.out.println("\nSaindo...");
+			return;
 		}
 
-		rankingManager.addEntry(player.getPlayerName(), player.getScore());
-		rankingManager.printRanking();
+		switch (cmd) {
+			case 'w' -> {
+				MovementSystem.tryMovePlayer(grid, player, Direction.UP, enemyManager.getEnemies());
+			}
+			case 's' -> {
+				MovementSystem.tryMovePlayer(grid, player, Direction.DOWN, enemyManager.getEnemies());
+			}
+			case 'a' -> {
+				MovementSystem.tryMovePlayer(grid, player, Direction.LEFT, enemyManager.getEnemies());
+			}
+			case 'd' -> {
+				MovementSystem.tryMovePlayer(grid, player, Direction.RIGHT, enemyManager.getEnemies());
+			}
+			case 'f' -> {
+				ShotSystem.playerShoot(shots, grid, player);
+			}
+			default -> {
+			}
+		}
+	}
+
+	private void updateWorld(Grid grid, TankPlayer player, long tick) {
+		enemyManager.updateEnemies(grid, player, tick);
+		ShotSystem.enemiesRandomShoot(shots, grid, enemyManager.getEnemies(), 0.04);
+		CollisionSystem.handleShotsVsTanks(shots, enemyManager.getEnemies(), player);
+		ShotSystem.cleanupShots(shots);
+	}
+
+	private void cleanup(TankPlayer player, PowerUpSpawner spawner) {
+		input.stop();
+		ShotSystem.stopAllShots(shots);
+		spawner.stop();
+		player.stop();
+		enemyManager.stopAll();
 	}
 }
