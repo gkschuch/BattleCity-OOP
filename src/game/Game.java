@@ -7,26 +7,23 @@ import grid.Grid;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
-import java.util.Scanner;
-import java.io.File;
 
 import ranking.RankingManager;
 import ui.Hud;
 import utils.Direction;
 
-
 public class Game {
 	// atributos
 
 	private final InputHandler input;
-	private       GameSetup    setup;
+	private Random random = new Random();
 
 	// construtor
 
 	public Game(GameSetup setup) {
 		this.input = new InputHandler();
-		this.setup = setup;
 	}
 
 	// métodos
@@ -36,85 +33,82 @@ public class Game {
 		System.out.flush();
 	}
 
-	private void spawnEnemiesByDifficulty(int difficulty, List<EnemyTank> enemies, TankPlayer player, String mapFile) {
+	private void spawnEnemiesByDifficulty(int difficulty, List<EnemyTank> enemies, TankPlayer player, Grid grid) {
 		enemies.clear();
 
-		switch ( difficulty ) {
+		int r, c;
+		switch (difficulty) {
 			case 1 -> {
-				int x, y;
 				do {
-					x = setup.sorteioNumeroX();
-					y = setup.sorteioNumeroY();
-				} while ( !setup.posicaoLivre(x, y, mapFile) );
-				enemies.add(new NormalTank(x, y, player));
+					r = random.nextInt(grid.getRows());
+					c = random.nextInt(grid.getRows());
+				} while (grid.getBlock(r, c) != null);
+				enemies.add(new NormalTank(r, c, player));
 				do {
-					x = setup.sorteioNumeroX();
-					y = setup.sorteioNumeroY();
-				} while ( !setup.posicaoLivre(x, y, mapFile) );
-				enemies.add(new FastTank(x, y, player));
+					r = random.nextInt(grid.getRows());
+					c = random.nextInt(grid.getRows());
+				} while (grid.getBlock(r, c) != null);
+				enemies.add(new FastTank(r, c, player));
 			}
 			case 2 -> {
-				int x, y;
 				do {
-					x = setup.sorteioNumeroX();
-					y = setup.sorteioNumeroY();
-				} while ( !setup.posicaoLivre(x, y, mapFile) );
-				enemies.add(new NormalTank(x, y, player));
+					r = random.nextInt(grid.getRows());
+					c = random.nextInt(grid.getRows());
+				} while (grid.getBlock(r, c) != null);
+				enemies.add(new NormalTank(r, c, player));
 				do {
-					x = setup.sorteioNumeroX();
-					y = setup.sorteioNumeroY();
-				} while ( !setup.posicaoLivre(x, y, mapFile) );
-				enemies.add(new FastTank(x, y, player));
+					r = random.nextInt(grid.getRows());
+					c = random.nextInt(grid.getRows());
+				} while (grid.getBlock(r, c) != null);
+				enemies.add(new FastTank(r, c, player));
 				do {
-					x = setup.sorteioNumeroX();
-					y = setup.sorteioNumeroY();
-				} while ( !setup.posicaoLivre(x, y, mapFile) );
-				enemies.add(new ArmedTank(x, y, player));
-
+					r = random.nextInt(grid.getRows());
+					c = random.nextInt(grid.getRows());
+				} while (grid.getBlock(r, c) != null);
+				enemies.add(new ArmedTank(r, c, player));
 			}
 			default -> {
-				int x, y;
 				do {
-					x = setup.sorteioNumeroX();
-					y = setup.sorteioNumeroY();
-				} while ( !setup.posicaoLivre(x, y, mapFile) );
-				enemies.add(new NormalTank(x, y, player));
+					r = random.nextInt(grid.getRows());
+					c = random.nextInt(grid.getRows());
+				} while (grid.getBlock(r, c) != null);
+				enemies.add(new NormalTank(r, c, player));
 				do {
-					x = setup.sorteioNumeroX();
-					y = setup.sorteioNumeroY();
-				} while ( !setup.posicaoLivre(x, y, mapFile) );
-				enemies.add(new FastTank(x, y, player));
+					r = random.nextInt(grid.getRows());
+					c = random.nextInt(grid.getRows());
+				} while (grid.getBlock(r, c) != null);
+				enemies.add(new FastTank(r, c, player));
 				do {
-					x = setup.sorteioNumeroX();
-					y = setup.sorteioNumeroY();
-				} while ( !setup.posicaoLivre(x, y, mapFile) );
-				enemies.add(new ArmedTank(x, y, player));
+					r = random.nextInt(grid.getRows());
+					c = random.nextInt(grid.getRows());
+				} while (grid.getBlock(r, c) != null);
+				enemies.add(new ArmedTank(r, c, player));
 				do {
-					x = setup.sorteioNumeroX();
-					y = setup.sorteioNumeroY();
-				} while ( !setup.posicaoLivre(x, y, mapFile) );
-				enemies.add(new ArmoredTank(x, y, player));
+					r = random.nextInt(grid.getRows());
+					c = random.nextInt(grid.getRows());
+				} while (grid.getBlock(r, c) != null);
+				enemies.add(new ArmoredTank(r, c, player));
 			}
 		}
 
 		// começa a thread de cada inimigo assim que eles nascem
-		for ( EnemyTank e : enemies ) {
-			if ( e != null ) {
+		for (EnemyTank e : enemies) {
+			if (e != null) {
 				e.start();
 			}
 		}
 	}
 
 	public void run() {
-		Scanner   sc    = new Scanner(System.in);
+		Scanner sc = new Scanner(System.in);
 		GameSetup setup = new GameSetup(sc);
 
 		String playerName = setup.askPlayerName();
-		String mapFile    = setup.askMapChoice();
-		int    difficulty = setup.askDifficulty();
+		String mapFile = setup.askMapChoice();
+		int difficulty = setup.askDifficulty();
 
 		Grid grid = new Grid(mapFile);
-		Hud  hud  = new Hud();
+		Hud hud = new Hud();
 
 		RankingManager rankingManager = new RankingManager();
 
@@ -127,30 +121,30 @@ public class Game {
 		player.start();
 
 		List<EnemyTank> enemies = new ArrayList<>();
-		spawnEnemiesByDifficulty(difficulty, enemies, player, mapFile);
+		spawnEnemiesByDifficulty(difficulty, enemies, player, grid);
 
-		PowerUpSpawner spawner       = new PowerUpSpawner(grid, enemies);
-		Thread         spawnerThread = new Thread(spawner);
+		PowerUpSpawner spawner = new PowerUpSpawner(grid, enemies);
+		Thread spawnerThread = new Thread(spawner);
 		spawnerThread.start();
 
 		List<Shot> shots = Collections.synchronizedList(new ArrayList<>());
 
 		input.start();
 
-		long    tick  = 0;
+		long tick = 0;
 		boolean ended = false;
 
-		while ( input.getRunning() && !ended ) {
+		while (input.getRunning() && !ended) {
 			tick++;
 
 			char cmd = input.pollCommand();
 
-			if ( cmd == 'q' ) {
+			if (cmd == 'q') {
 				System.out.println("\nSaindo...");
 				break;
 			}
 
-			switch ( cmd ) {
+			switch (cmd) {
 				case 'w' -> {
 					MovementSystem.tryMovePlayer(grid, player, Direction.UP, enemies);
 				}
@@ -170,11 +164,11 @@ public class Game {
 				}
 			}
 
-			if ( tick % 4 == 0 ) {
-				for ( int i = 0; i < enemies.size(); i++ ) {
+			if (tick % 4 == 0) {
+				for (int i = 0; i < enemies.size(); i++) {
 					EnemyTank e = enemies.get(i);
 
-					if ( e == null || e.isDestroyed() )
+					if (e == null || e.isDestroyed())
 						continue;
 
 					MovementSystem.stepEnemy(grid, e, player, enemies);
@@ -190,24 +184,24 @@ public class Game {
 			clearScreen();
 			ConsoleRenderer.render(hud, grid, player, enemies, shots);
 
-			if ( grid.isBaseDestroyed() ) {
+			if (grid.isBaseDestroyed()) {
 				System.out.println("\nGAME OVER: a base foi destruída.");
 				ended = true;
 			}
 
-			if ( player.getLives() <= 0 ) {
+			if (player.getLives() <= 0) {
 				System.out.println("\nGAME OVER: você ficou sem vidas.");
 				ended = true;
 			}
 
-			if ( MovementSystem.countAlive(enemies) == 0 ) {
+			if (MovementSystem.countAlive(enemies) == 0) {
 				System.out.println("\nVOCE VENCEU: todos os inimigos foram destruídos.");
 				ended = true;
 			}
 
 			try {
 				Thread.sleep(80);
-			} catch ( InterruptedException ex ) {
+			} catch (InterruptedException ex) {
 				Thread.currentThread().interrupt();
 				break;
 			}
@@ -220,8 +214,8 @@ public class Game {
 		spawnerThread.interrupt();
 
 		player.stop();
-		for ( EnemyTank e : enemies ) {
-			if ( e != null ) {
+		for (EnemyTank e : enemies) {
+			if (e != null) {
 				e.stop();
 			}
 		}
