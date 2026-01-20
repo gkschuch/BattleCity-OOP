@@ -2,64 +2,83 @@ package grid;
 
 import grid.blocks.*;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
 public final class Grid {
 	// atributos
 
-	private int rows;
-	private int cols;
+	private       int       rows;
+	private       int       cols;
 	private final Block[][] blocks;
-	private Base base;
+	private       Base      base;
 
 	// construtor
 
-	public Grid() {
-		this.rows = 17;
-		this.cols = 13;
+	public Grid(String mapFile) {
+		this.rows   = 13;
+		this.cols   = 17;
 		this.blocks = new Block[rows][cols];
-		initMap();
+		loadMapFromFile(mapFile);
 	}
 
 	// métodos
 
-	public void initMap() {
-		for (int r = 0; r < rows; r++) {
-			for (int c = 0; c < cols; c++) {
+	private void loadMapFromFile(String mapFile) {
+		for ( int r = 0; r < rows; r++ ) {
+			for ( int c = 0; c < cols; c++ ) {
 				blocks[r][c] = null;
 			}
 		}
 
-		for (int r = 0; r < rows; r++) {
-			blocks[r][0] = new Steel(r, 0);
+		try ( BufferedReader br = new BufferedReader(new FileReader(mapFile)) ) {
+			String line;
+			int    row = 0;
+
+			while ( (line = br.readLine()) != null && row < rows ) {
+				for ( int col = 0; col < line.length() && col < cols; col++ ) {
+					char tile = line.charAt(col);
+					createBlockFromChar(row, col, tile);
+				}
+				row++;
+			}
+
+		} catch ( IOException e ) {
+			System.err.println("Erro ao carregar mapa: " + mapFile);
+			e.printStackTrace();
+			initDefaultMap();
+		}
+	}
+
+	private void createBlockFromChar(int row, int col, char tile) {
+		switch ( tile ) {
+			case '#' -> blocks[row][col] = new Steel(row, col);
+			case 'B' -> blocks[row][col] = new Brick(row, col);
+			case '~' -> blocks[row][col] = new Water(row, col);
+			case 'T' -> blocks[row][col] = new Tree(row, col);
+			case 'X' -> {
+				base             = new Base(row, col);
+				blocks[row][col] = base;
+			}
+			case '.' -> blocks[row][col] = null;
+			default -> blocks[row][col] = null;
+		}
+	}
+
+	private void initDefaultMap() {
+		for ( int r = 0; r < rows; r++ ) {
+			blocks[r][0]        = new Steel(r, 0);
 			blocks[r][cols - 1] = new Steel(r, cols - 1);
 		}
-		for (int c = 0; c < cols; c++) {
-			blocks[0][c] = new Steel(0, c);
+		for ( int c = 0; c < cols; c++ ) {
+			blocks[0][c]        = new Steel(0, c);
 			blocks[rows - 1][c] = new Steel(rows - 1, c);
 		}
 
-		// exemplo pra teste, tem que criar aleatório ou varios mapas
-
-		blocks[5][3] = new Brick(5, 3);
-		blocks[5][4] = new Brick(5, 4);
-
-		blocks[3][6] = new Water(3, 6);
-
-		blocks[4][2] = new Tree(4, 2);
-		blocks[4][3] = new Tree(4, 3);
-
-		blocks[13][6] = new Brick(13, 6);
-		blocks[15][8] = new Brick(15, 8);
-		blocks[12][7] = new Brick(12, 7);
-		blocks[15][1] = new Brick(16, 2);
-
-		blocks[13][8] = new Brick(13, 8);
-		blocks[15][8] = new Brick(15, 8);
-		blocks[14][7] = new Brick(14, 7);
-		blocks[14][9] = new Brick(14, 9);
-
 		int baseRow = 14;
-		int baseCol = 8;
-		base = new Base(baseRow, baseCol);
+		int baseCol = 6;
+		base                     = new Base(baseRow, baseCol);
 		blocks[baseRow][baseCol] = base;
 	}
 
@@ -68,42 +87,39 @@ public final class Grid {
 	}
 
 	public boolean isWalkable(int row, int col) {
-		if (!isInside(row, col))
+		if ( !isInside(row, col) )
 			return false;
 		Block b = blocks[row][col];
 		return b == null || b.isWalkable();
 	}
 
 	public boolean canProjectilePass(int row, int col) {
-		if (!isInside(row, col))
+		if ( !isInside(row, col) )
 			return false;
 		Block b = blocks[row][col];
 		return b == null || b.isProjectilePassThrough();
 	}
 
-	// mantém compatibilidade com código antigo
 	public boolean handleProjectileHit(int row, int col) {
 		return handleProjectileHit(row, col, 1);
 	}
 
-	// dano configurável
 	public boolean handleProjectileHit(int row, int col, int damage) {
-		if (!isInside(row, col))
+		if ( !isInside(row, col) )
 			return false;
 
 		Block b = blocks[row][col];
 
-		// vazio ou atravessável -> continua
-		if (b == null) {
+		if ( b == null ) {
 			return true;
 		}
-		if (b.isProjectilePassThrough()) {
+		if ( b.isProjectilePassThrough() ) {
 			return true;
 		}
-		// sólido -> toma dano, projétil para
+
 		b.takeDamage(damage);
 
-		if (b.isDestroyed()) {
+		if ( b.isDestroyed() ) {
 			blocks[row][col] = null;
 		}
 
@@ -115,6 +131,7 @@ public final class Grid {
 	}
 
 	// getters e setters
+
 	public int getRows() {
 		return rows;
 	}
@@ -140,19 +157,19 @@ public final class Grid {
 	}
 
 	public synchronized Block getBlock(int row, int col) {
-		if (!isInside(row, col))
+		if ( !isInside(row, col) )
 			return null;
 		return blocks[row][col];
 	}
 
 	public synchronized void setBlock(int row, int col, Block block) {
-		if (!isInside(row, col))
+		if ( !isInside(row, col) )
 			return;
 
 		blocks[row][col] = block;
 
-		if (block != null && block.isBase()) {
-			base = (Base) block;
+		if ( block != null && block.isBase() ) {
+			base = ( Base ) block;
 		}
 	}
 }

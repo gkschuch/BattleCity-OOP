@@ -1,0 +1,74 @@
+package game;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import characters.TankPlayer;
+import characters.enemy.*;
+import grid.Grid;
+
+public class EnemyManager {
+    private final List<EnemyTank> enemies = new ArrayList<>();
+    private final Random random = new Random();
+
+    private int[] findEmptyPosition(Grid grid) {
+        int r, c;
+        do {
+            r = random.nextInt(grid.getRows());
+            c = random.nextInt(grid.getCols());
+        } while (grid.getBlock(r, c) != null);
+        return new int[] { r, c };
+    }
+
+    private EnemyTank createTankByIndex(int index, TankPlayer player, Grid grid) {
+        int[] pos = findEmptyPosition(grid);
+        int r = pos[0], c = pos[1];
+
+        return switch (index) {
+            case 0 -> new NormalTank(r, c, player);
+            case 1 -> new FastTank(r, c, player);
+            case 2 -> new ArmedTank(r, c, player);
+            default -> new ArmoredTank(r, c, player);
+        };
+    }
+
+    protected void spawnEnemies(int difficulty, TankPlayer player, Grid grid) {
+        enemies.clear();
+
+        int count = switch (difficulty) {
+            case 1 -> 2;
+            case 2 -> 3;
+            default -> 4;
+        };
+
+        for (int i = 0; i < count; i++) {
+            EnemyTank enemy = createTankByIndex(i, player, grid);
+            if (enemy != null) {
+                enemies.add(enemy);
+                enemy.start();
+            }
+        }
+    }
+
+    protected void updateEnemies(Grid grid, TankPlayer player, long tick) {
+        if (tick % 4 == 0)
+            for (EnemyTank e : enemies)
+                if (e != null && !e.isDestroyed())
+                    MovementSystem.stepEnemy(grid, e, player, enemies);
+    }
+
+    protected void stopAll() {
+        for (EnemyTank enemyTank : enemies)
+            if (enemyTank != null)
+                enemyTank.stop();
+    }
+
+    protected List<EnemyTank> getEnemies() {
+        return enemies;
+    }
+
+    protected int countAlive() {
+        return MovementSystem.countAlive(enemies);
+    }
+}

@@ -4,7 +4,6 @@ import characters.TankPlayer;
 import characters.enemy.EnemyTank;
 import grid.Grid;
 import grid.blocks.Block;
-
 import java.util.List;
 
 import ui.Hud;
@@ -21,8 +20,7 @@ public class ConsoleRenderer {
 		hud.clear();
 		hud.draw(player, grid);
 
-		System.out
-				.println("Legenda: P=player E=inimigo *=tiro X=base x=base destruida T=arvore ~=agua #=parede .=vazio");
+		System.out.println("Legenda: P=player E=inimigo *=tiro X=base x=base destruida T=arvore ~=agua #=parede .=vazio");
 		drawWorld(grid, player, enemies, shots);
 	}
 
