@@ -17,7 +17,7 @@ public class EnemyManager {
         do {
             r = random.nextInt(grid.getRows());
             c = random.nextInt(grid.getCols());
-        } while (grid.getBlock(r, c) != null);
+        } while (!grid.isWalkable(r, c));
         return new int[] { r, c };
     }
 
@@ -26,10 +26,10 @@ public class EnemyManager {
         int r = pos[0], c = pos[1];
 
         return switch (index) {
-            case 0 -> new NormalTank(r, c, player);
-            case 1 -> new FastTank(r, c, player);
-            case 2 -> new ArmedTank(r, c, player);
-            default -> new ArmoredTank(r, c, player);
+            case 0 -> new NormalTank(c, r, player);
+            case 1 -> new FastTank(c, r, player);
+            case 2 -> new ArmedTank(c, r, player);
+            default -> new ArmoredTank(c, r, player);
         };
     }
 
