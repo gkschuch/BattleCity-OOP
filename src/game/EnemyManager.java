@@ -12,17 +12,24 @@ public class EnemyManager {
     private final List<EnemyTank> enemies = new ArrayList<>();
     private final Random random = new Random();
 
-    private int[] findEmptyPosition(Grid grid) {
+    private int[] findEmptyPosition(Grid grid, TankPlayer player) {
         int r, c;
+        boolean isOccupied;
         do {
             r = random.nextInt(grid.getRows());
             c = random.nextInt(grid.getCols());
-        } while (!grid.isWalkable(r, c));
+
+            boolean isObstacle = !grid.isWalkable(r, c);
+            boolean isAtPlayerPosition = (r == (int) player.getY() && c == (int) player.getX());
+
+            isOccupied = isObstacle || isAtPlayerPosition;
+
+        } while (isOccupied);
         return new int[] { r, c };
     }
 
     private EnemyTank createTankByIndex(int index, TankPlayer player, Grid grid) {
-        int[] pos = findEmptyPosition(grid);
+        int[] pos = findEmptyPosition(grid, player);
         int r = pos[0], c = pos[1];
 
         return switch (index) {
