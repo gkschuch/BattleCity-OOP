@@ -8,17 +8,20 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
+import ui.GameFrame;
+import ui.GamePanel;
 import ui.Hud;
-import utils.Direction;
 
 public class Game {
 	// atributos
-	private final InputHandler input = new InputHandler();
+	private final InputController input = new InputController();
 	private final EnemyManager enemyManager = new EnemyManager();
 	private final GameStateManager stateManager = new GameStateManager();
 	private final List<Shot> shots = Collections.synchronizedList(new ArrayList<>());
 
 	// construtor
+	public Game() {
+	}
 
 	// métodos
 
@@ -41,13 +44,20 @@ public class Game {
 		Thread spawnerThread = new Thread(spawner);
 		spawnerThread.start();
 
-		input.start();
+		GameFrame frame = new GameFrame(input);
+		GamePanel panel = new GamePanel(grid, player, enemyManager.getEnemies(), shots);
+		frame.add(panel);
+		frame.pack();
+		frame.setVisible(true);
+
 		long tick = 0;
-		while (input.getRunning()) {
+		while (input.isRunning()) {
 			tick++;
-			handleInput(player, grid);
+			input.processInput(player, grid, enemyManager.getEnemies(), shots);
 
 			updateWorld(grid, player, tick);
+
+			panel.repaint();
 
 			clearScreen();
 			ConsoleRenderer.render(new Hud(), grid, player, enemyManager.getEnemies(), shots);
@@ -65,35 +75,6 @@ public class Game {
 
 		cleanup(player, spawner);
 		stateManager.finalizeGame(player);
-	}
-
-	private void handleInput(TankPlayer player, Grid grid) {
-		char cmd = input.pollCommand();
-
-		if (cmd == 'q') {
-			System.out.println("\nSaindo...");
-			return;
-		}
-
-		switch (cmd) {
-			case 'w' -> {
-				MovementSystem.tryMovePlayer(grid, player, Direction.UP, enemyManager.getEnemies());
-			}
-			case 's' -> {
-				MovementSystem.tryMovePlayer(grid, player, Direction.DOWN, enemyManager.getEnemies());
-			}
-			case 'a' -> {
-				MovementSystem.tryMovePlayer(grid, player, Direction.LEFT, enemyManager.getEnemies());
-			}
-			case 'd' -> {
-				MovementSystem.tryMovePlayer(grid, player, Direction.RIGHT, enemyManager.getEnemies());
-			}
-			case 'f' -> {
-				ShotSystem.playerShoot(shots, grid, player);
-			}
-			default -> {
-			}
-		}
 	}
 
 	private void updateWorld(Grid grid, TankPlayer player, long tick) {

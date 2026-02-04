@@ -11,6 +11,11 @@ public class Steel extends Block {
 	// métodos
 
 	@Override
+	public java.awt.Color getColor() {
+		return java.awt.Color.LIGHT_GRAY; // Cinza claro
+	}
+
+	@Override
 	public boolean isWalkable() {
 		return false;
 	}

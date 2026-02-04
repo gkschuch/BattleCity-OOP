@@ -33,6 +33,8 @@ public abstract class Block implements Destructible {
 		}
 	}
 
+	public abstract java.awt.Color getColor();
+
 	@Override
 	public boolean isDestroyed() { // vê se o bloco existe
 		return destroyed;
