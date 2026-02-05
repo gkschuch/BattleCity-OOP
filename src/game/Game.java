@@ -6,7 +6,6 @@ import grid.Grid;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Scanner;
 
 import ui.GameFrame;
 import ui.GamePanel;
@@ -31,7 +30,7 @@ public class Game {
 	}
 
 	public void run() {
-		GameSetup setup = new GameSetup(new Scanner(System.in));
+		GameSetup setup = new GameSetup();
 		String playerName = setup.askPlayerName();
 		Grid grid = new Grid(setup.askMapChoice());
 		int difficulty = setup.askDifficulty();

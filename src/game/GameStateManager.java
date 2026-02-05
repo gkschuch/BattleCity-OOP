@@ -3,6 +3,7 @@ package game;
 import characters.TankPlayer;
 import grid.Grid;
 import ranking.RankingManager;
+import ui.RankingView;
 
 public class GameStateManager {
     private final RankingManager rankingManager = new RankingManager();
@@ -26,6 +27,7 @@ public class GameStateManager {
     protected void finalizeGame(TankPlayer player) {
         rankingManager.addEntry(player.getPlayerName(), player.getScore());
         rankingManager.printRanking();
+        RankingView.displayLeaderboard(rankingManager.getFormattedRanking());
     }
 
 }
