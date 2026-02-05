@@ -1,89 +1,68 @@
 package game;
 
-import java.util.Scanner;
+import javax.swing.JOptionPane;
+import java.util.Random;
 
 public class GameSetup {
-	// atributos
-
-	private final Scanner sc;
-
-	// construtor
-
-	public GameSetup(Scanner sc) {
-		this.sc = sc;
+	public GameSetup() {
 	}
 
 	// métodos
 
 	public String askPlayerName() {
 		while (true) {
-			System.out.print("Digite seu nome: ");
-			String name = sc.nextLine();
+			String name = JOptionPane.showInputDialog(null, "Digite o seu nome", "Player Setup",
+					JOptionPane.QUESTION_MESSAGE);
 
-			if (name == null)
-				continue;
+			if (name != null && !name.trim().isEmpty())
+				return name.trim();
 
-			name = name.trim();
-
-			if (!name.isEmpty())
-				return name;
-
-			System.out.println("Nome inválido. Tente de novo.\n");
+			JOptionPane.showMessageDialog(null, "Nome inválido. Tente de novo.", "ERROR", JOptionPane.ERROR_MESSAGE);
+			System.out.println("\n");
 		}
 	}
 
 	public String askMapChoice() {
-		System.out.println("\nEscolha o mapa:");
-		System.out.println("1 - Mapa Clássico");
-		System.out.println("2 - Mapa Labirinto");
-		System.out.println("3 - Mapa Fortaleza");
-		System.out.println("4 - Aleatório");
-		System.out.print("Escolhba: ");
 
-		int number = sc.nextInt();
-		sc.nextLine();
+		String[] options = { "Mapa Clássico", "Mapa Labirinto", "Mapa Fortaleza", "Aleatório" };
 
-		if (number == 4) {
-			number = (int) (Math.random() * 3) + 1;
-		}
-		switch (number) {
-			case 1:
-				return "src/grid/models/model_classic.txt";
-			case 2:
-				return "src/grid/models/model_maze.txt";
-			case 3:
-				return "src/grid/models/model_strength.txt";
-			default:
-				return "src/grid/models/model_classic.txt";
-		}
+		int selection = JOptionPane.showOptionDialog(
+				null,
+				"Escolha o mapa:",
+				"Seleção de mapas",
+				JOptionPane.DEFAULT_OPTION,
+				JOptionPane.INFORMATION_MESSAGE,
+				null,
+				options,
+				options[3]);
+		if (selection == JOptionPane.CLOSED_OPTION)
+			selection = 3;
+
+		if (selection == 3)
+			selection = new Random().nextInt(3);
+
+		return switch (selection) {
+			case 0 -> "src/grid/models/model_classic.txt";
+			case 1 -> "src/grid/models/model_maze.txt";
+			case 2 -> "src/grid/models/model_strength.txt";
+			default -> "src/grid/models/model_classic.txt";
+		};
 	}
 
 	public int askDifficulty() {
-		while (true) {
-			System.out.println("Escolha a dificuldade:");
-			System.out.println("1 - Fácil");
-			System.out.println("2 - Médio");
-			System.out.println("3 - Difícil");
-			System.out.print("Digite 1, 2 ou 3: ");
+		String[] options = { "Fácil", "Médio", "Difícil" };
+		int selection = JOptionPane.showOptionDialog(
+				null,
+				"Escolha a dificuldade:",
+				"Seleção de dificuldade",
+				JOptionPane.DEFAULT_OPTION,
+				JOptionPane.WARNING_MESSAGE,
+				null,
+				options,
+				options[0]);
 
-			String op = sc.nextLine();
-
-			if (op == null)
-				continue;
-
-			op = op.trim();
-
-			switch (op) {
-				case "1":
-					return 1;
-				case "2":
-					return 2;
-				case "3":
-					return 3;
-				default:
-					System.out.println("Opção inválida. Tente de novo.\n");
-			}
-		}
+		if (selection == JOptionPane.CLOSED_OPTION)
+			return 1;
+		return selection + 1;
 	}
-
 }
