@@ -72,7 +72,7 @@ public class Game {
 			}
 		}
 
-		cleanup(player, spawner);
+		cleanup(player, spawner, frame);
 		stateManager.finalizeGame(player);
 	}
 
@@ -83,11 +83,14 @@ public class Game {
 		ShotSystem.cleanupShots(shots);
 	}
 
-	private void cleanup(TankPlayer player, PowerUpSpawner spawner) {
+	private void cleanup(TankPlayer player, PowerUpSpawner spawner, GameFrame gameFrame) {
 		input.stop();
 		ShotSystem.stopAllShots(shots);
 		spawner.stop();
 		player.stop();
 		enemyManager.stopAll();
+
+		if (gameFrame != null)
+			gameFrame.dispose();
 	}
 }
