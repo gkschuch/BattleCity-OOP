@@ -28,6 +28,8 @@ public abstract class EnemyTank extends Tank {
 
 	public abstract void updateIA();
 
+	public abstract EnemyTankType getEnemyTankType();
+
 	public int getScoreValue() {
 		return scoreValue;
 	}
