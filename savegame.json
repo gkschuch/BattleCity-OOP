@@ -1,0 +1,48 @@
+{
+  "mapPath": "src/grid/models/model_maze.txt",
+  "difficulty": 1,
+  "player": {
+    "name": "Gabriel",
+    "x": 2.0,
+    "y": 1.0,
+    "speed": 1.0,
+    "score": 0,
+    "lives": 7,
+    "gunLevel": 1,
+    "direction": "LEFT"
+  },
+  "enemies": [
+    {
+      "type": "NORMAL",
+      "x": 2.0,
+      "y": 11.0,
+      "lives": 1,
+      "frozen": false,
+      "direction": "UP"
+    },
+    {
+      "type": "FAST",
+      "x": 12.0,
+      "y": 2.0,
+      "lives": 1,
+      "frozen": false,
+      "direction": "LEFT"
+    }
+  ],
+  "powerUps": [],
+  "gridLayout": [
+    "#################",
+    "#...............#",
+    "#.###.T.###.T.###",
+    "#.#~~.T.~~#.T.#.#",
+    "#...#.###.#...#.#",
+    "#.T...#.X.#...T.#",
+    "#...#.###.#...#.#",
+    "#.#~~.T.~~#.T.#.#",
+    "#.###.T.###.T.###",
+    "#...T...T...T...#",
+    "#.#####.#####.#.#",
+    "#...............#",
+    "#################"
+  ]
+}

@@ -5,6 +5,10 @@ import grid.blocks.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import characters.powerups.PowerUp;
 
 public final class Grid {
 	// atributos
@@ -12,6 +16,7 @@ public final class Grid {
 	private int rows;
 	private int cols;
 	private final Block[][] blocks;
+	private final List<PowerUp> activePowerUps = new ArrayList<>();
 	private Base base;
 
 	// construtor
@@ -95,6 +100,20 @@ public final class Grid {
 		return layout;
 	}
 
+	public void addPowerUp(PowerUp powerUp) {
+		activePowerUps.add(powerUp);
+		this.setBlock(powerUp.getRow(), powerUp.getCol(), powerUp);
+	}
+
+	public void removePowerUp(PowerUp powerUp) {
+		activePowerUps.remove(powerUp);
+		this.setBlock(powerUp.getRow(), powerUp.getCol(), null);
+	}
+
+	public List<PowerUp> getActivePowerUps() {
+		return new ArrayList<>(activePowerUps); // Retorna uma cópia por segurança
+	}
+
 	public boolean isInside(int row, int col) {
 		return row >= 0 && row < rows && col >= 0 && col < cols;
 	}
@@ -104,6 +123,13 @@ public final class Grid {
 			return false;
 		Block b = blocks[row][col];
 		return b == null || b.isWalkable();
+	}
+
+	public boolean isTileEmpty(int row, int col) {
+		if (!isInside(row, col)) {
+			return false;
+		}
+		return blocks[row][col] == null;
 	}
 
 	public boolean canProjectilePass(int row, int col) {

@@ -45,8 +45,12 @@ public class JsonSaveManager {
                     powerUp.getRow(),
                     powerUp.getCol()));
         }
-
-        data.gridLayout = grid.getCurrentLayout();
+        char[][] rawLayout = grid.getCurrentLayout();
+        String[] stringLayout = new String[rawLayout.length];
+        for (int i = 0; i < rawLayout.length; i++) {
+            stringLayout[i] = new String(rawLayout[i]);
+        }
+        data.gridLayout = stringLayout;
 
         try (FileWriter writer = new FileWriter(FILE_NAME)) {
             gson.toJson(data, writer);

@@ -27,6 +27,7 @@ public abstract class PowerUp extends Block implements Collectable {
     public void onPlayerStep(TankPlayer player, Grid grid) {
         this.applyEffect(player);
         grid.setBlock(this.getRow(), this.getCol(), null);
+        grid.removePowerUp(this);
     }
 
     @Override

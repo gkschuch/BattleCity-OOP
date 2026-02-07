@@ -25,7 +25,7 @@ public class InputController {
             this.running = false;
     }
 
-    public void processInput(TankPlayer player, Grid grid, List<EnemyTank> enemies, List<Shot> shots) {
+    public void processInput(TankPlayer player, Grid grid, List<EnemyTank> enemies, List<Shot> shots, Game game) {
         char currentCommand = pollCommand();
         if (currentCommand == 0)
             return;
@@ -35,7 +35,11 @@ public class InputController {
             System.out.println(paused ? "Jogo Pausado" : "Jogo Retomado");
             return;
         }
+
         if (paused) {
+            if (currentCommand == 'o') {
+                game.save();
+            }
             return;
         }
 

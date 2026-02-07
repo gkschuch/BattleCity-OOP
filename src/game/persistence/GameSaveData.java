@@ -12,7 +12,7 @@ public class GameSaveData {
     public List<EnemySaveData> enemies = new ArrayList<>();
     public List<PowerUpSaveData> powerUps = new ArrayList<>();
 
-    public char[][] gridLayout;
+    public String[] gridLayout;
 
     public GameSaveData() {
     }

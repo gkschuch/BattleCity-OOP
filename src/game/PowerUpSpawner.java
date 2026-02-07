@@ -33,9 +33,10 @@ public class PowerUpSpawner implements Runnable {
                 int r = random.nextInt(grid.getRows());
                 int c = random.nextInt(grid.getCols());
 
-                if (grid.isWalkable(r, c)) {
+                if (grid.isTileEmpty(r, c)) {
                     PowerUp powerUp = PowerUpFactory.createRandom(r, c, grid, enemies);
                     grid.setBlock(r, c, powerUp);
+                    grid.addPowerUp(powerUp);
                 }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
