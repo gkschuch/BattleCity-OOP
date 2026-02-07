@@ -1,5 +1,6 @@
 package projectiles;
 
+import game.InputController;
 import grid.Grid;
 import utils.Direction;
 import projectiles.strategy.MoveStrategy;
@@ -14,22 +15,25 @@ public abstract class Projectiles implements Runnable {
     protected boolean active = true;
     protected Thread thread;
     protected Grid grid;
+    protected InputController input;
     protected MoveStrategy moveStrategy; // Atributo para Strategy Pattern
 
     // construtores
-    public Projectiles(int startX, int startY, Direction direction, int damage) {
+    public Projectiles(int startX, int startY, Direction direction, int damage, InputController input) {
         this.x = startX;
         this.y = startY;
         this.direction = direction;
         this.damage = damage;
+        this.input = input;
         this.moveStrategy = new NormalMoveStrategy(); // Estratégia padrão
     }
 
-    public Projectiles(int startX, int startY, Direction direction, MoveStrategy strategy) {
+    public Projectiles(int startX, int startY, Direction direction, MoveStrategy strategy, InputController input) {
         this.x = startX;
         this.y = startY;
         this.direction = direction;
         this.moveStrategy = strategy;
+        this.input = input;
         this.damage = strategy.getBaseDamage(); // Dano baseado na estratégia
     }
 
@@ -49,6 +53,16 @@ public abstract class Projectiles implements Runnable {
     @Override
     public void run() {
         while (active) {
+            if (input != null && input.isPaused()) {
+                try {
+                    Thread.sleep(100);
+                    continue;
+                } catch (InterruptedException e) {
+                    if (!active)
+                        break;
+                }
+            }
+
             move();
 
             if (grid != null) {
@@ -59,7 +73,7 @@ public abstract class Projectiles implements Runnable {
 
                 boolean canContinue = grid.handleProjectileHit(y, x, getDamage());
                 if (!canContinue) {
-                    moveStrategy.onHit(); // Executa ação da estratégia
+                    moveStrategy.onHit();
                     if (!moveStrategy.shouldContinueAfterHit()) {
                         deactivate();
                         break;
@@ -68,9 +82,10 @@ public abstract class Projectiles implements Runnable {
             }
 
             try {
-                Thread.sleep(moveStrategy.getMoveDelay()); // Delay baseado na estratégia
+                Thread.sleep(moveStrategy.getMoveDelay());
             } catch (InterruptedException e) {
-                break;
+                if (!active)
+                    break;
             }
         }
     }

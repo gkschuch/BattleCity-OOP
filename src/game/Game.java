@@ -39,7 +39,7 @@ public class Game {
 		player.start();
 
 		enemyManager.spawnEnemies(difficulty, player, grid);
-		PowerUpSpawner spawner = new PowerUpSpawner(grid, enemyManager.getEnemies());
+		PowerUpSpawner spawner = new PowerUpSpawner(grid, enemyManager.getEnemies(), input);
 		Thread spawnerThread = new Thread(spawner);
 		spawnerThread.start();
 
@@ -53,8 +53,9 @@ public class Game {
 		while (input.isRunning()) {
 			tick++;
 			input.processInput(player, grid, enemyManager.getEnemies(), shots);
-
-			updateWorld(grid, player, tick);
+			if (!input.isPaused()) {
+				updateWorld(grid, player, tick);
+			}
 
 			panel.repaint();
 
@@ -78,7 +79,7 @@ public class Game {
 
 	private void updateWorld(Grid grid, TankPlayer player, long tick) {
 		enemyManager.updateEnemies(grid, player, tick);
-		ShotSystem.enemiesRandomShoot(shots, grid, enemyManager.getEnemies(), 0.04);
+		ShotSystem.enemiesRandomShoot(shots, grid, enemyManager.getEnemies(), 0.04, input);
 		CollisionSystem.handleShotsVsTanks(shots, enemyManager.getEnemies(), player);
 		ShotSystem.cleanupShots(shots);
 	}

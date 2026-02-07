@@ -11,12 +11,14 @@ import grid.Grid;
 public class PowerUpSpawner implements Runnable {
     private final Grid grid;
     private final List<EnemyTank> enemies;
+    private final InputController input;
     private final Random random = new Random();
     private boolean running = true;
 
-    public PowerUpSpawner(Grid grid, List<EnemyTank> enemies) {
+    public PowerUpSpawner(Grid grid, List<EnemyTank> enemies, InputController input) {
         this.grid = grid;
         this.enemies = enemies;
+        this.input = input;
     }
 
     @Override
@@ -24,6 +26,10 @@ public class PowerUpSpawner implements Runnable {
         while (running) {
             try {
                 Thread.sleep(5000 + random.nextInt(5000));
+
+                if (input.isPaused()) {
+                    continue;
+                }
                 int r = random.nextInt(grid.getRows());
                 int c = random.nextInt(grid.getCols());
 

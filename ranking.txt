@@ -5,6 +5,6 @@ a;900
 tiago;900
 a;600
 a;550
-Gabriel;500
+a;550
 a;500
 tiago;500

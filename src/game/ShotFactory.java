@@ -11,13 +11,14 @@ public class ShotFactory {
 
 	// métodos
 
-	public static BasicProjectile createShotFromTank(double tankX, double tankY, Direction tankDir) {
+	public static BasicProjectile createShotFromTank(double tankX, double tankY,
+			Direction tankDir, int damage, InputController input) {
 		Direction pd = tankDir;
 
 		int startX = (int) tankX;
 		int startY = (int) tankY;
 
-		return new BasicProjectile(startX, startY, pd, 1);
+		return new BasicProjectile(startX, startY, pd, damage, input);
 	}
 
 }
