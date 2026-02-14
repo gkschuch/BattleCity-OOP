@@ -1,5 +1,7 @@
 package characters;
 
+import characters.exceptions.InvalidAttributeException;
+import characters.exceptions.TankDestroyedException;
 import utils.*;
 
 public abstract class Tank implements Movable, Destructible, Runnable {
@@ -16,6 +18,10 @@ public abstract class Tank implements Movable, Destructible, Runnable {
 	// contrutor
 
 	public Tank(double x, double y, double speed, int lives) {
+		if (speed <= 0)
+			throw new InvalidAttributeException("Speed", speed);
+		if (lives <= 0)
+			throw new InvalidAttributeException("Lives", lives);
 		this.x = x;
 		this.y = y;
 		this.speed = speed;
@@ -76,6 +82,9 @@ public abstract class Tank implements Movable, Destructible, Runnable {
 
 	@Override
 	public void move() {
+		if (isDestroyed()) {
+			throw new TankDestroyedException("move");
+		}
 		this.x += direction.getDx() * speed;
 		this.y += direction.getDy() * speed;
 
@@ -106,10 +115,14 @@ public abstract class Tank implements Movable, Destructible, Runnable {
 	}
 
 	public void setLives(int lives) {
+		if (lives <= 0)
+			throw new InvalidAttributeException("Lives", lives);
 		this.lives = lives;
 	}
 
 	public void setSpeed(double speed) {
+		if (speed <= 0)
+			throw new InvalidAttributeException("Speed", speed);
 		this.speed = speed;
 	}
 

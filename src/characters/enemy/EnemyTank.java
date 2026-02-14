@@ -2,6 +2,7 @@ package characters.enemy;
 
 import characters.Tank;
 import characters.TankPlayer;
+import characters.exceptions.DependencyMissingException;
 import grid.Grid;
 
 public abstract class EnemyTank extends Tank {
@@ -14,7 +15,6 @@ public abstract class EnemyTank extends Tank {
 	// contrutor
 
 	public EnemyTank(double x, double y, int lives, int speed, int scoreValue, TankPlayer player) {
-
 		super(x, y, speed, lives);
 		this.scoreValue = scoreValue;
 		this.player = player;
@@ -25,6 +25,8 @@ public abstract class EnemyTank extends Tank {
 
 	@Override
 	public void updateBehavior() {
+		if (isDestroyed())
+			return;
 		this.updateIA();
 	}
 
@@ -45,6 +47,8 @@ public abstract class EnemyTank extends Tank {
 	}
 
 	public void setGrid(Grid grid) {
+		if (grid == null)
+			throw new DependencyMissingException("Grid no EnemyTank");
 		this.grid = grid;
 	}
 
