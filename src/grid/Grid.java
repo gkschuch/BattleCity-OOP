@@ -87,6 +87,21 @@ public final class Grid {
 		blocks[baseRow][baseCol] = base;
 	}
 
+	public void applySavedLayout(String[] savedLines) {
+		this.activePowerUps.clear();
+		for (int r = 0; r < rows && r < savedLines.length; r++) {
+			char[] lineChars = savedLines[r].toCharArray();
+			for (int c = 0; c < cols && c < lineChars.length; c++) {
+				char icon = lineChars[c];
+				if (icon == '.') {
+					blocks[r][c] = null;
+				} else {
+					createBlockFromChar(r, c, icon);
+				}
+			}
+		}
+	}
+
 	public char[][] getCurrentLayout() {
 		char[][] layout = new char[rows][cols];
 		for (int r = 0; r < rows; r++) {

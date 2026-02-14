@@ -100,4 +100,12 @@ public class TankPlayer extends Tank {
 	public void setGrid(Grid grid) {
 		this.grid = grid;
 	}
+
+	public void setScore(int score) {
+		this.score = score;
+	}
+
+	public void setGunLevel(int gunLevel) {
+		this.gunLevel = gunLevel;
+	}
 }

@@ -2,11 +2,13 @@ package characters.enemy;
 
 import characters.Tank;
 import characters.TankPlayer;
+import grid.Grid;
 
 public abstract class EnemyTank extends Tank {
 
 	private final int scoreValue;
 	private TankPlayer player;
+	private Grid grid;
 	private boolean frozen;
 
 	// contrutor
@@ -40,6 +42,10 @@ public abstract class EnemyTank extends Tank {
 
 	public void setFrozen(boolean frozen) {
 		this.frozen = frozen;
+	}
+
+	public void setGrid(Grid grid) {
+		this.grid = grid;
 	}
 
 	@Override

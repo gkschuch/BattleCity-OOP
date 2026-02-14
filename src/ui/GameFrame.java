@@ -27,6 +27,7 @@ public class GameFrame extends JFrame {
                     case KeyEvent.VK_Q -> command = 'q';
                     case KeyEvent.VK_P -> command = 'p';
                     case KeyEvent.VK_O -> command = 'o';
+                    case KeyEvent.VK_L -> command = 'l';
                 }
                 if (command != ' ')
                     input.addCommand(command);

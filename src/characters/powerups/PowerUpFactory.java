@@ -15,6 +15,10 @@ public class PowerUpFactory {
     public static PowerUp createRandom(int row, int col, Grid grid, List<EnemyTank> enemies) {
         int typeIndex = random.nextInt(PowerUpType.values().length);
         PowerUpType type = PowerUpType.values()[typeIndex];
+        return createByType(type, row, col, grid, enemies);
+    }
+
+    public static PowerUp createByType(PowerUpType type, int row, int col, Grid grid, List<EnemyTank> enemies) {
         return switch (type) {
             case STAR -> new StarPowerUp(row, col);
             case HELMET -> new HelmetPowerUp(row, col);
@@ -22,7 +26,6 @@ public class PowerUpFactory {
             case BOMB -> new BombPowerUp(row, col, enemies);
             case SHOVEL -> new ShovelPowerUp(row, col, grid);
             case CLOCK -> new ClockPowerUp(row, col, enemies);
-
         };
     }
 }

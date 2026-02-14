@@ -26,6 +26,12 @@ public class GamePanel extends JPanel {
         setBackground(Color.BLACK);
     }
 
+    public void updateReferences(Grid newGrid, TankPlayer newPlayer, List<EnemyTank> newEnemies) {
+        this.grid = newGrid;
+        this.player = newPlayer;
+        this.enemies = newEnemies;
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

@@ -3,14 +3,18 @@ package game;
 import characters.TankPlayer;
 import characters.enemy.EnemyTank;
 import characters.powerups.PowerUp;
+import characters.powerups.PowerUpFactory;
+import game.exceptions.GameTerminationException;
+import game.persistence.EnemySaveData;
+import game.persistence.GameSaveData;
 import game.persistence.JsonSaveManager;
+import game.persistence.PowerUpSaveData;
 import grid.Grid;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import ui.GameFrame;
 import ui.GamePanel;
-import ui.Hud;
 
 public class Game {
 	private final InputController input = new InputController();
@@ -22,6 +26,7 @@ public class Game {
 	private Grid grid;
 	private int difficulty;
 	private String mapPath;
+	private GamePanel panel;
 
 	public Game() {
 	}
@@ -43,40 +48,39 @@ public class Game {
 		spawnerThread.start();
 
 		GameFrame frame = new GameFrame(input);
-		GamePanel panel = new GamePanel(grid, player, enemyManager.getEnemies(), shots);
+		this.panel = new GamePanel(grid, player, enemyManager.getEnemies(), shots);
 		frame.add(panel);
 		frame.pack();
 		frame.setVisible(true);
 
 		long tick = 0;
-		while (input.isRunning()) {
-			tick++;
+		try {
+			while (input.isRunning()) {
+				tick++;
 
-			input.processInput(player, grid, enemyManager.getEnemies(), shots, this);
+				input.processInput(player, grid, enemyManager.getEnemies(), shots, this);
 
-			if (!input.isPaused()) {
-				updateWorld(grid, player, tick);
+				if (!input.isPaused()) {
+					updateWorld(grid, player, tick);
+				}
+
+				panel.repaint();
+
+				stateManager.checkGameState(grid, player, enemyManager.countAlive());
+				try {
+					Thread.sleep(80);
+				} catch (InterruptedException ex) {
+					Thread.currentThread().interrupt();
+					break;
+				}
 			}
-
-			panel.repaint();
-
-			// ConsoleRenderer.render(new Hud(), grid, player, enemyManager.getEnemies(),
-			// shots);
-
-			if (stateManager.isGameOver(grid, player, enemyManager.countAlive()))
-				break;
-
-			try {
-				Thread.sleep(80);
-			} catch (InterruptedException ex) {
-				Thread.currentThread().interrupt();
-				break;
-			}
+		} catch (GameTerminationException e) {
+			System.out.println(e.getMessage());
+			input.stop();
+		} finally {
+			cleanup(player, spawner, frame);
+			stateManager.finalizeGame(player);
 		}
-
-		// 6. Finalização
-		cleanup(player, spawner, frame);
-		stateManager.finalizeGame(player);
 	}
 
 	public void save() {
@@ -97,6 +101,58 @@ public class Game {
 				this.mapPath);
 
 		System.out.println("Progresso guardado com sucesso no arquivo JSON!");
+	}
+
+	public void load() {
+		GameSaveData data = JsonSaveManager.loadGame();
+
+		if (data == null) {
+			System.out.println("Nenhum jogo salvo");
+			return;
+		}
+
+		if (this.player != null) {
+			this.player.stop();
+		}
+		enemyManager.clearEnemies();
+		ShotSystem.stopAllShots(shots);
+		shots.clear();
+
+		this.mapPath = data.mapPath;
+		this.difficulty = data.difficulty;
+
+		this.grid = new Grid(mapPath);
+		this.grid.applySavedLayout(data.gridLayout);
+
+		this.player = new TankPlayer(
+				data.player.name,
+				data.player.x,
+				data.player.y,
+				data.player.lives,
+				data.player.speed);
+		this.player.setScore(data.player.score);
+		this.player.setGunLevel(data.player.gunLevel);
+		this.player.setDirection(data.player.direction);
+		this.player.setGrid(grid);
+		this.player.start();
+
+		for (EnemySaveData eData : data.enemies)
+			enemyManager.addSavedEnemy(eData, player, grid);
+
+		for (PowerUpSaveData pData : data.powerUps) {
+			PowerUp powerUp = PowerUpFactory.createByType(
+					pData.type,
+					pData.row,
+					pData.col,
+					this.grid,
+					this.enemyManager.getEnemies());
+			grid.addPowerUp(powerUp);
+		}
+		if (this.panel != null) {
+			this.panel.updateReferences(this.grid, this.player, enemyManager.getEnemies());
+			this.panel.repaint();
+		}
+		System.out.println("Jogo carregado com sucesso! A retomar...");
 	}
 
 	private void updateWorld(Grid grid, TankPlayer player, long tick) {

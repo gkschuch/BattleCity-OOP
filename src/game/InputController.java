@@ -40,6 +40,9 @@ public class InputController {
             if (currentCommand == 'o') {
                 game.save();
             }
+            if (currentCommand == 'l') {
+                game.load();
+            }
             return;
         }
 
