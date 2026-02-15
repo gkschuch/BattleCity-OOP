@@ -5,6 +5,8 @@ import com.google.gson.GsonBuilder;
 import characters.TankPlayer;
 import characters.enemy.EnemyTank;
 import characters.powerups.PowerUp;
+import game.persistence.exceptions.GameLoadException;
+import game.persistence.exceptions.GameSaveException;
 import grid.Grid;
 import java.io.*;
 import java.util.List;
@@ -56,7 +58,7 @@ public class JsonSaveManager {
             gson.toJson(data, writer);
             System.out.println("Jogo salvo com sucesso em " + FILE_NAME);
         } catch (IOException e) {
-            System.err.println("FALHA EM SALVAR O JOGOz: " + e.getMessage());
+            throw new GameSaveException("Falha ao escrever o ficheiro de save: " + FILE_NAME, e);
         }
     }
 
@@ -66,10 +68,12 @@ public class JsonSaveManager {
             return null;
 
         try (FileReader reader = new FileReader(FILE_NAME)) {
-            return gson.fromJson(reader, GameSaveData.class);
+            GameSaveData data = gson.fromJson(reader, GameSaveData.class);
+            if (data == null || data.player == null)
+                throw new GameLoadException("O ficheiro de save está corrompido ou incompleto.", null);
+            return data;
         } catch (IOException e) {
-            System.err.println("FALHA EM CARREGAR O JOGO: " + e.getMessage());
-            return null;
+            throw new GameLoadException("Falha ao ler os dados do ficheiro JSON.", e);
         }
     }
 }
