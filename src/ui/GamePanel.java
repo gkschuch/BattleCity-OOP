@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import grid.Grid;
 import grid.blocks.Block;
+import ui.exceptions.MissingRenderContextException;
 import utils.GameConfig;
 import characters.TankPlayer;
 import characters.enemy.EnemyTank;
@@ -17,6 +18,14 @@ public class GamePanel extends JPanel {
     private List<Shot> shots;
 
     public GamePanel(Grid grid, TankPlayer player, List<EnemyTank> enemies, List<Shot> shots) {
+        if (grid == null)
+            throw new MissingRenderContextException("Grid");
+        if (player == null)
+            throw new MissingRenderContextException("TankPlayer");
+        if (enemies == null)
+            throw new MissingRenderContextException("Lista de Inimigos");
+        if (shots == null)
+            throw new MissingRenderContextException("Lista de Tiros");
         this.grid = grid;
         this.player = player;
         this.enemies = enemies;
@@ -27,6 +36,12 @@ public class GamePanel extends JPanel {
     }
 
     public void updateReferences(Grid newGrid, TankPlayer newPlayer, List<EnemyTank> newEnemies) {
+        if (newGrid == null)
+            throw new MissingRenderContextException("New Grid (Load)");
+        if (newPlayer == null)
+            throw new MissingRenderContextException("New TankPlayer (Load)");
+        if (newEnemies == null)
+            throw new MissingRenderContextException("New Lista de Inimigos (Load)");
         this.grid = newGrid;
         this.player = newPlayer;
         this.enemies = newEnemies;

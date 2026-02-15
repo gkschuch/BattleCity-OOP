@@ -5,10 +5,14 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 import game.InputController;
+import ui.exceptions.UIException;
 
 public class GameFrame extends JFrame {
 
     public GameFrame(InputController input) {
+        if (input == null) {
+            throw new UIException("O GameFrame não pode ser iniciado sem um InputController válido.");
+        }
         setTitle("Battle City OOP - UFPel Edition");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(true);

@@ -1,10 +1,14 @@
 package ui;
 
 import javax.swing.*;
+import ui.exceptions.UIException;
 import java.awt.*;
 
 public class RankingView {
     public static void displayLeaderboard(String formattedRanking) {
+        if (formattedRanking == null || formattedRanking.trim().isEmpty()) {
+            throw new UIException("Os dados do Ranking estão vazios ou nulos. Não é possível exibir o painel.");
+        }
         JTextArea textArea = new JTextArea(formattedRanking);
 
         textArea.setFont(new Font("Monospaced", Font.BOLD, 14));
