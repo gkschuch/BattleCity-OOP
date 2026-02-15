@@ -1,5 +1,6 @@
 package projectiles.strategy;
 
+import projectiles.exceptions.MissingProjectileDependencyException;
 import utils.Direction;
 
 /**
@@ -9,10 +10,12 @@ public class NormalMoveStrategy implements MoveStrategy {
 
     @Override
     public int[] calculateNextPosition(int currentX, int currentY, Direction direction) {
+        if (direction == null)
+            throw new MissingProjectileDependencyException("Direction para cálculo de rota");
         // Move exatamente 1 célula na direção
         int newX = currentX + direction.getDx();
         int newY = currentY + direction.getDy();
-        return new int[]{newX, newY};
+        return new int[] { newX, newY };
     }
 
     @Override

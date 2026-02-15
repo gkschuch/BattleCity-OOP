@@ -1,5 +1,6 @@
 package projectiles.strategy;
 
+import projectiles.exceptions.InvalidProjectileAttributeException;
 import utils.Direction;
 
 /**
@@ -13,6 +14,8 @@ public class PiercingMoveStrategy implements MoveStrategy {
     }
 
     public PiercingMoveStrategy(int maxPierces) {
+        if (maxPierces < 0)
+            throw new InvalidProjectileAttributeException("maxPierces", maxPierces);
         this.remainingPierces = maxPierces;
     }
 
@@ -21,7 +24,7 @@ public class PiercingMoveStrategy implements MoveStrategy {
         // Move 1 célula (igual ao normal)
         int newX = currentX + direction.getDx();
         int newY = currentY + direction.getDy();
-        return new int[]{newX, newY};
+        return new int[] { newX, newY };
     }
 
     @Override

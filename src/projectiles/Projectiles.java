@@ -3,6 +3,8 @@ package projectiles;
 import game.InputController;
 import grid.Grid;
 import utils.Direction;
+import projectiles.exceptions.MissingProjectileDependencyException;
+import projectiles.exceptions.ProjectileException;
 import projectiles.strategy.MoveStrategy;
 import projectiles.strategy.NormalMoveStrategy;
 
@@ -20,6 +22,12 @@ public abstract class Projectiles implements Runnable {
 
     // construtores
     public Projectiles(int startX, int startY, Direction direction, int damage, InputController input) {
+        if ((x < 0 || x > 13) || (y < 0 || y > 17))
+            throw new ProjectileException("Coordenadas de spawn inválidas: " + x + "," + y);
+        if (direction == null)
+            throw new MissingProjectileDependencyException("Direction");
+        if (moveStrategy == null)
+            throw new MissingProjectileDependencyException("MoveStrategy");
         this.x = startX;
         this.y = startY;
         this.direction = direction;
@@ -29,6 +37,12 @@ public abstract class Projectiles implements Runnable {
     }
 
     public Projectiles(int startX, int startY, Direction direction, MoveStrategy strategy, InputController input) {
+        if ((x < 0 || x > 13) || (y < 0 || y > 17))
+            throw new ProjectileException("Coordenadas de spawn inválidas: " + x + "," + y);
+        if (direction == null)
+            throw new MissingProjectileDependencyException("Direction");
+        if (moveStrategy == null)
+            throw new MissingProjectileDependencyException("MoveStrategy");
         this.x = startX;
         this.y = startY;
         this.direction = direction;
@@ -46,6 +60,8 @@ public abstract class Projectiles implements Runnable {
     }
 
     public void start() {
+        if (this.grid == null)
+            throw new MissingProjectileDependencyException("Grid (Use setGrid antes de chamar start)");
         thread = new Thread(this);
         thread.start();
     }
