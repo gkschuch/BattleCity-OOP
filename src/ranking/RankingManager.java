@@ -2,6 +2,7 @@ package ranking;
 
 import java.util.List;
 
+import ranking.exceptions.InvalidEntryException;
 import utils.GameConfig;
 
 public class RankingManager {
@@ -19,6 +20,13 @@ public class RankingManager {
 	}
 
 	public void addEntry(String name, int score) {
+		if (name == null || name.trim().isEmpty()) {
+			throw new InvalidEntryException("O nome do jogador não pode estar vazio no ranking.");
+		}
+		if (score < 0) {
+			throw new InvalidEntryException("A pontuação não pode ser negativa: " + score);
+		}
+
 		rankingList.add(new RankingEntry(name, score));
 		sortRanking();
 
