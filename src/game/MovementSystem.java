@@ -2,6 +2,7 @@ package game;
 
 import characters.TankPlayer;
 import characters.enemy.EnemyTank;
+import game.exceptions.MissingSystemDependencyException;
 import grid.Grid;
 import grid.blocks.Block;
 import utils.Direction;
@@ -17,6 +18,15 @@ public class MovementSystem {
 	// métodos
 
 	public static void tryMovePlayer(Grid grid, TankPlayer p, Direction dir, List<EnemyTank> enemies) {
+		if (grid == null)
+			throw new MissingSystemDependencyException("MovementSystem", "grid");
+		if (enemies == null)
+			throw new MissingSystemDependencyException("MovementSystem", "List<EnemyTank>");
+		if (p == null)
+			throw new MissingSystemDependencyException("MovementSystem", "TankPlayer");
+		if (dir == null)
+			throw new MissingSystemDependencyException("MovementSystem", "Direction");
+
 		p.setDirection(dir);
 
 		int row = (int) p.getY();
@@ -44,6 +54,15 @@ public class MovementSystem {
 	}
 
 	public static void stepEnemy(Grid grid, EnemyTank e, TankPlayer player, List<EnemyTank> enemies) {
+		if (grid == null)
+			throw new MissingSystemDependencyException("MovementSystem", "grid");
+		if (e == null)
+			throw new MissingSystemDependencyException("MovementSystem", "EnemyTank");
+		if (enemies == null)
+			throw new MissingSystemDependencyException("MovementSystem", "List<EnemyTank>");
+		if (player == null)
+			throw new MissingSystemDependencyException("MovementSystem", "TankPlayer");
+
 		int row = (int) e.getY();
 		int col = (int) e.getX();
 
@@ -72,10 +91,14 @@ public class MovementSystem {
 	}
 
 	public static boolean isPlayerAt(TankPlayer p, int row, int col) {
+		if (p == null)
+			return false;
 		return ((int) p.getY() == row && (int) p.getX() == col);
 	}
 
 	public static boolean isEnemyAt(List<EnemyTank> enemies, int row, int col) {
+		if (enemies == null)
+			return false;
 		for (int i = 0; i < enemies.size(); i++) {
 			EnemyTank e = enemies.get(i);
 
@@ -93,6 +116,8 @@ public class MovementSystem {
 	}
 
 	public static int countAlive(List<EnemyTank> enemies) {
+		if (enemies == null)
+			throw new MissingSystemDependencyException("MovementSystem (countAlive)", "List<EnemyTank>");
 		int n = 0;
 
 		for (int i = 0; i < enemies.size(); i++) {

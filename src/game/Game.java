@@ -13,6 +13,9 @@ import grid.Grid;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import javax.swing.JOptionPane;
+
 import ui.GameFrame;
 import ui.GamePanel;
 
@@ -91,23 +94,38 @@ public class Game {
 
 		List<EnemyTank> currentEnemies = enemyManager.getEnemies();
 		List<PowerUp> currentPowerUps = grid.getActivePowerUps();
+		try {
+			JsonSaveManager.saveGame(
+					this.player,
+					currentEnemies,
+					currentPowerUps,
+					this.grid,
+					this.difficulty,
+					this.mapPath);
 
-		JsonSaveManager.saveGame(
-				this.player,
-				currentEnemies,
-				currentPowerUps,
-				this.grid,
-				this.difficulty,
-				this.mapPath);
+			JOptionPane.showMessageDialog(panel, "Progresso guardado com sucesso!", "Save Game",
+					JOptionPane.INFORMATION_MESSAGE);
 
-		System.out.println("Progresso guardado com sucesso no arquivo JSON!");
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(panel, "Falha ao guardar o jogo:\n" + e.getMessage(), "Erro de Save",
+					JOptionPane.ERROR_MESSAGE);
+		}
 	}
 
 	public void load() {
 		GameSaveData data = JsonSaveManager.loadGame();
 
+		try {
+			data = JsonSaveManager.loadGame();
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(panel, "Não foi possível carregar o jogo:\n" + e.getMessage(), "Erro de Load",
+					JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+
 		if (data == null) {
-			System.out.println("Nenhum jogo salvo");
+			JOptionPane.showMessageDialog(panel, "Nenhum jogo salvo encontrado.", "Load Game",
+					JOptionPane.INFORMATION_MESSAGE);
 			return;
 		}
 

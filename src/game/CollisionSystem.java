@@ -2,6 +2,7 @@ package game;
 
 import characters.TankPlayer;
 import characters.enemy.EnemyTank;
+import game.exceptions.MissingSystemDependencyException;
 
 import java.util.List;
 
@@ -16,44 +17,47 @@ public class CollisionSystem {
 	// métodos
 
 	public static void handleShotsVsTanks(List<Shot> shots, List<EnemyTank> enemies, TankPlayer player) {
-		if ( shots == null || enemies == null || player == null )
-			return;
-
-		synchronized ( shots ) {
-			for ( int i = 0; i < shots.size(); i++ ) {
+		if (shots == null)
+			throw new MissingSystemDependencyException("CollisionSystem", "List<Shot>");
+		if (enemies == null)
+			throw new MissingSystemDependencyException("CollisionSystem", "List<EnemyTank>");
+		if (player == null)
+			throw new MissingSystemDependencyException("CollisionSystem", "TankPlayer");
+		synchronized (shots) {
+			for (int i = 0; i < shots.size(); i++) {
 				Shot s = shots.get(i);
 
-				if ( s == null || s.p == null )
+				if (s == null || s.p == null)
 					continue;
 
 				BasicProjectile p = s.p;
 
-				if ( !p.isActive() )
+				if (!p.isActive())
 					continue;
 
 				int r = p.getY();
 				int c = p.getX();
 
-				if ( s.fromEnemy ) {
-					if ( (( int ) player.getY() == r) && (( int ) player.getX() == c) ) {
+				if (s.fromEnemy) {
+					if (((int) player.getY() == r) && ((int) player.getX() == c)) {
 						player.takeDamage(p.getDamage());
 						p.deactivate();
 					}
 				} else {
-					for ( int j = 0; j < enemies.size(); j++ ) {
+					for (int j = 0; j < enemies.size(); j++) {
 						EnemyTank e = enemies.get(j);
 
-						if ( e == null )
+						if (e == null)
 							continue;
 
-						if ( e.isDestroyed() )
+						if (e.isDestroyed())
 							continue;
 
-						if ( (( int ) e.getY() == r) && (( int ) e.getX() == c) ) {
+						if (((int) e.getY() == r) && ((int) e.getX() == c)) {
 							e.takeDamage(p.getDamage());
 							p.deactivate();
 
-							if ( e.isDestroyed() ) {
+							if (e.isDestroyed()) {
 								player.addScore(e.getScoreValue());
 							}
 							break;
