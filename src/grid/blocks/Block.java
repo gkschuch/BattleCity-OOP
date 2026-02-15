@@ -3,6 +3,7 @@ package grid.blocks;
 import characters.TankPlayer;
 import characters.enemy.EnemyTank;
 import grid.Grid;
+import grid.exceptions.GridException;
 import utils.Destructible;
 
 public abstract class Block implements Destructible {
@@ -14,6 +15,8 @@ public abstract class Block implements Destructible {
 	// construtor
 
 	public Block(int row, int col) {
+		if (row < 0 || col < 0)
+			throw new GridException("Coordenadas do bloco não podem ser negativas: [" + row + ", " + col + "]");
 		this.setRow(row);
 		this.setCol(col);
 		this.health = 1;

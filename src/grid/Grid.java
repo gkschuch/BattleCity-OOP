@@ -1,6 +1,8 @@
 package grid;
 
 import grid.blocks.*;
+import grid.exceptions.MapLoadException;
+import grid.exceptions.OutOfBoundsException;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -50,8 +52,7 @@ public final class Grid {
 			}
 
 		} catch (IOException e) {
-			System.err.println("Erro ao carregar mapa: " + mapFile);
-			e.printStackTrace();
+			System.err.println(new MapLoadException(mapFile, e).getMessage());
 			initDefaultMap();
 		}
 	}
@@ -81,10 +82,12 @@ public final class Grid {
 			blocks[rows - 1][c] = new Steel(rows - 1, c);
 		}
 
-		int baseRow = 14;
-		int baseCol = 6;
+		int baseRow = rows - 1;
+		int baseCol = cols / 2;
+
 		base = new Base(baseRow, baseCol);
-		blocks[baseRow][baseCol] = base;
+
+		setBlock(baseRow, baseCol, base);
 	}
 
 	public void applySavedLayout(String[] savedLines) {
@@ -218,7 +221,7 @@ public final class Grid {
 
 	public synchronized void setBlock(int row, int col, Block block) {
 		if (!isInside(row, col))
-			return;
+			throw new OutOfBoundsException(row, col, this.rows, this.cols);
 
 		blocks[row][col] = block;
 
