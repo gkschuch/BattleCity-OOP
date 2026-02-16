@@ -26,8 +26,6 @@ public abstract class Projectiles implements Runnable {
             throw new ProjectileException("Coordenadas de spawn inválidas: " + x + "," + y);
         if (direction == null)
             throw new MissingProjectileDependencyException("Direction");
-        if (moveStrategy == null)
-            throw new MissingProjectileDependencyException("MoveStrategy");
         this.x = startX;
         this.y = startY;
         this.direction = direction;
@@ -41,7 +39,7 @@ public abstract class Projectiles implements Runnable {
             throw new ProjectileException("Coordenadas de spawn inválidas: " + x + "," + y);
         if (direction == null)
             throw new MissingProjectileDependencyException("Direction");
-        if (moveStrategy == null)
+        if (strategy == null)
             throw new MissingProjectileDependencyException("MoveStrategy");
         this.x = startX;
         this.y = startY;

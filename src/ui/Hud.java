@@ -1,33 +1,59 @@
 package ui;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+
 import characters.TankPlayer;
 import grid.Grid;
 import ui.exceptions.MissingRenderContextException;
 
 public class Hud {
 
-	// métodos
-
-	public void clear() {
-		System.out.print("\033[H\033[2J");
-		System.out.flush();
-	}
-
-	public void draw(TankPlayer p, Grid g) {
+	public void draw(Graphics g, TankPlayer p, Grid grid, int screenWidth, int screenHeight) {
 		if (p == null)
 			throw new MissingRenderContextException("TankPlayer no HUD");
-		if (g == null)
+		if (grid == null)
 			throw new MissingRenderContextException("Grid no HUD");
-		System.out.println("Player: " + p.getPlayerName() + " | Vidas: " + p.getLives() + " | Score: " + p.getScore()
-				+ " | Arma: " + p.getGunLevel());
+		if (g == null)
+			throw new MissingRenderContextException("Graphics no HUD");
 
-		if (g.isBaseDestroyed()) {
-			System.out.println("Base: DESTRUIDA");
+		g.setColor(new Color(0, 0, 0, 200));
+		g.fillRect(0, 0, screenWidth, 30);
+
+		g.setFont(new Font("Monospaced", Font.BOLD, 20));
+		FontMetrics fm = g.getFontMetrics();
+
+		String stats = String.format("%s | Vidas: %d | Score: %d | Arma: %d   |   ",
+				p.getPlayerName(), p.getLives(), p.getScore(), p.getGunLevel());
+		String baseStatus = grid.isBaseDestroyed() ? "Base: DESTRUÍDA" : "Base: SEGURA";
+
+		int statsWidth = fm.stringWidth(stats);
+		int baseWidth = fm.stringWidth(baseStatus);
+		int totalTopWidth = statsWidth + baseWidth;
+
+		int topStartX = (screenWidth - totalTopWidth) / 2;
+
+		g.setColor(Color.WHITE);
+		g.drawString(stats, topStartX, 20);
+
+		if (grid.isBaseDestroyed()) {
+			g.setColor(Color.RED);
 		} else {
-			System.out.println("Base: OK");
+			g.setColor(Color.GREEN);
 		}
+		g.drawString(baseStatus, topStartX + statsWidth, 20);
 
-		System.out.println("Controles: W/A/S/D mover | F atirar | Q sair");
-		System.out.println();
+		g.setColor(new Color(0, 0, 0, 200));
+		g.fillRect(0, screenHeight - 30, screenWidth, 30);
+
+		String bottomText = "W/A/S/D: Mover | SPACE: Atirar | P: Pause | L: CARREGAR | O: SALVAR | Q: Sair";
+		int bottomWidth = fm.stringWidth(bottomText);
+
+		int bottomStartX = (screenWidth - bottomWidth) / 2;
+
+		g.setColor(Color.LIGHT_GRAY);
+		g.drawString(bottomText, bottomStartX, screenHeight - 10);
 	}
 }

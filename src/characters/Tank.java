@@ -115,8 +115,10 @@ public abstract class Tank implements Movable, Destructible, Runnable {
 	}
 
 	public void setLives(int lives) {
-		if (lives <= 0)
-			throw new InvalidAttributeException("Lives", lives);
+		if (lives <= 0) {
+			this.lives = 0;
+			return;
+		}
 		this.lives = lives;
 	}
 

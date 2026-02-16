@@ -16,6 +16,7 @@ public class GamePanel extends JPanel {
     private TankPlayer player;
     private List<EnemyTank> enemies;
     private List<Shot> shots;
+    private Hud hud = new Hud();
 
     public GamePanel(Grid grid, TankPlayer player, List<EnemyTank> enemies, List<Shot> shots) {
         if (grid == null)
@@ -42,14 +43,36 @@ public class GamePanel extends JPanel {
             throw new MissingRenderContextException("New TankPlayer (Load)");
         if (newEnemies == null)
             throw new MissingRenderContextException("New Lista de Inimigos (Load)");
+
         this.grid = newGrid;
         this.player = newPlayer;
         this.enemies = newEnemies;
+
+        int width = grid.getCols() * GameConfig.TILE_SIZE;
+        int height = grid.getRows() * GameConfig.TILE_SIZE + 60;
+
+        setPreferredSize(new Dimension(width, height));
+        setBackground(Color.BLACK);
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+
+        int gameWidth = grid.getCols() * GameConfig.TILE_SIZE;
+        int gameHeight = grid.getRows() * GameConfig.TILE_SIZE;
+
+        int offsetX = (getWidth() - gameWidth) / 2;
+        int offsetY = (getHeight() - gameHeight) / 2;
+
+        if (offsetY < 30) {
+            offsetY = 30;
+        }
+        if (offsetX < 0) {
+            offsetX = 0;
+        }
+
+        g.translate(offsetX, offsetY);
 
         for (int r = 0; r < grid.getRows(); r++) {
             for (int c = 0; c < grid.getCols(); c++) {
@@ -57,6 +80,7 @@ public class GamePanel extends JPanel {
                 drawBlock(g, b, r, c);
             }
         }
+
         g.setColor(Color.GREEN);
         g.fillRect((int) player.getX() * GameConfig.TILE_SIZE, (int) player.getY() * GameConfig.TILE_SIZE,
                 GameConfig.TILE_SIZE, GameConfig.TILE_SIZE);
@@ -68,11 +92,24 @@ public class GamePanel extends JPanel {
                         GameConfig.TILE_SIZE, GameConfig.TILE_SIZE);
             }
         }
+
         g.setColor(Color.YELLOW);
         synchronized (shots) {
+            int bulletSize = 8;
+
+            int offset = (GameConfig.TILE_SIZE - bulletSize) / 2;
+
             for (Shot s : shots) {
-                g.fillOval(s.p.getX() * GameConfig.TILE_SIZE + 10, s.p.getY() * GameConfig.TILE_SIZE + 10, 8, 8);
+                g.fillOval(
+                        s.p.getX() * GameConfig.TILE_SIZE + offset,
+                        s.p.getY() * GameConfig.TILE_SIZE + offset,
+                        bulletSize,
+                        bulletSize);
             }
+
+            g.translate(-offsetX, -offsetY);
+
+            hud.draw(g, player, grid, getWidth(), getHeight());
         }
     }
 

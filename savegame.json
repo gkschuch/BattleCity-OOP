@@ -3,39 +3,33 @@
   "difficulty": 1,
   "player": {
     "name": "a",
-    "x": 7.0,
-    "y": 3.0,
+    "x": 4.0,
+    "y": 11.0,
     "speed": 1.0,
     "score": 0,
     "lives": 7,
     "gunLevel": 1,
-    "direction": "DOWN"
+    "direction": "RIGHT"
   },
   "enemies": [
     {
       "type": "NORMAL",
-      "x": 13.0,
+      "x": 1.0,
       "y": 4.0,
       "lives": 1,
       "frozen": false,
-      "direction": "LEFT"
+      "direction": "RIGHT"
     },
     {
       "type": "FAST",
-      "x": 7.0,
-      "y": 11.0,
+      "x": 12.0,
+      "y": 2.0,
       "lives": 1,
       "frozen": false,
-      "direction": "DOWN"
+      "direction": "RIGHT"
     }
   ],
-  "powerUps": [
-    {
-      "type": "CLOCK",
-      "row": 11,
-      "col": 5
-    }
-  ],
+  "powerUps": [],
   "gridLayout": [
     "#################",
     "#...............#",
@@ -48,7 +42,7 @@
     "#.###.T.###.T.###",
     "#...T...T...T...#",
     "#.#####.#####.#.#",
-    "#....?..........#",
+    "#...............#",
     "#################"
   ]
 }
