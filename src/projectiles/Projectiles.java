@@ -1,7 +1,10 @@
 package projectiles;
 
+import game.InputController;
 import grid.Grid;
 import utils.Direction;
+import projectiles.exceptions.MissingProjectileDependencyException;
+import projectiles.exceptions.ProjectileException;
 import projectiles.strategy.MoveStrategy;
 import projectiles.strategy.NormalMoveStrategy;
 
@@ -14,22 +17,37 @@ public abstract class Projectiles implements Runnable {
     protected boolean active = true;
     protected Thread thread;
     protected Grid grid;
+    protected InputController input;
     protected MoveStrategy moveStrategy; // Atributo para Strategy Pattern
 
     // construtores
-    public Projectiles(int startX, int startY, Direction direction, int damage) {
+    public Projectiles(int startX, int startY, Direction direction, int damage, InputController input) {
+        if ((x < 0 || x > 13) || (y < 0 || y > 17))
+            throw new ProjectileException("Coordenadas de spawn inválidas: " + x + "," + y);
+        if (direction == null)
+            throw new MissingProjectileDependencyException("Direction");
+        if (moveStrategy == null)
+            throw new MissingProjectileDependencyException("MoveStrategy");
         this.x = startX;
         this.y = startY;
         this.direction = direction;
         this.damage = damage;
+        this.input = input;
         this.moveStrategy = new NormalMoveStrategy(); // Estratégia padrão
     }
 
-    public Projectiles(int startX, int startY, Direction direction, MoveStrategy strategy) {
+    public Projectiles(int startX, int startY, Direction direction, MoveStrategy strategy, InputController input) {
+        if ((x < 0 || x > 13) || (y < 0 || y > 17))
+            throw new ProjectileException("Coordenadas de spawn inválidas: " + x + "," + y);
+        if (direction == null)
+            throw new MissingProjectileDependencyException("Direction");
+        if (moveStrategy == null)
+            throw new MissingProjectileDependencyException("MoveStrategy");
         this.x = startX;
         this.y = startY;
         this.direction = direction;
         this.moveStrategy = strategy;
+        this.input = input;
         this.damage = strategy.getBaseDamage(); // Dano baseado na estratégia
     }
 
@@ -42,6 +60,8 @@ public abstract class Projectiles implements Runnable {
     }
 
     public void start() {
+        if (this.grid == null)
+            throw new MissingProjectileDependencyException("Grid (Use setGrid antes de chamar start)");
         thread = new Thread(this);
         thread.start();
     }
@@ -49,6 +69,16 @@ public abstract class Projectiles implements Runnable {
     @Override
     public void run() {
         while (active) {
+            if (input != null && input.isPaused()) {
+                try {
+                    Thread.sleep(100);
+                    continue;
+                } catch (InterruptedException e) {
+                    if (!active)
+                        break;
+                }
+            }
+
             move();
 
             if (grid != null) {
@@ -59,7 +89,7 @@ public abstract class Projectiles implements Runnable {
 
                 boolean canContinue = grid.handleProjectileHit(y, x, getDamage());
                 if (!canContinue) {
-                    moveStrategy.onHit(); // Executa ação da estratégia
+                    moveStrategy.onHit();
                     if (!moveStrategy.shouldContinueAfterHit()) {
                         deactivate();
                         break;
@@ -68,9 +98,10 @@ public abstract class Projectiles implements Runnable {
             }
 
             try {
-                Thread.sleep(moveStrategy.getMoveDelay()); // Delay baseado na estratégia
+                Thread.sleep(moveStrategy.getMoveDelay());
             } catch (InterruptedException e) {
-                break;
+                if (!active)
+                    break;
             }
         }
     }

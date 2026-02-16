@@ -6,30 +6,38 @@ import java.util.Random;
 
 import characters.TankPlayer;
 import characters.enemy.*;
+import game.persistence.EnemySaveData;
 import grid.Grid;
 
 public class EnemyManager {
     private final List<EnemyTank> enemies = new ArrayList<>();
     private final Random random = new Random();
 
-    private int[] findEmptyPosition(Grid grid) {
+    private int[] findEmptyPosition(Grid grid, TankPlayer player) {
         int r, c;
+        boolean isOccupied;
         do {
             r = random.nextInt(grid.getRows());
             c = random.nextInt(grid.getCols());
-        } while (grid.getBlock(r, c) != null);
+
+            boolean isObstacle = !grid.isWalkable(r, c);
+            boolean isAtPlayerPosition = (r == (int) player.getY() && c == (int) player.getX());
+
+            isOccupied = isObstacle || isAtPlayerPosition;
+
+        } while (isOccupied);
         return new int[] { r, c };
     }
 
     private EnemyTank createTankByIndex(int index, TankPlayer player, Grid grid) {
-        int[] pos = findEmptyPosition(grid);
+        int[] pos = findEmptyPosition(grid, player);
         int r = pos[0], c = pos[1];
 
         return switch (index) {
-            case 0 -> new NormalTank(r, c, player);
-            case 1 -> new FastTank(r, c, player);
-            case 2 -> new ArmedTank(r, c, player);
-            default -> new ArmoredTank(r, c, player);
+            case 0 -> new NormalTank(c, r, player);
+            case 1 -> new FastTank(c, r, player);
+            case 2 -> new ArmedTank(c, r, player);
+            default -> new ArmoredTank(c, r, player);
         };
     }
 
@@ -56,6 +64,31 @@ public class EnemyManager {
             for (EnemyTank e : enemies)
                 if (e != null && !e.isDestroyed())
                     MovementSystem.stepEnemy(grid, e, player, enemies);
+    }
+
+    public void addSavedEnemy(EnemySaveData eData, TankPlayer player, Grid grid) {
+        EnemyTank enemy = null;
+        switch (eData.type) {
+            case NORMAL -> enemy = new NormalTank(eData.x, eData.y, player);
+            case FAST -> enemy = new FastTank(eData.x, eData.y, player);
+            case ARMORED -> enemy = new ArmoredTank(eData.x, eData.y, player);
+            case ARMED -> enemy = new ArmedTank(eData.x, eData.y, player);
+        }
+        if (enemy == null)
+            return;
+
+        enemy.setLives(eData.lives);
+        enemy.setFrozen(eData.frozen);
+        enemy.setDirection(eData.direction);
+        enemy.setGrid(grid);
+
+        this.enemies.add(enemy);
+        enemy.start();
+    }
+
+    public void clearEnemies() {
+        stopAll();
+        enemies.clear();
     }
 
     protected void stopAll() {

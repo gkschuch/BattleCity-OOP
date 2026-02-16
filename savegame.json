@@ -1,0 +1,54 @@
+{
+  "mapPath": "src/grid/models/model_maze.txt",
+  "difficulty": 1,
+  "player": {
+    "name": "a",
+    "x": 7.0,
+    "y": 3.0,
+    "speed": 1.0,
+    "score": 0,
+    "lives": 7,
+    "gunLevel": 1,
+    "direction": "DOWN"
+  },
+  "enemies": [
+    {
+      "type": "NORMAL",
+      "x": 13.0,
+      "y": 4.0,
+      "lives": 1,
+      "frozen": false,
+      "direction": "LEFT"
+    },
+    {
+      "type": "FAST",
+      "x": 7.0,
+      "y": 11.0,
+      "lives": 1,
+      "frozen": false,
+      "direction": "DOWN"
+    }
+  ],
+  "powerUps": [
+    {
+      "type": "CLOCK",
+      "row": 11,
+      "col": 5
+    }
+  ],
+  "gridLayout": [
+    "#################",
+    "#...............#",
+    "#.###.T.###.T.###",
+    "#.#~~.T.~~#.T.#.#",
+    "#...#.###.#...#.#",
+    "#.T...#.X.#...T.#",
+    "#...#.###.#...#.#",
+    "#.#~~.T.~~#.T.#.#",
+    "#.###.T.###.T.###",
+    "#...T...T...T...#",
+    "#.#####.#####.#.#",
+    "#....?..........#",
+    "#################"
+  ]
+}

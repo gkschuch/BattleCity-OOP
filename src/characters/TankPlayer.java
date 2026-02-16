@@ -1,5 +1,6 @@
 package characters;
 
+import characters.exceptions.DependencyMissingException;
 import grid.Grid;
 import projectiles.BasicProjectile;
 import utils.Direction;
@@ -33,10 +34,8 @@ public class TankPlayer extends Tank {
 
 	@Override
 	public void shoot() {
-		if (grid == null) {
-			System.out.println("TankPlayer: grid nao configurado. Use player.setGrid(grid).");
-			return;
-		}
+		if (grid == null)
+			throw new DependencyMissingException("Grid");
 
 		if (lastShot != null && lastShot.isActive())
 			return;
@@ -46,7 +45,7 @@ public class TankPlayer extends Tank {
 		int startX = (int) this.getX() + pd.getDx();
 		int startY = (int) this.getY() + pd.getDy();
 
-		BasicProjectile p = new BasicProjectile(startX, startY, pd, getGunLevel());
+		BasicProjectile p = new BasicProjectile(startX, startY, pd, getGunLevel(), null);
 		p.setGrid(grid);
 		p.start();
 
@@ -98,6 +97,16 @@ public class TankPlayer extends Tank {
 	}
 
 	public void setGrid(Grid grid) {
+		if (grid == null)
+			throw new DependencyMissingException("Grid no TankPlayer");
 		this.grid = grid;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
+	}
+
+	public void setGunLevel(int gunLevel) {
+		this.gunLevel = gunLevel;
 	}
 }

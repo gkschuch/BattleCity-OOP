@@ -28,4 +28,8 @@ public class NormalTank extends EnemyTank {
 		if (this.isFrozen())
 			return;
 	}
+
+	public EnemyTankType getEnemyTankType() {
+		return EnemyTankType.NORMAL;
+	}
 }

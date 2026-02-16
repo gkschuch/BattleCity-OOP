@@ -1,18 +1,19 @@
 package projectiles;
 
 import utils.Direction;
+import game.InputController;
 import projectiles.strategy.MoveStrategy;
 
 public class BasicProjectile extends Projectiles {
 
     // Construtor original (mantém compatibilidade)
-    public BasicProjectile(int startX, int startY, Direction direction, int damage) {
-        super(startX, startY, direction, damage);
+    public BasicProjectile(int startX, int startY, Direction direction, int damage, InputController input) {
+        super(startX, startY, direction, damage, input);
     }
 
     // Construtor com Strategy personalizado
-    public BasicProjectile(int startX, int startY, Direction direction, MoveStrategy strategy) {
-        super(startX, startY, direction, strategy);
+    public BasicProjectile(int startX, int startY, Direction direction, MoveStrategy strategy, InputController input) {
+        super(startX, startY, direction, strategy, input);
     }
 
     @Override

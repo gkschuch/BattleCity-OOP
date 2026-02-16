@@ -34,4 +34,7 @@ public final class GameConfig {
 	public static final int CLOCK_DURATION_MS = 7000;
 	public static final int SHOVEL_DURATION_MS = 10000;
 
+	// GUI
+	public static final int TILE_SIZE = 30;
+
 }

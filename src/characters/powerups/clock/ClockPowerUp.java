@@ -16,6 +16,8 @@ public class ClockPowerUp extends PowerUp {
 
     @Override
     public void applyEffect(TankPlayer player) {
+        if (enemies.isEmpty())
+            return;
         Thread freezeThread = new Thread(new FreezeEnemiesTask(enemies));
         freezeThread.start();
     }

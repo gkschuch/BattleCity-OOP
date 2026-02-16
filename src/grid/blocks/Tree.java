@@ -11,6 +11,11 @@ public class Tree extends Block {
 	// métodos
 
 	@Override
+	public java.awt.Color getColor() {
+		return new java.awt.Color(34, 139, 34); // Verde floresta
+	}
+
+	@Override
 	public boolean isWalkable() {
 		return true;
 	}

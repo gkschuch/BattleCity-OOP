@@ -1,5 +1,6 @@
 package characters.powerups.shovel;
 
+import characters.exceptions.PowerUpDependencyException;
 import grid.Grid;
 import grid.blocks.Brick;
 import grid.blocks.Steel;
@@ -9,6 +10,8 @@ public class ShovelTask implements Runnable {
     private final Grid grid;
 
     public ShovelTask(Grid grid) {
+        if (grid == null)
+            throw new PowerUpDependencyException("SHOVEL_TASK", "Grid");
         this.grid = grid;
     }
 

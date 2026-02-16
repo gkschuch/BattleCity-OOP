@@ -28,4 +28,8 @@ public class FastTank extends EnemyTank {
 		if (this.isFrozen())
 			return;
 	}
+
+	public EnemyTankType getEnemyTankType() {
+		return EnemyTankType.FAST;
+	}
 }

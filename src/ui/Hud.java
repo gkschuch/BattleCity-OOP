@@ -2,6 +2,7 @@ package ui;
 
 import characters.TankPlayer;
 import grid.Grid;
+import ui.exceptions.MissingRenderContextException;
 
 public class Hud {
 
@@ -13,9 +14,14 @@ public class Hud {
 	}
 
 	public void draw(TankPlayer p, Grid g) {
-		System.out.println("Player: " + p.getPlayerName() + " | Vidas: " + p.getLives() + " | Score: " + p.getScore() + " | Arma: " + p.getGunLevel());
+		if (p == null)
+			throw new MissingRenderContextException("TankPlayer no HUD");
+		if (g == null)
+			throw new MissingRenderContextException("Grid no HUD");
+		System.out.println("Player: " + p.getPlayerName() + " | Vidas: " + p.getLives() + " | Score: " + p.getScore()
+				+ " | Arma: " + p.getGunLevel());
 
-		if ( g.isBaseDestroyed() ) {
+		if (g.isBaseDestroyed()) {
 			System.out.println("Base: DESTRUIDA");
 		} else {
 			System.out.println("Base: OK");
