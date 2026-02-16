@@ -1,8 +1,7 @@
-import game.Game;
+import ui.MainMenu;
 
 public class App {
 	public static void main(String[] args) {
-		Game game = new Game();
-		game.run();
+		new MainMenu().setVisible(true);
 	}
 }

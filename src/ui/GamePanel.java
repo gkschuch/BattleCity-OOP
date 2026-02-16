@@ -18,6 +18,8 @@ public class GamePanel extends JPanel {
     private List<Shot> shots;
     private Hud hud = new Hud();
 
+    private boolean paused = false;
+
     public GamePanel(Grid grid, TankPlayer player, List<EnemyTank> enemies, List<Shot> shots) {
         if (grid == null)
             throw new MissingRenderContextException("Grid");
@@ -53,12 +55,20 @@ public class GamePanel extends JPanel {
 
         setPreferredSize(new Dimension(width, height));
         setBackground(Color.BLACK);
+
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+        if (!isPaused()) {
+            drawGameWorld(g);
+            return;
+        }
+        drawPauseOverlay(g);
+    }
 
+    private void drawGameWorld(Graphics g) {
         int gameWidth = grid.getCols() * GameConfig.TILE_SIZE;
         int gameHeight = grid.getRows() * GameConfig.TILE_SIZE;
 
@@ -113,6 +123,41 @@ public class GamePanel extends JPanel {
         }
     }
 
+    private void drawPauseOverlay(Graphics g) {
+        g.setColor(new Color(0, 0, 0, 180));
+        g.fillRect(0, 0, getWidth(), getHeight());
+
+        g.setFont(new Font("Monospaced", Font.BOLD, 50));
+        FontMetrics fmTitle = g.getFontMetrics();
+        String title = "JOGO PAUSADO";
+
+        int titleX = (getWidth() - fmTitle.stringWidth(title)) / 2;
+        int titleY = getHeight() / 2 - 60;
+
+        g.setColor(Color.BLACK);
+        g.drawString(title, titleX + 3, titleY + 3);
+        g.setColor(Color.YELLOW);
+        g.drawString(title, titleX, titleY);
+
+        g.setFont(new Font("Monospaced", Font.BOLD, 20));
+        FontMetrics fmOptions = g.getFontMetrics();
+        g.setColor(Color.WHITE);
+
+        String[] options = {
+                "[ P ] RETOMAR JOGO",
+                "[ O ] SALVAR PROGRESSO",
+                "[ L ] CARREGAR JOGO",
+                "[ Q ] SAIR DO JOGO"
+        };
+
+        int optionY = getHeight() / 2 + 10;
+        for (String option : options) {
+            int optionX = (getWidth() - fmOptions.stringWidth(option)) / 2;
+            g.drawString(option, optionX, optionY);
+            optionY += 35;
+        }
+    }
+
     private void drawBlock(Graphics g, Block b, int row, int col) {
         if (b == null)
             return;
@@ -123,5 +168,13 @@ public class GamePanel extends JPanel {
 
         g.setColor(g.getColor().darker());
         g.drawRect(col * GameConfig.TILE_SIZE, row * GameConfig.TILE_SIZE, GameConfig.TILE_SIZE, GameConfig.TILE_SIZE);
+    }
+
+    public boolean isPaused() {
+        return paused;
+    }
+
+    public void setPaused(boolean paused) {
+        this.paused = paused;
     }
 }

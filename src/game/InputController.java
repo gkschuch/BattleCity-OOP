@@ -21,8 +21,6 @@ public class InputController {
 
     public void addCommand(char command) {
         this.bufferedCommand = Character.toLowerCase(command);
-        if (this.bufferedCommand == 'q')
-            this.running = false;
     }
 
     public void processInput(TankPlayer player, Grid grid, List<EnemyTank> enemies, List<Shot> shots, Game game) {
@@ -32,7 +30,6 @@ public class InputController {
 
         if (currentCommand == 'p') {
             togglePause();
-            System.out.println(paused ? "Jogo Pausado" : "Jogo Retomado");
             return;
         }
 
@@ -42,6 +39,9 @@ public class InputController {
             }
             if (currentCommand == 'l') {
                 game.load();
+            }
+            if (currentCommand == 'q') {
+                this.running = false;
             }
             return;
         }

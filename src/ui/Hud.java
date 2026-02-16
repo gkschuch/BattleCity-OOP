@@ -25,7 +25,7 @@ public class Hud {
 		g.setFont(new Font("Monospaced", Font.BOLD, 20));
 		FontMetrics fm = g.getFontMetrics();
 
-		String stats = String.format("%s | Vidas: %d | Score: %d | Arma: %d   |   ",
+		String stats = String.format("Nome do Jogador: %s | Vidas: %d | Score: %d | Arma: %d   |   ",
 				p.getPlayerName(), p.getLives(), p.getScore(), p.getGunLevel());
 		String baseStatus = grid.isBaseDestroyed() ? "Base: DESTRUÍDA" : "Base: SEGURA";
 
@@ -48,7 +48,7 @@ public class Hud {
 		g.setColor(new Color(0, 0, 0, 200));
 		g.fillRect(0, screenHeight - 30, screenWidth, 30);
 
-		String bottomText = "W/A/S/D: Mover | SPACE: Atirar | P: Pause | L: CARREGAR | O: SALVAR | Q: Sair";
+		String bottomText = "W/A/S/D: Mover | SPACE: Atirar";
 		int bottomWidth = fm.stringWidth(bottomText);
 
 		int bottomStartX = (screenWidth - bottomWidth) / 2;

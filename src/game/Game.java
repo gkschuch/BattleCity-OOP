@@ -34,18 +34,19 @@ public class Game {
 	public Game() {
 	}
 
-	public void run() {
-		GameSetup setup = new GameSetup();
-		String playerName = setup.askPlayerName();
-		this.mapPath = setup.askMapChoice();
-		this.grid = new Grid(mapPath);
-		this.difficulty = setup.askDifficulty();
+	public void startGame(boolean isNewGame, String playerName, String mapPath, int difficulty) {
+		if (isNewGame) {
+			this.mapPath = mapPath;
+			this.grid = new Grid(mapPath);
+			this.difficulty = difficulty;
 
-		this.player = new TankPlayer(playerName, 1, 1, 20, 1.0);
-		this.player.setGrid(grid);
-		this.player.start();
-
-		enemyManager.spawnEnemies(difficulty, player, grid);
+			this.player = new TankPlayer(playerName, 1, 1, 20, 1.0);
+			this.player.setGrid(grid);
+			this.player.start();
+			enemyManager.spawnEnemies(difficulty, player, grid);
+		} else {
+			load();
+		}
 		PowerUpSpawner spawner = new PowerUpSpawner(grid, enemyManager.getEnemies(), input);
 		Thread spawnerThread = new Thread(spawner);
 		spawnerThread.start();
@@ -66,6 +67,8 @@ public class Game {
 				if (!input.isPaused()) {
 					updateWorld(grid, player, tick);
 				}
+
+				panel.setPaused(input.isPaused());
 
 				panel.repaint();
 
