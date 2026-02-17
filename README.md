@@ -20,7 +20,7 @@ Para rodar este projeto localmente na sua máquina, siga os passos abaixo:
 
 1. **Clone este repositório:**
    ```bash
-   git clone [https://github.com/gkschuch/BattleCity-OOP.git](https://github.com/gkschuch/BattleCity-OOP.git)
+   git clone https://github.com/gkschuch/BattleCity-OOP.git
    ```
 2. **Dependências do Projeto**
    Este projeto utiliza a biblioteca **Gson** da Google para manipulação de dados.
