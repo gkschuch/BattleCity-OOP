@@ -1,5 +1,9 @@
 package grid.blocks;
 
+import java.awt.image.BufferedImage;
+
+import utils.SpriteManager;
+
 public class Base extends Block {
 
 	// contrutor
@@ -18,6 +22,14 @@ public class Base extends Block {
 		}
 		// Cor Ouro (RGB: 255, 215, 0) para a base ativa
 		return new java.awt.Color(255, 215, 0);
+	}
+
+	@Override
+	public BufferedImage getImage() {
+		if (this.isDestroyed()) {
+			return SpriteManager.getSprite(320, 32, 16, 16);
+		}
+		return SpriteManager.getSprite(1433, 355, 182, 233);
 	}
 
 	@Override

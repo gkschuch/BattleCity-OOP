@@ -5,6 +5,8 @@ import characters.exceptions.PowerUpException;
 import grid.Grid;
 import grid.blocks.Block;
 import utils.Collectable;
+import java.awt.image.BufferedImage;
+import utils.SpriteManager;
 
 public abstract class PowerUp extends Block implements Collectable {
     private PowerUpType powerUpType;
@@ -21,6 +23,18 @@ public abstract class PowerUp extends Block implements Collectable {
     @Override
     public java.awt.Color getColor() {
         return java.awt.Color.MAGENTA;
+    }
+
+    @Override
+    public BufferedImage getImage() {
+        return switch (this.getPowerUpType()) {
+            case HELMET -> SpriteManager.getSprite(864, 83, 166, 159);
+            case CLOCK -> SpriteManager.getSprite(1316, 74, 160, 177);
+            case SHOVEL -> SpriteManager.getSprite(1087, 66, 172, 181);
+            case STAR -> SpriteManager.getSprite(643, 64, 177, 180);
+            case BOMB -> SpriteManager.getSprite(1537, 73, 164, 174);
+            case LIFE -> SpriteManager.getSprite(1755, 86, 158, 154);
+        };
     }
 
     @Override

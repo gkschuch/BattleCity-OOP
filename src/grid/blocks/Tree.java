@@ -1,5 +1,9 @@
 package grid.blocks;
 
+import java.awt.image.BufferedImage;
+
+import utils.SpriteManager;
+
 public class Tree extends Block {
 
 	// contrutor
@@ -13,6 +17,11 @@ public class Tree extends Block {
 	@Override
 	public java.awt.Color getColor() {
 		return new java.awt.Color(34, 139, 34); // Verde floresta
+	}
+
+	@Override
+	public BufferedImage getImage() {
+		return SpriteManager.getSprite(922, 365, 184, 205);
 	}
 
 	@Override

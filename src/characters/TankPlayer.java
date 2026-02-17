@@ -5,6 +5,7 @@ import grid.Grid;
 import projectiles.BasicProjectile;
 import utils.Direction;
 import utils.GameConfig;
+import java.awt.image.BufferedImage;
 
 public class TankPlayer extends Tank {
 	// atributos
@@ -30,6 +31,40 @@ public class TankPlayer extends Tank {
 	public void updateBehavior() {
 		// comportamento automático do player na thread (pode ser vazio
 		// ou usado para regenerar escudo/recarregar tiro) [cite: 102]
+	}
+
+	public BufferedImage getImage() {
+		int x = 0, y = 0, w = 0, h = 0;
+
+		switch (this.getDirection()) {
+			case UP:
+				x = 304;
+				y = 648;
+				w = 125;
+				h = 174;
+				break;
+			case RIGHT:
+				x = 517;
+				y = 703;
+				w = 178;
+				h = 111;
+				break;
+			case DOWN:
+				x = 770;
+				y = 848;
+				w = 125;
+				h = 174;
+				break;
+			case LEFT:
+				x = 971;
+				y = 704;
+				w = 184;
+				h = 110;
+				break;
+		}
+
+		// Retorna o recorte exato da Sprite Sheet
+		return utils.SpriteManager.getSprite(x, y, w, h);
 	}
 
 	@Override

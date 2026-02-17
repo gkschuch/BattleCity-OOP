@@ -1,5 +1,9 @@
 package grid.blocks;
 
+import java.awt.image.BufferedImage;
+
+import utils.SpriteManager;
+
 public class Steel extends Block {
 
 	// contrutor
@@ -13,6 +17,11 @@ public class Steel extends Block {
 	@Override
 	public java.awt.Color getColor() {
 		return java.awt.Color.LIGHT_GRAY; // Cinza claro
+	}
+
+	@Override
+	public BufferedImage getImage() {
+		return SpriteManager.getSprite(660, 360, 207, 214);
 	}
 
 	@Override

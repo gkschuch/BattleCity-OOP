@@ -75,12 +75,10 @@ public class GamePanel extends JPanel {
         int offsetX = (getWidth() - gameWidth) / 2;
         int offsetY = (getHeight() - gameHeight) / 2;
 
-        if (offsetY < 30) {
+        if (offsetY < 30)
             offsetY = 30;
-        }
-        if (offsetX < 0) {
+        if (offsetX < 0)
             offsetX = 0;
-        }
 
         g.translate(offsetX, offsetY);
 
@@ -91,36 +89,33 @@ public class GamePanel extends JPanel {
             }
         }
 
-        g.setColor(Color.GREEN);
-        g.fillRect((int) player.getX() * GameConfig.TILE_SIZE, (int) player.getY() * GameConfig.TILE_SIZE,
-                GameConfig.TILE_SIZE, GameConfig.TILE_SIZE);
+        g.drawImage(player.getImage(),
+                (int) (player.getX() * GameConfig.TILE_SIZE),
+                (int) (player.getY() * GameConfig.TILE_SIZE),
+                GameConfig.TILE_SIZE, GameConfig.TILE_SIZE, null);
 
-        g.setColor(Color.RED);
         for (EnemyTank e : enemies) {
             if (e != null && !e.isDestroyed()) {
-                g.fillRect((int) e.getX() * GameConfig.TILE_SIZE, (int) e.getY() * GameConfig.TILE_SIZE,
-                        GameConfig.TILE_SIZE, GameConfig.TILE_SIZE);
+                g.drawImage(e.getImage(),
+                        (int) (e.getX() * GameConfig.TILE_SIZE),
+                        (int) (e.getY() * GameConfig.TILE_SIZE),
+                        GameConfig.TILE_SIZE, GameConfig.TILE_SIZE, null);
             }
         }
 
         g.setColor(Color.YELLOW);
         synchronized (shots) {
             int bulletSize = 8;
-
             int offset = (GameConfig.TILE_SIZE - bulletSize) / 2;
-
             for (Shot s : shots) {
-                g.fillOval(
-                        s.p.getX() * GameConfig.TILE_SIZE + offset,
+                g.fillOval(s.p.getX() * GameConfig.TILE_SIZE + offset,
                         s.p.getY() * GameConfig.TILE_SIZE + offset,
-                        bulletSize,
-                        bulletSize);
+                        bulletSize, bulletSize);
             }
-
-            g.translate(-offsetX, -offsetY);
-
-            hud.draw(g, player, grid, getWidth(), getHeight());
         }
+
+        g.translate(-offsetX, -offsetY);
+        hud.draw(g, player, grid, getWidth(), getHeight());
     }
 
     private void drawPauseOverlay(Graphics g) {
@@ -161,13 +156,17 @@ public class GamePanel extends JPanel {
     private void drawBlock(Graphics g, Block b, int row, int col) {
         if (b == null)
             return;
+        Image image = b.getImage();
 
-        g.setColor(b.getColor());
-
-        g.fillRect(col * GameConfig.TILE_SIZE, row * GameConfig.TILE_SIZE, GameConfig.TILE_SIZE, GameConfig.TILE_SIZE);
-
-        g.setColor(g.getColor().darker());
-        g.drawRect(col * GameConfig.TILE_SIZE, row * GameConfig.TILE_SIZE, GameConfig.TILE_SIZE, GameConfig.TILE_SIZE);
+        if (image != null) {
+            g.drawImage(
+                    image,
+                    col * GameConfig.TILE_SIZE,
+                    row * GameConfig.TILE_SIZE,
+                    GameConfig.TILE_SIZE,
+                    GameConfig.TILE_SIZE,
+                    null);
+        }
     }
 
     public boolean isPaused() {

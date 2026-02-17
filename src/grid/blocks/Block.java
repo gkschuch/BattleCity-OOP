@@ -5,6 +5,7 @@ import characters.enemy.EnemyTank;
 import grid.Grid;
 import grid.exceptions.GridException;
 import utils.Destructible;
+import java.awt.image.BufferedImage;
 
 public abstract class Block implements Destructible {
 	protected int row;
@@ -37,6 +38,8 @@ public abstract class Block implements Destructible {
 	}
 
 	public abstract java.awt.Color getColor();
+
+	public abstract BufferedImage getImage();
 
 	@Override
 	public boolean isDestroyed() { // vê se o bloco existe

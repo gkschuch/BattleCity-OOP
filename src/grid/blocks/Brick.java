@@ -1,5 +1,8 @@
 package grid.blocks;
 
+import java.awt.image.BufferedImage;
+import utils.SpriteManager;
+
 public class Brick extends Block {
 
 	// contrutor
@@ -12,7 +15,12 @@ public class Brick extends Block {
 
 	@Override
 	public java.awt.Color getColor() {
-		return new java.awt.Color(165, 42, 42); // Marrom/Tijolo
+		return new java.awt.Color(165, 42, 42);
+	}
+
+	@Override
+	public BufferedImage getImage() {
+		return SpriteManager.getSprite(393, 356, 224, 220);
 	}
 
 	@Override

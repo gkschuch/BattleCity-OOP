@@ -1,5 +1,7 @@
 package characters;
 
+import java.awt.image.BufferedImage;
+
 import characters.exceptions.InvalidAttributeException;
 import characters.exceptions.TankDestroyedException;
 import utils.*;
@@ -32,6 +34,8 @@ public abstract class Tank implements Movable, Destructible, Runnable {
 	// métodos
 
 	public abstract void shoot();
+
+	public abstract BufferedImage getImage();
 
 	public abstract void updateBehavior();
 
