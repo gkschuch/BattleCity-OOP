@@ -5,11 +5,13 @@ import java.awt.image.BufferedImage;
 import utils.SpriteManager;
 
 public class Steel extends Block {
-
+	private BufferedImage myImage;
 	// contrutor
 
 	public Steel(int row, int col) {
 		super(row, col);
+
+		this.myImage = SpriteManager.getSprite(660, 360, 207, 214);
 	}
 
 	// métodos
@@ -21,7 +23,7 @@ public class Steel extends Block {
 
 	@Override
 	public BufferedImage getImage() {
-		return SpriteManager.getSprite(660, 360, 207, 214);
+		return this.myImage;
 	}
 
 	@Override

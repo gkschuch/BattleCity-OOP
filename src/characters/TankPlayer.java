@@ -5,7 +5,11 @@ import grid.Grid;
 import projectiles.BasicProjectile;
 import utils.Direction;
 import utils.GameConfig;
+import utils.SpriteManager;
+
 import java.awt.image.BufferedImage;
+import java.util.EnumMap;
+import java.util.Map;
 
 public class TankPlayer extends Tank {
 	// atributos
@@ -16,6 +20,10 @@ public class TankPlayer extends Tank {
 	private Grid grid;
 	private BasicProjectile lastShot;
 
+	// CACHE DE IMAGENS: Guarda as sprites já carregadas para não recriar
+	// Usamos EnumMap pois é muito mais rápido que HashMap para Enums
+	private final Map<Direction, BufferedImage> spriteCache;
+
 	// contrutor
 
 	public TankPlayer(String name, double x, double y, int lives, double speed) {
@@ -23,48 +31,28 @@ public class TankPlayer extends Tank {
 		this.playerName = name;
 		this.score = 0;
 		this.gunLevel = 1;
+
+		this.spriteCache = new EnumMap<>(Direction.class);
+		loadSprites();
+	}
+
+	private void loadSprites() {
+		spriteCache.put(Direction.UP, SpriteManager.getSprite(304, 648, 125, 174));
+		spriteCache.put(Direction.RIGHT, SpriteManager.getSprite(517, 703, 178, 111));
+		spriteCache.put(Direction.DOWN, SpriteManager.getSprite(770, 848, 125, 174));
+		spriteCache.put(Direction.LEFT, SpriteManager.getSprite(971, 704, 184, 110));
 	}
 
 	// métodos
 
 	@Override
 	public void updateBehavior() {
-		// comportamento automático do player na thread (pode ser vazio
-		// ou usado para regenerar escudo/recarregar tiro) [cite: 102]
 	}
 
+	@Override
 	public BufferedImage getImage() {
-		int x = 0, y = 0, w = 0, h = 0;
 
-		switch (this.getDirection()) {
-			case UP:
-				x = 304;
-				y = 648;
-				w = 125;
-				h = 174;
-				break;
-			case RIGHT:
-				x = 517;
-				y = 703;
-				w = 178;
-				h = 111;
-				break;
-			case DOWN:
-				x = 770;
-				y = 848;
-				w = 125;
-				h = 174;
-				break;
-			case LEFT:
-				x = 971;
-				y = 704;
-				w = 184;
-				h = 110;
-				break;
-		}
-
-		// Retorna o recorte exato da Sprite Sheet
-		return utils.SpriteManager.getSprite(x, y, w, h);
+		return spriteCache.get(this.getDirection());
 	}
 
 	@Override

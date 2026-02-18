@@ -62,6 +62,8 @@ public class MovementSystem {
 			throw new MissingSystemDependencyException("MovementSystem", "List<EnemyTank>");
 		if (player == null)
 			throw new MissingSystemDependencyException("MovementSystem", "TankPlayer");
+		if (e.isFrozen())
+			return;
 
 		int row = (int) e.getY();
 		int col = (int) e.getX();

@@ -4,11 +4,13 @@ import utils.SpriteManager;
 import java.awt.image.BufferedImage;
 
 public class Water extends Block {
-
+	private BufferedImage myImage;
 	// contrutor
 
 	public Water(int row, int col) {
 		super(row, col);
+
+		this.myImage = SpriteManager.getSprite(1163, 361, 205, 212);
 	}
 
 	// métodos
@@ -20,7 +22,7 @@ public class Water extends Block {
 
 	@Override
 	public BufferedImage getImage() {
-		return SpriteManager.getSprite(1163, 361, 205, 212);
+		return this.myImage;
 	}
 
 	@Override

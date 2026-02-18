@@ -4,11 +4,12 @@ import java.awt.image.BufferedImage;
 import utils.SpriteManager;
 
 public class Brick extends Block {
-
+	private BufferedImage myImage;
 	// contrutor
 
 	public Brick(int row, int col) {
 		super(row, col);
+		this.myImage = SpriteManager.getSprite(393, 356, 224, 220);
 	}
 
 	// métodos
@@ -20,7 +21,7 @@ public class Brick extends Block {
 
 	@Override
 	public BufferedImage getImage() {
-		return SpriteManager.getSprite(393, 356, 224, 220);
+		return this.myImage;
 	}
 
 	@Override

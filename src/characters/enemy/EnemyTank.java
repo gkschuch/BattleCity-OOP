@@ -4,6 +4,11 @@ import characters.Tank;
 import characters.TankPlayer;
 import characters.exceptions.DependencyMissingException;
 import grid.Grid;
+import utils.Direction;
+
+import java.awt.image.BufferedImage;
+import java.util.EnumMap;
+import java.util.Map;
 
 public abstract class EnemyTank extends Tank {
 
@@ -12,14 +17,21 @@ public abstract class EnemyTank extends Tank {
 	private Grid grid;
 	private boolean frozen;
 
-	// contrutor
+	protected final Map<Direction, BufferedImage> spriteCache;
 
+	// construtor
 	public EnemyTank(double x, double y, int lives, int speed, int scoreValue, TankPlayer player) {
 		super(x, y, speed, lives);
 		this.scoreValue = scoreValue;
 		this.player = player;
 		this.frozen = false;
+
+		this.spriteCache = new EnumMap<>(Direction.class);
+
+		loadSprites();
 	}
+
+	protected abstract void loadSprites();
 
 	// métodos
 
@@ -31,6 +43,11 @@ public abstract class EnemyTank extends Tank {
 	}
 
 	public abstract void updateIA();
+
+	@Override
+	public BufferedImage getImage() {
+		return spriteCache.get(this.getDirection());
+	}
 
 	public abstract EnemyTankType getEnemyTankType();
 

@@ -5,11 +5,13 @@ import java.awt.image.BufferedImage;
 import utils.SpriteManager;
 
 public class Tree extends Block {
-
+	private BufferedImage myImage;
 	// contrutor
 
 	public Tree(int row, int col) {
 		super(row, col);
+
+		this.myImage = SpriteManager.getSprite(922, 365, 184, 205);
 	}
 
 	// métodos
@@ -21,7 +23,7 @@ public class Tree extends Block {
 
 	@Override
 	public BufferedImage getImage() {
-		return SpriteManager.getSprite(922, 365, 184, 205);
+		return this.myImage;
 	}
 
 	@Override
