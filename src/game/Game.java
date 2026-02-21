@@ -40,7 +40,7 @@ public class Game {
 			this.grid = new Grid(mapPath);
 			this.difficulty = difficulty;
 
-			this.player = new TankPlayer(playerName, 1, 1, 20, 1.0);
+			this.player = new TankPlayer(playerName, 1, 1, 4, 1.0);
 			this.player.setGrid(grid);
 			this.player.start();
 			enemyManager.spawnEnemies(difficulty, player, grid);
@@ -74,7 +74,7 @@ public class Game {
 
 				stateManager.checkGameState(grid, player, enemyManager.countAlive());
 				try {
-					Thread.sleep(80);
+					Thread.sleep(160);
 				} catch (InterruptedException ex) {
 					Thread.currentThread().interrupt();
 					break;

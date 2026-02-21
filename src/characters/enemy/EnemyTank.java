@@ -3,6 +3,8 @@ package characters.enemy;
 import characters.Tank;
 import characters.TankPlayer;
 import characters.exceptions.DependencyMissingException;
+import characters.enemy.strategy.EnemyBehaviorStrategy;
+import characters.enemy.strategy.RandomBehaviorStrategy;
 import grid.Grid;
 import utils.Direction;
 
@@ -17,6 +19,8 @@ public abstract class EnemyTank extends Tank {
 	private Grid grid;
 	private boolean frozen;
 
+	protected EnemyBehaviorStrategy behaviorStrategy;
+
 	protected final Map<Direction, BufferedImage> spriteCache;
 
 	// construtor
@@ -26,14 +30,20 @@ public abstract class EnemyTank extends Tank {
 		this.player = player;
 		this.frozen = false;
 
+		this.behaviorStrategy = new RandomBehaviorStrategy();
+
 		this.spriteCache = new EnumMap<>(Direction.class);
 
 		loadSprites();
 	}
 
-	protected abstract void loadSprites();
-
 	// métodos
+
+	public void setBehaviorStrategy(EnemyBehaviorStrategy behaviorStrategy) {
+		this.behaviorStrategy = behaviorStrategy;
+	}
+
+	protected abstract void loadSprites();
 
 	@Override
 	public void updateBehavior() {
@@ -42,7 +52,15 @@ public abstract class EnemyTank extends Tank {
 		this.updateIA();
 	}
 
-	public abstract void updateIA();
+	public void updateIA() {
+		if (this.isFrozen() || behaviorStrategy == null)
+			return;
+
+		Direction newDir = behaviorStrategy.determineDirection(this, this.player, this.grid);
+		if (newDir != null) {
+			this.setDirection(newDir);
+		}
+	}
 
 	@Override
 	public BufferedImage getImage() {

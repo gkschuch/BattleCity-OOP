@@ -48,7 +48,7 @@ public class Hud {
 		g.setColor(new Color(0, 0, 0, 200));
 		g.fillRect(0, screenHeight - 30, screenWidth, 30);
 
-		String bottomText = "W/A/S/D: Mover | SPACE: Atirar";
+		String bottomText = "W/A/S/D: Mover | SPACE: Atirar | P: Pausar";
 		int bottomWidth = fm.stringWidth(bottomText);
 
 		int bottomStartX = (screenWidth - bottomWidth) / 2;

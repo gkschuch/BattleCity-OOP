@@ -22,6 +22,7 @@ public class GameFrame extends JFrame {
             @Override
             public void keyPressed(KeyEvent e) {
                 char command = ' ';
+
                 switch (e.getKeyCode()) {
                     case KeyEvent.VK_W -> command = 'w';
                     case KeyEvent.VK_S -> command = 's';
