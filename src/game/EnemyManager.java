@@ -6,6 +6,7 @@ import java.util.Random;
 
 import characters.TankPlayer;
 import characters.enemy.*;
+import characters.enemy.strategy.*;
 import game.persistence.EnemySaveData;
 import grid.Grid;
 
@@ -17,7 +18,7 @@ public class EnemyManager {
         int r, c;
         boolean isOccupied;
         do {
-            r = random.nextInt(grid.getRows());
+            r = random.nextInt(2) + 1;
             c = random.nextInt(grid.getCols());
 
             boolean isObstacle = !grid.isWalkable(r, c);
@@ -26,36 +27,80 @@ public class EnemyManager {
             isOccupied = isObstacle || isAtPlayerPosition;
 
         } while (isOccupied);
+
         return new int[] { r, c };
     }
 
-    private EnemyTank createTankByIndex(int index, TankPlayer player, Grid grid) {
+    private EnemyTank createTank(EnemyTankType type, TankPlayer player, Grid grid) {
         int[] pos = findEmptyPosition(grid, player);
         int r = pos[0], c = pos[1];
 
-        return switch (index) {
-            case 0 -> new NormalTank(c, r, player);
-            case 1 -> new FastTank(c, r, player);
-            case 2 -> new ArmedTank(c, r, player);
-            default -> new ArmoredTank(c, r, player);
+        return switch (type) {
+            case NORMAL -> new NormalTank(c, r, player);
+            case FAST -> new FastTank(c, r, player);
+            case ARMED -> new ArmedTank(c, r, player);
+            case ARMORED -> new ArmoredTank(c, r, player);
         };
     }
 
     protected void spawnEnemies(int difficulty, TankPlayer player, Grid grid) {
         enemies.clear();
 
-        int count = switch (difficulty) {
-            case 1 -> 2;
-            case 2 -> 3;
-            default -> 4;
-        };
+        switch (difficulty) {
+            case 1 -> spawnEasy(player, grid);
+            case 2 -> spawnMedium(player, grid);
+            case 3 -> spawnHard(player, grid);
+            default -> spawnEasy(player, grid);
+        }
+    }
 
-        for (int i = 0; i < count; i++) {
-            EnemyTank enemy = createTankByIndex(i, player, grid);
-            if (enemy != null) {
-                enemies.add(enemy);
-                enemy.start();
-            }
+    private void spawnEasy(TankPlayer player, Grid grid) {
+        for (int i = 0; i < 4; i++) {
+            EnemyTank tank = createTank(EnemyTankType.NORMAL, player, grid);
+            tank.setBehaviorStrategy(new RandomBehaviorStrategy());
+
+            enemies.add(tank);
+            tank.start();
+        }
+    }
+
+    private void spawnMedium(TankPlayer player, Grid grid) {
+        EnemyTank fast = createTank(EnemyTankType.FAST, player, grid);
+        fast.setBehaviorStrategy(new PersuitBehaviorStrategy());
+
+        EnemyTank armed = createTank(EnemyTankType.ARMED, player, grid);
+        armed.setBehaviorStrategy(new PersuitBehaviorStrategy());
+
+        EnemyTank normal = createTank(EnemyTankType.NORMAL, player, grid);
+        normal.setBehaviorStrategy(new FleeBehaviorStrategy());
+
+        EnemyTank armored = createTank(EnemyTankType.ARMORED, player, grid);
+        armored.setBehaviorStrategy(new RandomBehaviorStrategy());
+
+        addAndStartTanks(fast, armed, normal, armored);
+    }
+
+    private void spawnHard(TankPlayer player, Grid grid) {
+        EnemyTank armed1 = createTank(EnemyTankType.ARMED, player, grid);
+        EnemyTank armed2 = createTank(EnemyTankType.ARMED, player, grid);
+        EnemyTank armed3 = createTank(EnemyTankType.ARMED, player, grid);
+        EnemyTank armored = createTank(EnemyTankType.ARMORED, player, grid);
+        EnemyTank fast = createTank(EnemyTankType.FAST, player, grid);
+
+        PersuitBehaviorStrategy pursuit = new PersuitBehaviorStrategy();
+        armed1.setBehaviorStrategy(pursuit);
+        armed2.setBehaviorStrategy(pursuit);
+        armed3.setBehaviorStrategy(pursuit);
+        armored.setBehaviorStrategy(pursuit);
+        fast.setBehaviorStrategy(pursuit);
+
+        addAndStartTanks(armed1, armed2, armed3, armored, fast);
+    }
+
+    private void addAndStartTanks(EnemyTank... tanksList) {
+        for (EnemyTank tank : tanksList) {
+            enemies.add(tank);
+            tank.start();
         }
     }
 
@@ -68,7 +113,7 @@ public class EnemyManager {
 
     public void addSavedEnemy(EnemySaveData eData, TankPlayer player, Grid grid) {
         EnemyTank enemy = null;
-        switch (eData.type) {
+        switch (eData.type) { //
             case NORMAL -> enemy = new NormalTank(eData.x, eData.y, player);
             case FAST -> enemy = new FastTank(eData.x, eData.y, player);
             case ARMORED -> enemy = new ArmoredTank(eData.x, eData.y, player);
