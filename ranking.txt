@@ -1,10 +1,10 @@
 aaa;2100
+aaaaaa;2100
 Player1;1500
 a;1250
 a;1200
-tiago;900
 Gabriel;900
 a;900
+tiago;900
 a;800
 a;600
-a;550

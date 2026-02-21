@@ -20,7 +20,7 @@ public class ShovelTask implements Runnable {
     public void run() {
         try {
             this.updateWalls(true);
-            Thread.sleep(GameConfig.SHOVEL_DURATION_MS); //
+            Thread.sleep(GameConfig.SHOVEL_DURATION_MS);
         } catch (InterruptedException e) {
             System.err.println("Shovel effect interrupted");
             Thread.currentThread().interrupt();
@@ -37,18 +37,15 @@ public class ShovelTask implements Runnable {
         int baseRow = base.getRow();
         int baseCol = base.getCol();
 
-        for (int r = baseRow - 1; r <= baseRow + 1; r++) {
+        for (int r = baseRow - 1; r <= baseRow + 1; r++)
             for (int c = baseCol - 1; c <= baseCol + 1; c++) {
                 if (r == baseRow && c == baseCol)
                     continue;
-                if (grid.isInside(r, c)) {
-                    if (toSteel) {
+                if (grid.isInside(r, c))
+                    if (toSteel)
                         grid.setBlock(r, c, new Steel(r, c));
-                    } else {
+                    else
                         grid.setBlock(r, c, new Brick(r, c));
-                    }
-                }
             }
-        }
     }
 }
