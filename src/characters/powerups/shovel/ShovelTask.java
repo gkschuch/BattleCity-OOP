@@ -2,6 +2,7 @@ package characters.powerups.shovel;
 
 import characters.exceptions.PowerUpDependencyException;
 import grid.Grid;
+import grid.blocks.Base;
 import grid.blocks.Brick;
 import grid.blocks.Steel;
 import utils.GameConfig;
@@ -19,30 +20,34 @@ public class ShovelTask implements Runnable {
     public void run() {
         try {
             this.updateWalls(true);
-            Thread.sleep(GameConfig.SHOVEL_DURATION_MS);
+            Thread.sleep(GameConfig.SHOVEL_DURATION_MS); //
         } catch (InterruptedException e) {
-            System.err.println("Shovel effect interrupted"); // Tratamento de exceção
+            System.err.println("Shovel effect interrupted");
             Thread.currentThread().interrupt();
         } finally {
             updateWalls(false);
         }
-
     }
 
     private void updateWalls(boolean toSteel) {
-        int[][] positions = {
-                { 13, 7 }, { 13, 8 }, { 13, 9 },
-                { 14, 7 }, { 14, 9 },
-                { 15, 7 }, { 15, 8 }, { 15, 9 }
-        };
-        for (int[] pos : positions) {
-            int r = pos[0];
-            int c = pos[1];
+        Base base = grid.getBase();
+        if (base == null)
+            return;
 
-            if (toSteel) {
-                grid.setBlock(r, c, new Steel(r, c));
-            } else {
-                grid.setBlock(r, c, new Brick(r, c));
+        int baseRow = base.getRow();
+        int baseCol = base.getCol();
+
+        for (int r = baseRow - 1; r <= baseRow + 1; r++) {
+            for (int c = baseCol - 1; c <= baseCol + 1; c++) {
+                if (r == baseRow && c == baseCol)
+                    continue;
+                if (grid.isInside(r, c)) {
+                    if (toSteel) {
+                        grid.setBlock(r, c, new Steel(r, c));
+                    } else {
+                        grid.setBlock(r, c, new Brick(r, c));
+                    }
+                }
             }
         }
     }
