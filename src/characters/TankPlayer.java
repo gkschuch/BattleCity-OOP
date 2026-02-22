@@ -2,7 +2,6 @@ package characters;
 
 import characters.exceptions.DependencyMissingException;
 import grid.Grid;
-import projectiles.BasicProjectile;
 import utils.Direction;
 import utils.GameConfig;
 import utils.SpriteManager;
@@ -18,10 +17,7 @@ public class TankPlayer extends Tank {
 	private int score;
 	private int gunLevel;
 	private Grid grid;
-	private BasicProjectile lastShot;
 
-	// CACHE DE IMAGENS: Guarda as sprites já carregadas para não recriar
-	// Usamos EnumMap pois é muito mais rápido que HashMap para Enums
 	private final Map<Direction, BufferedImage> spriteCache;
 
 	// contrutor
@@ -37,9 +33,10 @@ public class TankPlayer extends Tank {
 	}
 
 	private void loadSprites() {
-		spriteCache.put(Direction.UP, SpriteManager.getSprite(304, 648, 125, 174));
+		BufferedImage spriteUp = SpriteManager.getSprite(304, 648, 125, 174);
+		spriteCache.put(Direction.UP, spriteUp);
+		spriteCache.put(Direction.DOWN, SpriteManager.flipVertically(spriteUp));
 		spriteCache.put(Direction.RIGHT, SpriteManager.getSprite(517, 703, 178, 111));
-		spriteCache.put(Direction.DOWN, SpriteManager.getSprite(770, 848, 125, 174));
 		spriteCache.put(Direction.LEFT, SpriteManager.getSprite(971, 704, 184, 110));
 	}
 
@@ -53,26 +50,6 @@ public class TankPlayer extends Tank {
 	public BufferedImage getImage() {
 
 		return spriteCache.get(this.getDirection());
-	}
-
-	@Override
-	public void shoot() {
-		if (grid == null)
-			throw new DependencyMissingException("Grid");
-
-		if (lastShot != null && lastShot.isActive())
-			return;
-
-		Direction pd = this.getDirection();
-
-		int startX = (int) this.getX() + pd.getDx();
-		int startY = (int) this.getY() + pd.getDy();
-
-		BasicProjectile p = new BasicProjectile(startX, startY, pd, getGunLevel(), null);
-		p.setGrid(grid);
-		p.start();
-
-		lastShot = p;
 	}
 
 	@Override

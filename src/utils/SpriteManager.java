@@ -25,4 +25,15 @@ public class SpriteManager {
         return spriteSheet.getSubimage(x, y, width, height);
     }
 
+    public static BufferedImage flipVertically(BufferedImage img) {
+        int w = img.getWidth();
+        int h = img.getHeight();
+        BufferedImage flipped = new BufferedImage(w, h, img.getType());
+        java.awt.Graphics2D g = flipped.createGraphics();
+
+        g.drawImage(img, 0, 0, w, h, 0, h, w, 0, null);
+        g.dispose();
+
+        return flipped;
+    }
 }

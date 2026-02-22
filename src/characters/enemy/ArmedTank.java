@@ -22,12 +22,6 @@ public class ArmedTank extends EnemyTank {
 		spriteCache.put(Direction.LEFT, SpriteManager.getSprite(2104, 1244, 201, 131));
 	}
 
-	@Override
-	public void shoot() {
-		if (this.isFrozen())
-			return;
-	}
-
 	public EnemyTankType getEnemyTankType() {
 		return EnemyTankType.ARMED;
 	}

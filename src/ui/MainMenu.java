@@ -33,7 +33,7 @@ public class MainMenu extends JFrame {
         mainPanel.setBackground(Color.BLACK);
 
         JLabel title = new JLabel("BATTLE CITY");
-        title.setFont(new Font("Monospaced", Font.BOLD, 46));
+        title.setFont(utils.FontManager.getFont(46f));
         title.setForeground(Color.YELLOW);
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -89,12 +89,12 @@ public class MainMenu extends JFrame {
         mainPanel.setBackground(Color.BLACK);
 
         JLabel title = new JLabel("CONFIGURAÇÃO", SwingConstants.CENTER);
-        title.setFont(new Font("Monospaced", Font.BOLD, 30));
+        title.setFont(utils.FontManager.getFont(30f));
         title.setForeground(Color.YELLOW);
 
         JLabel lblName = createLabel("NOME DO JOGADOR:");
         JTextField txtName = new JTextField();
-        txtName.setFont(new Font("Monospaced", Font.BOLD, 16));
+        title.setFont(utils.FontManager.getFont(16f));
 
         JLabel lblMap = createLabel("ESCOLHA O MAPA:");
         String[] maps = { "Mapa Clássico",
@@ -102,14 +102,14 @@ public class MainMenu extends JFrame {
                 "Mapa Fortaleza",
                 "Aleatório" };
         JComboBox<String> cbMap = new JComboBox<>(maps);
-        cbMap.setFont(new Font("Monospaced", Font.BOLD, 14));
+        cbMap.setFont(utils.FontManager.getFont(14f));
 
         JLabel lblDiff = createLabel("DIFICULDADE:");
         String[] diffs = { "Fácil",
                 "Médio",
                 "Difícil" };
         JComboBox<String> cbDiff = new JComboBox<>(diffs);
-        cbDiff.setFont(new Font("Monospaced", Font.BOLD, 14));
+        cbDiff.setFont(utils.FontManager.getFont(14f));
 
         JPanel btnPanel = new JPanel(new GridLayout(1, 2, 10, 0));
         btnPanel.setBackground(Color.BLACK);
@@ -160,24 +160,24 @@ public class MainMenu extends JFrame {
     }
 
     private JLabel createLabel(String text) {
-        JLabel lbl = new JLabel(text);
-        lbl.setForeground(Color.WHITE);
-        lbl.setFont(new Font("Monospaced", Font.BOLD, 14));
-        lbl.setVerticalAlignment(SwingConstants.BOTTOM);
-        return lbl;
+        JLabel label = new JLabel(text);
+        label.setForeground(Color.WHITE);
+        label.setFont(utils.FontManager.getFont(14f));
+        label.setVerticalAlignment(SwingConstants.BOTTOM);
+        return label;
     }
 
     private JButton createButton(String text) {
-        JButton btn = new JButton(text);
-        btn.setFont(new Font("Monospaced", Font.BOLD, 18));
-        btn.setBackground(Color.DARK_GRAY);
-        btn.setForeground(Color.WHITE);
-        btn.setFocusPainted(false);
-        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        JButton button = new JButton(text);
+        button.setFont(utils.FontManager.getFont(18f));
+        button.setBackground(Color.DARK_GRAY);
+        button.setForeground(Color.WHITE);
+        button.setFocusPainted(false);
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        btn.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btn.setMaximumSize(new Dimension(250, 45));
-        return btn;
+        button.setAlignmentX(Component.CENTER_ALIGNMENT);
+        button.setMaximumSize(new Dimension(250, 45));
+        return button;
     }
 
     private void launchGame(boolean isNewGame, String name, String map, int diff) {

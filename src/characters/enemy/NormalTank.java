@@ -22,12 +22,6 @@ public class NormalTank extends EnemyTank {
 		spriteCache.put(Direction.LEFT, SpriteManager.getSprite(985, 861, 191, 128));
 	}
 
-	@Override
-	public void shoot() {
-		if (this.isFrozen())
-			return;
-	}
-
 	public EnemyTankType getEnemyTankType() {
 		return EnemyTankType.NORMAL;
 	}

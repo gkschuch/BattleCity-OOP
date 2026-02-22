@@ -15,14 +15,35 @@ public class PowerUpFactory {
     private static final Random random = new Random();
 
     public static PowerUp createRandom(int row, int col, Grid grid, List<EnemyTank> enemies) {
-        int typeIndex = random.nextInt(PowerUpType.values().length);
-        PowerUpType type = PowerUpType.values()[typeIndex];
+        PowerUpType type = getRandomTypeByRarity();
         return createByType(type, row, col, grid, enemies);
+    }
+
+    private static PowerUpType getRandomTypeByRarity() {
+        int chance = random.nextInt(100);
+
+        if (chance < 26)
+            return PowerUpType.STAR;
+
+        if (chance < 52)
+            return PowerUpType.LIFE;
+
+        if (chance < 67)
+            return PowerUpType.HELMET;
+
+        if (chance < 82)
+            return PowerUpType.CLOCK;
+
+        if (chance < 97)
+            return PowerUpType.SHOVEL;
+
+        return PowerUpType.BOMB;
     }
 
     public static PowerUp createByType(PowerUpType type, int row, int col, Grid grid, List<EnemyTank> enemies) {
         if (type == null)
             throw new PowerUpException("Tentativa de criar PowerUp com tipo nulo na linha " + row);
+
         return switch (type) {
             case STAR -> new StarPowerUp(row, col);
             case HELMET -> new HelmetPowerUp(row, col);

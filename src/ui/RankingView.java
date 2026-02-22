@@ -11,7 +11,7 @@ public class RankingView {
         }
         JTextArea textArea = new JTextArea(formattedRanking);
 
-        textArea.setFont(new Font("Monospaced", Font.BOLD, 14));
+        textArea.setFont(utils.FontManager.getFont(14f));
         textArea.setEditable(false);
         textArea.setBackground(new Color(230, 230, 230));
         textArea.setMargin(new Insets(10, 10, 10, 10));

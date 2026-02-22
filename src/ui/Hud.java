@@ -1,7 +1,6 @@
 package ui;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 
@@ -22,7 +21,7 @@ public class Hud {
 		g.setColor(new Color(0, 0, 0, 200));
 		g.fillRect(0, 0, screenWidth, 30);
 
-		g.setFont(new Font("Monospaced", Font.BOLD, 20));
+		g.setFont(utils.FontManager.getFont(20f));
 		FontMetrics fm = g.getFontMetrics();
 
 		String stats = String.format("Nome do Jogador: %s | Vidas: %d | Score: %d | Arma: %d   |   ",

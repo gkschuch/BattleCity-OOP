@@ -39,6 +39,8 @@ public class ShotSystem {
 
 			if (e == null)
 				continue;
+			if (e.isFrozen())
+				continue;
 
 			if (e.isDestroyed())
 				continue;

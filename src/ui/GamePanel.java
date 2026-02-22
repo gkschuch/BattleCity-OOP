@@ -122,7 +122,7 @@ public class GamePanel extends JPanel {
         g.setColor(new Color(0, 0, 0, 180));
         g.fillRect(0, 0, getWidth(), getHeight());
 
-        g.setFont(new Font("Monospaced", Font.BOLD, 50));
+        g.setFont(utils.FontManager.getFont(50f));
         FontMetrics fmTitle = g.getFontMetrics();
         String title = "JOGO PAUSADO";
 
@@ -134,7 +134,7 @@ public class GamePanel extends JPanel {
         g.setColor(Color.YELLOW);
         g.drawString(title, titleX, titleY);
 
-        g.setFont(new Font("Monospaced", Font.BOLD, 20));
+        g.setFont(utils.FontManager.getFont(20f));
         FontMetrics fmOptions = g.getFontMetrics();
         g.setColor(Color.WHITE);
 

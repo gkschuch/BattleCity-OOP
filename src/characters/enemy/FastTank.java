@@ -22,12 +22,6 @@ public class FastTank extends EnemyTank {
 		spriteCache.put(Direction.LEFT, SpriteManager.getSprite(2109, 1047, 182, 123));
 	}
 
-	@Override
-	public void shoot() {
-		if (this.isFrozen())
-			return;
-	}
-
 	public EnemyTankType getEnemyTankType() {
 		return EnemyTankType.FAST;
 	}
