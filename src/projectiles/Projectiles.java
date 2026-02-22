@@ -35,7 +35,7 @@ public abstract class Projectiles implements Runnable {
     }
 
     public Projectiles(int startX, int startY, Direction direction, MoveStrategy strategy, InputController input) {
-        if ((x < 0 || x > 13) || (y < 0 || y > 17))
+        if ((x < 0 || x > 12) || (y < 0 || y > 16))
             throw new ProjectileException("Coordenadas de spawn inválidas: " + x + "," + y);
         if (direction == null)
             throw new MissingProjectileDependencyException("Direction");

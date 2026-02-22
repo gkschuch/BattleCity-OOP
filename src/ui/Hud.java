@@ -107,6 +107,7 @@ public class Hud {
 				y += line;
 			}
 		}
+		g.setFont(utils.FontManager.getFont(20f));
 
 		y += 10;
 

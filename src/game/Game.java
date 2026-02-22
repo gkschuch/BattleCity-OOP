@@ -24,6 +24,7 @@ public class Game {
 	private final EnemyManager enemyManager = new EnemyManager();
 	private final GameStateManager stateManager = new GameStateManager();
 	private final List<Shot> shots = Collections.synchronizedList(new ArrayList<>());
+	private PowerUpSpawner powerUpSpawner;
 
 	private TankPlayer player;
 	private Grid grid;
@@ -47,8 +48,8 @@ public class Game {
 		} else {
 			load();
 		}
-		PowerUpSpawner spawner = new PowerUpSpawner(grid, enemyManager.getEnemies(), input);
-		Thread spawnerThread = new Thread(spawner);
+		this.powerUpSpawner = new PowerUpSpawner(grid, enemyManager.getEnemies(), input);
+		Thread spawnerThread = new Thread(powerUpSpawner);
 		spawnerThread.start();
 
 		GameFrame frame = new GameFrame(input);
@@ -83,7 +84,7 @@ public class Game {
 			System.out.println(e.getMessage());
 			input.stop();
 		} finally {
-			cleanup(player, spawner, frame);
+			cleanup(player, powerUpSpawner, frame);
 			stateManager.finalizeGame(player);
 		}
 	}
@@ -134,6 +135,9 @@ public class Game {
 		if (this.player != null) {
 			this.player.stop();
 		}
+		if (this.powerUpSpawner != null) {
+			this.powerUpSpawner.stop();
+		}
 		enemyManager.clearEnemies();
 		ShotSystem.stopAllShots(shots);
 		shots.clear();
@@ -168,6 +172,7 @@ public class Game {
 					this.enemyManager.getEnemies());
 			grid.addPowerUp(powerUp);
 		}
+
 		if (this.panel != null) {
 			this.panel.updateReferences(this.grid, this.player, enemyManager.getEnemies());
 			this.panel.repaint();

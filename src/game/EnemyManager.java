@@ -60,6 +60,7 @@ public class EnemyManager {
             tank.setBehaviorStrategy(new RandomBehaviorStrategy());
 
             enemies.add(tank);
+            tank.setGrid(grid);
             tank.start();
         }
     }
@@ -77,7 +78,7 @@ public class EnemyManager {
         EnemyTank armored = createTank(EnemyTankType.ARMORED, player, grid);
         armored.setBehaviorStrategy(new RandomBehaviorStrategy());
 
-        addAndStartTanks(fast, armed, normal, armored);
+        addAndStartTanks(grid, fast, armed, normal, armored);
     }
 
     private void spawnHard(TankPlayer player, Grid grid) {
@@ -94,12 +95,13 @@ public class EnemyManager {
         armored.setBehaviorStrategy(pursuit);
         fast.setBehaviorStrategy(pursuit);
 
-        addAndStartTanks(armed1, armed2, armed3, armored, fast);
+        addAndStartTanks(grid, armed1, armed2, armed3, armored, fast);
     }
 
-    private void addAndStartTanks(EnemyTank... tanksList) {
+    private void addAndStartTanks(Grid grid, EnemyTank... tanksList) {
         for (EnemyTank tank : tanksList) {
             enemies.add(tank);
+            tank.setGrid(grid);
             tank.start();
         }
     }

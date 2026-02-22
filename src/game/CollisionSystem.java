@@ -56,10 +56,6 @@ public class CollisionSystem {
 						if (((int) e.getY() == r) && ((int) e.getX() == c)) {
 							e.takeDamage(p.getDamage());
 							p.deactivate();
-
-							if (e.isDestroyed()) {
-								player.addScore(e.getScoreValue());
-							}
 							break;
 						}
 					}

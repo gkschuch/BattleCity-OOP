@@ -15,6 +15,11 @@ public class Brick extends Block {
 	// métodos
 
 	@Override
+	public char getIcon() {
+		return 'B';
+	}
+
+	@Override
 	public java.awt.Color getColor() {
 		return new java.awt.Color(165, 42, 42);
 	}
