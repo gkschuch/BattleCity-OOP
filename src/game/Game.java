@@ -40,7 +40,7 @@ public class Game {
 			this.grid = new Grid(mapPath);
 			this.difficulty = difficulty;
 
-			this.player = new TankPlayer(playerName, 1, 1, 4, 1.0);
+			this.player = new TankPlayer(playerName, 1, 11, 4, 1.0);
 			this.player.setGrid(grid);
 			this.player.start();
 			enemyManager.spawnEnemies(difficulty, player, grid);
@@ -177,7 +177,7 @@ public class Game {
 
 	private void updateWorld(Grid grid, TankPlayer player, long tick) {
 		enemyManager.updateEnemies(grid, player, tick);
-		ShotSystem.enemiesRandomShoot(shots, grid, enemyManager.getEnemies(), 0.04, input);
+		ShotSystem.enemiesRandomShoot(shots, grid, enemyManager.getEnemies(), 0.04, input, this.difficulty);
 		CollisionSystem.handleShotsVsTanks(shots, enemyManager.getEnemies(), player);
 		ShotSystem.cleanupShots(shots);
 	}

@@ -8,6 +8,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import projectiles.BasicProjectile;
+import projectiles.strategy.FastMoveStrategy;
+import projectiles.strategy.MoveStrategy;
+import projectiles.strategy.NormalMoveStrategy;
+import projectiles.strategy.PiercingMoveStrategy;
 
 public class ShotSystem {
 	// construtor
@@ -24,8 +28,14 @@ public class ShotSystem {
 
 		if (paused)
 			return;
-		BasicProjectile p = ShotFactory.createShotFromTank(player.getX(), player.getY(), player.getDirection(),
-				player.getGunLevel(), input);
+		MoveStrategy strategy = new NormalMoveStrategy();
+
+		BasicProjectile p = ShotFactory.createCustomShotFromTank(
+				player.getX(),
+				player.getY(),
+				player.getDirection(),
+				strategy,
+				input);
 		p.setGrid(grid);
 		p.start();
 
@@ -33,23 +43,30 @@ public class ShotSystem {
 	}
 
 	public static void enemiesRandomShoot(List<Shot> shots, Grid grid,
-			List<EnemyTank> enemies, double chancePerTick, InputController input) {
-		for (int i = 0; i < enemies.size(); i++) {
-			EnemyTank e = enemies.get(i);
+			List<EnemyTank> enemies, double chancePerTick, InputController input, int difficulty) {
 
-			if (e == null)
-				continue;
-			if (e.isFrozen())
-				continue;
-
-			if (e.isDestroyed())
+		for (EnemyTank e : enemies) {
+			if (e == null || e.isFrozen() || e.isDestroyed())
 				continue;
 
 			if (Math.random() < chancePerTick) {
-				BasicProjectile p = ShotFactory.createShotFromTank(e.getX(), e.getY(), e.getDirection(), 1, input);
+				MoveStrategy strategy;
+
+				if (difficulty <= 1) {
+					strategy = new NormalMoveStrategy();
+				} else {
+					strategy = switch (e.getEnemyTankType()) {
+						case ARMED -> new PiercingMoveStrategy(2);
+						case FAST -> new FastMoveStrategy();
+						case ARMORED, NORMAL -> new NormalMoveStrategy();
+					};
+				}
+
+				BasicProjectile p = ShotFactory.createCustomShotFromTank(
+						e.getX(), e.getY(), e.getDirection(), strategy, input);
+
 				p.setGrid(grid);
 				p.start();
-
 				shots.add(new Shot(p, true));
 			}
 		}

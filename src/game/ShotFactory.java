@@ -1,8 +1,8 @@
 package game;
 
-import game.exceptions.InvalidShotParameterException;
 import game.exceptions.MissingSystemDependencyException;
 import projectiles.BasicProjectile;
+import projectiles.strategy.MoveStrategy;
 import utils.Direction;
 
 public class ShotFactory {
@@ -13,19 +13,16 @@ public class ShotFactory {
 
 	// métodos
 
-	public static BasicProjectile createShotFromTank(double tankX, double tankY,
-			Direction tankDir, int damage, InputController input) {
+	public static BasicProjectile createCustomShotFromTank(double tankX, double tankY,
+			Direction tankDir, MoveStrategy strategy, InputController input) {
 		if (tankDir == null)
-			throw new MissingSystemDependencyException("ShotFactory", "Direction (A direção do tanque é nula)");
-
-		if (damage <= 0)
-			throw new InvalidShotParameterException("damage", damage);
-		Direction pd = tankDir;
+			throw new MissingSystemDependencyException("ShotFactory", "Direction");
+		if (strategy == null)
+			throw new MissingSystemDependencyException("ShotFactory", "MoveStrategy");
 
 		int startX = (int) tankX;
 		int startY = (int) tankY;
 
-		return new BasicProjectile(startX, startY, pd, damage, input);
+		return new BasicProjectile(startX, startY, tankDir, strategy, input);
 	}
-
 }

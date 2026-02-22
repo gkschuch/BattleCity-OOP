@@ -3,14 +3,11 @@ package projectiles.strategy;
 import projectiles.exceptions.InvalidProjectileAttributeException;
 import utils.Direction;
 
-/**
- * Estratégia perfurante: atravessa múltiplos alvos.
- */
 public class PiercingMoveStrategy implements MoveStrategy {
     private int remainingPierces;
 
     public PiercingMoveStrategy() {
-        this(2); // Padrão: atravessa 2 vezes
+        this(2);
     }
 
     public PiercingMoveStrategy(int maxPierces) {
@@ -21,7 +18,6 @@ public class PiercingMoveStrategy implements MoveStrategy {
 
     @Override
     public int[] calculateNextPosition(int currentX, int currentY, Direction direction) {
-        // Move 1 célula (igual ao normal)
         int newX = currentX + direction.getDx();
         int newY = currentY + direction.getDy();
         return new int[] { newX, newY };
@@ -31,19 +27,19 @@ public class PiercingMoveStrategy implements MoveStrategy {
     public boolean shouldContinueAfterHit() {
         if (remainingPierces > 0) {
             remainingPierces--;
-            return true; // Continua após colisão
+            return true;
         }
-        return false; // Para quando acabarem as penetracoes
+        return false;
     }
 
     @Override
     public int getBaseDamage() {
-        return 1; // Dano normal
+        return 1;
     }
 
     @Override
     public int getMoveDelay() {
-        return 200; // Velocidade normal
+        return 200;
     }
 
     @Override
@@ -51,7 +47,6 @@ public class PiercingMoveStrategy implements MoveStrategy {
         System.out.println("Penetracao! Restam " + remainingPierces + " penetracoes.");
     }
 
-    // Método adicional específico desta estratégia
     public int getRemainingPierces() {
         return remainingPierces;
     }
