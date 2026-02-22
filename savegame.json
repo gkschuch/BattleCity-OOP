@@ -1,45 +1,53 @@
 {
-  "mapPath": "src/grid/models/model_classic.txt",
-  "difficulty": 1,
+  "mapPath": "src/grid/models/model_maze.txt",
+  "difficulty": 3,
   "player": {
-    "name": "wq",
-    "x": 1.0,
-    "y": 1.0,
+    "name": "a",
+    "x": 2.0,
+    "y": 9.0,
     "speed": 1.0,
-    "score": 0,
+    "score": 400,
     "lives": 2,
     "gunLevel": 1,
-    "direction": "UP"
+    "direction": "RIGHT"
   },
   "enemies": [
     {
-      "type": "NORMAL",
+      "type": "ARMED",
+      "x": 2.0,
+      "y": 9.0,
+      "lives": 0,
+      "frozen": false,
+      "direction": "RIGHT"
+    },
+    {
+      "type": "ARMED",
       "x": 9.0,
-      "y": 2.0,
-      "lives": 1,
+      "y": 3.0,
+      "lives": 2,
       "frozen": false,
       "direction": "UP"
     },
     {
-      "type": "NORMAL",
-      "x": 1.0,
-      "y": 2.0,
-      "lives": 1,
+      "type": "ARMED",
+      "x": 10.0,
+      "y": 4.0,
+      "lives": 2,
       "frozen": false,
       "direction": "DOWN"
     },
     {
-      "type": "NORMAL",
-      "x": 13.0,
-      "y": 1.0,
-      "lives": 1,
+      "type": "ARMORED",
+      "x": 10.0,
+      "y": 3.0,
+      "lives": 4,
       "frozen": false,
       "direction": "LEFT"
     },
     {
-      "type": "NORMAL",
-      "x": 2.0,
-      "y": 1.0,
+      "type": "FAST",
+      "x": 3.0,
+      "y": 9.0,
       "lives": 1,
       "frozen": false,
       "direction": "LEFT"
@@ -49,16 +57,16 @@
   "gridLayout": [
     "#################",
     "#.......T.......#",
-    "#.#.#...#...#.#.#",
-    "#.#.#...#...#.#.#",
-    "#.#.#...#...#.#.#",
-    "#..~~~..#..~~~..#",
-    "#.###.......###.#",
-    "#..~~~..#..~~~..#",
-    "#.#.#...#...#.#.#",
-    "#.#.#...T...#.#.#",
-    "#......###......#",
-    "#.T....#X#....T.#",
+    "#.###.T.#.T.###.#",
+    "#.#~#.T.#.T.#~#.#",
+    "#...#..###..#...#",
+    "#.T.#..#X#..#.T.#",
+    "#...#..###..#...#",
+    "#.#~#.T.#.T.#~#.#",
+    "#.###.T.#.T.###.#",
+    "#...T.......T...#",
+    "#.#####...#####.#",
+    "#...............#",
     "#################"
   ]
 }

@@ -115,8 +115,8 @@ public class GamePanel extends JPanel {
         }
 
         g.translate(-offsetX, -offsetY);
-        hud.draw(g, player, grid, getWidth(), getHeight());
-    }
+        int hudX = offsetX + gameWidth + 20;
+        hud.drawRight(g, player, grid, getWidth(), getHeight(), hudX);    }
 
     private void drawPauseOverlay(Graphics g) {
         g.setColor(new Color(0, 0, 0, 180));
