@@ -4,15 +4,15 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
-
-import java.util.List;
+import java.awt.image.BufferedImage;
 
 import utils.FontManager;
+import utils.SpriteManager;
 
 import characters.TankPlayer;
 import grid.Grid;
 import ui.exceptions.MissingRenderContextException;
-import characters.powerups.PowerUp;
+import characters.powerups.PowerUpType;
 
 public class Hud {
 
@@ -76,43 +76,57 @@ public class Hud {
 		y += line;
 
 		g.setColor(Color.YELLOW);
-		g.drawString("POWERUPS: ", x, y);
-		y += 10;
+		g.drawString("GUIA DE POWER-UPS:", x, y);
+		y += 15;
 
-		List<PowerUp> activePowerUps = grid.getActivePowerUps();
+		int iconSize = 25;
 
-		if (activePowerUps.isEmpty()) {
-			g.setColor(Color.GRAY);
-			g.drawString("Nenhum no mapa", x, y + line);
-		} else {
-			int puX = x;
-			int puY = y + 5;
-			int iconSize = 35;
+		for (PowerUpType type : PowerUpType.values()) {
+			BufferedImage img = switch (type) {
+				case HELMET -> SpriteManager.getSprite(864, 83, 166, 159);
+				case CLOCK -> SpriteManager.getSprite(1316, 74, 160, 177);
+				case SHOVEL -> SpriteManager.getSprite(1087, 66, 172, 181);
+				case STAR -> SpriteManager.getSprite(643, 64, 177, 180);
+				case BOMB -> SpriteManager.getSprite(1537, 73, 164, 174);
+				case LIFE -> SpriteManager.getSprite(1755, 86, 158, 154);
+			};
+			if (img != null) {
+				g.drawImage(img, x, y - 18, iconSize, iconSize, null);
 
-			for (PowerUp pu : activePowerUps) {
-				if (pu != null && pu.getImage() != null) {
-					g.drawImage(pu.getImage(), puX, puY, iconSize, iconSize, null);
-
-					puX += iconSize + 10;
-					if (puX > panelX + panelWidth - 50) {
-						puX = x;
-						puY += iconSize + 10;
-					}
-				}
+				String description = switch (type) {
+					case STAR -> "Melhora a arma";
+					case HELMET -> "Invencibilidade";
+					case SHOVEL -> "Protege a base";
+					case CLOCK -> "Congela inimigos";
+					case BOMB -> "Limpa o mapa";
+					case LIFE -> "Vida extra";
+				};
+				g.setColor(Color.WHITE);
+				g.setFont(utils.FontManager.getFont(14f));
+				g.drawString(": " + description, x + iconSize + 5, y);
+				y += line;
 			}
 		}
 
-		y += line + 230;
+		y += 10;
+
 		g.setColor(Color.YELLOW);
 		g.drawString("CONTROLES:", x, y);
 		y += line;
+
 		g.setColor(Color.WHITE);
-		g.drawString("W/A/S/D  : mover", x, y);
+
+		int columnOffset = 110;
+
+		g.drawString("W/A/S/D", x, y);
+		g.drawString(": mover", x + columnOffset, y);
 		y += line;
-		g.drawString("SPACE    : atirar", x, y);
+
+		g.drawString("SPACE", x, y);
+		g.drawString(": atirar", x + columnOffset, y);
 		y += line;
-		g.drawString("P        : pausar", x, y);
-		y += line;
-		g.drawString("Q        : sair", x, y);
+
+		g.drawString("P", x, y);
+		g.drawString(": pausar", x + columnOffset, y);
 	}
 }

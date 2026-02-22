@@ -1,72 +1,64 @@
 {
-  "mapPath": "src/grid/models/model_maze.txt",
-  "difficulty": 3,
+  "mapPath": "src/grid/models/model_classic.txt",
+  "difficulty": 1,
   "player": {
-    "name": "a",
-    "x": 2.0,
-    "y": 9.0,
+    "name": "aaa",
+    "x": 1.0,
+    "y": 11.0,
     "speed": 1.0,
-    "score": 400,
-    "lives": 2,
+    "score": 0,
+    "lives": 4,
     "gunLevel": 1,
-    "direction": "RIGHT"
+    "direction": "UP"
   },
   "enemies": [
     {
-      "type": "ARMED",
-      "x": 2.0,
-      "y": 9.0,
-      "lives": 0,
+      "type": "NORMAL",
+      "x": 3.0,
+      "y": 1.0,
+      "lives": 1,
       "frozen": false,
       "direction": "RIGHT"
     },
     {
-      "type": "ARMED",
-      "x": 9.0,
-      "y": 3.0,
-      "lives": 2,
-      "frozen": false,
-      "direction": "UP"
-    },
-    {
-      "type": "ARMED",
-      "x": 10.0,
-      "y": 4.0,
-      "lives": 2,
-      "frozen": false,
-      "direction": "DOWN"
-    },
-    {
-      "type": "ARMORED",
+      "type": "NORMAL",
       "x": 10.0,
       "y": 3.0,
-      "lives": 4,
-      "frozen": false,
-      "direction": "LEFT"
-    },
-    {
-      "type": "FAST",
-      "x": 3.0,
-      "y": 9.0,
       "lives": 1,
       "frozen": false,
-      "direction": "LEFT"
+      "direction": "RIGHT"
+    },
+    {
+      "type": "NORMAL",
+      "x": 9.0,
+      "y": 2.0,
+      "lives": 1,
+      "frozen": false,
+      "direction": "RIGHT"
+    },
+    {
+      "type": "NORMAL",
+      "x": 11.0,
+      "y": 3.0,
+      "lives": 1,
+      "frozen": false,
+      "direction": "DOWN"
     }
   ],
   "powerUps": [],
   "gridLayout": [
     "#################",
     "#.......T.......#",
-    "#.###.T.#.T.###.#",
-    "#.#~#.T.#.T.#~#.#",
-    "#...#..###..#...#",
-    "#.T.#..#X#..#.T.#",
-    "#...#..###..#...#",
-    "#.#~#.T.#.T.#~#.#",
-    "#.###.T.#.T.###.#",
-    "#...T.......T...#",
-    "#.#####...#####.#",
-    "#...............#",
+    "#.#.#...#...#.#.#",
+    "#.#.#...#...#.#.#",
+    "#.#.#...#...#.#.#",
+    "#..~~~..#..~~~..#",
+    "#.###.......###.#",
+    "#..~~~..#..~~~..#",
+    "#.#.#...#...#.#.#",
+    "#.#.#...T...#.#.#",
+    "#......##.......#",
+    "#.T....#X#....T.#",
     "#################"
   ]
 }
