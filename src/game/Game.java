@@ -54,7 +54,6 @@ public class Game {
 		GameFrame frame = new GameFrame(input);
 		this.panel = new GamePanel(grid, player, enemyManager.getEnemies(), shots);
 		frame.add(panel);
-		frame.pack();
 		frame.setVisible(true);
 
 		long tick = 0;

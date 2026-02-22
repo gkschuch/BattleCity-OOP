@@ -1,10 +1,10 @@
 aaa;2100
 aaaaaa;2100
+tiago;2100
+Tiago;1500
+lala linda;1500
 Player1;1500
 a;1250
 a;1200
 aaaa;1150
 a;950
-tiago;900
-Gabriel;900
-a;900
