@@ -1,46 +1,62 @@
 {
-  "mapPath": "src/grid/models/model_classic.txt",
+  "mapPath": "src/grid/models/model_strength.txt",
   "difficulty": 1,
   "player": {
     "name": "aaaaaa",
-    "x": 4.0,
-    "y": 11.0,
+    "x": 2.0,
+    "y": 5.0,
     "speed": 1.0,
-    "score": 0,
-    "lives": 4,
+    "score": 400,
+    "lives": 1,
     "gunLevel": 1,
-    "direction": "RIGHT"
+    "direction": "LEFT"
   },
-  "elapsedTime": 9497,
+  "elapsedTime": 6605,
   "enemies": [
     {
       "type": "NORMAL",
-      "x": 7.0,
-      "y": 7.0,
+      "x": 3.0,
+      "y": 1.0,
       "lives": 1,
       "frozen": false,
-      "direction": "DOWN"
+      "direction": "UP"
     },
     {
       "type": "NORMAL",
-      "x": 6.0,
-      "y": 9.0,
+      "x": 12.0,
+      "y": 1.0,
       "lives": 1,
       "frozen": false,
-      "direction": "DOWN"
+      "direction": "RIGHT"
     },
     {
       "type": "NORMAL",
-      "x": 7.0,
-      "y": 9.0,
+      "x": 2.0,
+      "y": 1.0,
+      "lives": 1,
+      "frozen": false,
+      "direction": "UP"
+    },
+    {
+      "type": "NORMAL",
+      "x": 1.0,
+      "y": 1.0,
+      "lives": 1,
+      "frozen": false,
+      "direction": "RIGHT"
+    },
+    {
+      "type": "NORMAL",
+      "x": 11.0,
+      "y": 1.0,
       "lives": 1,
       "frozen": false,
       "direction": "LEFT"
     },
     {
       "type": "NORMAL",
-      "x": 1.0,
-      "y": 8.0,
+      "x": 13.0,
+      "y": 1.0,
       "lives": 1,
       "frozen": false,
       "direction": "DOWN"
@@ -50,16 +66,16 @@
   "gridLayout": [
     "#################",
     "#.......T.......#",
-    "#.B.B...#...B.B.#",
-    "#.B.B...#...B.B.#",
-    "#.B.B...B...B.B.#",
-    "#..~~~..B..~~~..#",
-    "#.###.......###.#",
-    "#..~~~..B..~~~..#",
-    "#.B.B...B...B.B.#",
-    "#.B.B...T...B.B.#",
-    "#......BBB......#",
-    "#.T....BXB....T.#",
+    "#.~~~.B###B.~~~.#",
+    "#.B.B.B...B.B.B.#",
+    "#.B.T.BB.BB.T.B.#",
+    "#...~~~B#B~~~...#",
+    "###.T..B#B..T.###",
+    "#...B.BB#BB.B...#",
+    "#.T.B.B~~~B.B.T.#",
+    "#.BBB.B...B.BBB.#",
+    "#.....TBBBT.....#",
+    "#.###..BXB..###.#",
     "#################"
   ]
 }
