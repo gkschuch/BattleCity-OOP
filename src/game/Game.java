@@ -91,10 +91,18 @@ public class Game {
 				}
 			}
 		} catch (GameTerminationException e) {
-			JOptionPane.showMessageDialog(panel, e.getMessage(), "Fim de Jogo", JOptionPane.INFORMATION_MESSAGE);
+			System.out.println(e.getMessage());
 			input.stop();
+			javax.swing.SwingUtilities.invokeLater(() -> {
+				ui.MainMenu.showEndScreen(
+						e.isVictory() ? "VITÓRIA!" : "GAME OVER",
+						e.getMessage(),
+						player);
+			});
+
 		} finally {
 			cleanup(player, powerUpSpawner, frame);
+
 			stateManager.finalizeGame(player);
 		}
 	}

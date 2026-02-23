@@ -4,6 +4,8 @@ import game.Game;
 import game.persistence.GameSaveData;
 import game.persistence.JsonSaveManager;
 import ranking.RankingManager;
+import utils.FontManager;
+import characters.TankPlayer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,7 +15,7 @@ public class MainMenu extends JFrame {
 
 	private static final String BACKGROUND_IMAGE_PATH = "resources/picture_menu.png";
 
-	private JPanel               mainPanel;
+	private JPanel mainPanel;
 	private BackgroundImagePanel backgroundPanel;
 
 	public MainMenu() {
@@ -30,7 +32,7 @@ public class MainMenu extends JFrame {
 	}
 
 	private void showMainScreen() {
-		if ( mainPanel != null )
+		if (mainPanel != null)
 			backgroundPanel.remove(mainPanel);
 
 		mainPanel = new JPanel();
@@ -38,7 +40,7 @@ public class MainMenu extends JFrame {
 		mainPanel.setOpaque(false);
 
 		JLabel title = new JLabel("BATTLE CITY");
-		title.setFont(utils.FontManager.getFont(46f));
+		title.setFont(FontManager.getFont(46f));
 		title.setForeground(Color.YELLOW);
 		title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -48,10 +50,10 @@ public class MainMenu extends JFrame {
 		buttonsBox.setBorder(BorderFactory.createEmptyBorder(20, 25, 20, 25));
 		buttonsBox.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-		JButton btnNew     = createButton("NOVO JOGO");
-		JButton btnLoad    = createButton("CONTINUAR JOGO");
+		JButton btnNew = createButton("NOVO JOGO");
+		JButton btnLoad = createButton("CONTINUAR JOGO");
 		JButton btnRanking = createButton("VER RANKING");
-		JButton btnExit    = createButton("SAIR");
+		JButton btnExit = createButton("SAIR");
 
 		btnNew.addActionListener(e -> showSetupScreen());
 		btnExit.addActionListener(e -> System.exit(0));
@@ -59,13 +61,15 @@ public class MainMenu extends JFrame {
 		btnLoad.addActionListener(e -> {
 			try {
 				GameSaveData data = JsonSaveManager.loadGame();
-				if ( data == null ) {
-					JOptionPane.showMessageDialog(this, "Nenhum jogo salvo encontrado!", "Continuar Jogo", JOptionPane.INFORMATION_MESSAGE);
+				if (data == null) {
+					JOptionPane.showMessageDialog(this, "Nenhum jogo salvo encontrado!", "Continuar Jogo",
+							JOptionPane.INFORMATION_MESSAGE);
 				} else {
 					launchGame(false, null, null, 1);
 				}
-			} catch ( Exception ex ) {
-				JOptionPane.showMessageDialog(this, "O ficheiro de save está corrompido.", "Erro", JOptionPane.ERROR_MESSAGE);
+			} catch (Exception ex) {
+				JOptionPane.showMessageDialog(this, "O ficheiro de save está corrompido.", "Erro",
+						JOptionPane.ERROR_MESSAGE);
 			}
 		});
 
@@ -94,8 +98,8 @@ public class MainMenu extends JFrame {
 		mainPanel.add(buttonsBox);
 
 		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.gridx  = 0;
-		gbc.gridy  = 0;
+		gbc.gridx = 0;
+		gbc.gridy = 0;
 		gbc.anchor = GridBagConstraints.CENTER;
 
 		backgroundPanel.add(mainPanel, gbc);
@@ -105,7 +109,7 @@ public class MainMenu extends JFrame {
 
 	private void showSetupScreen() {
 
-		if ( mainPanel != null )
+		if (mainPanel != null)
 			backgroundPanel.remove(mainPanel);
 
 		mainPanel = new RoundedPanel(16, new Color(0, 0, 0, 160));
@@ -117,29 +121,29 @@ public class MainMenu extends JFrame {
 		formPanel.setOpaque(false);
 
 		JLabel title = new JLabel("CONFIGURAÇÃO", SwingConstants.CENTER);
-		title.setFont(utils.FontManager.getFont(30f));
+		title.setFont(FontManager.getFont(30f));
 		title.setForeground(Color.YELLOW);
 
-		JLabel     lblName = createLabel("NOME DO JOGADOR:");
+		JLabel lblName = createLabel("NOME DO JOGADOR:");
 		JTextField txtName = new JTextField();
-		txtName.setFont(utils.FontManager.getFont(16f));
+		txtName.setFont(FontManager.getFont(16f));
 		txtName.setBackground(new Color(0, 0, 0));
 		txtName.setForeground(Color.WHITE);
 		txtName.setCaretColor(Color.WHITE);
 		txtName.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
 
-		JLabel            lblMap = createLabel("ESCOLHA O MAPA:");
-		String[]          maps   = {"Mapa Clássico", "Mapa Labirinto", "Mapa Fortaleza", "Aleatório"};
-		JComboBox<String> cbMap  = new JComboBox<>(maps);
-		cbMap.setFont(utils.FontManager.getFont(14f));
+		JLabel lblMap = createLabel("ESCOLHA O MAPA:");
+		String[] maps = { "Mapa Clássico", "Mapa Labirinto", "Mapa Fortaleza", "Aleatório" };
+		JComboBox<String> cbMap = new JComboBox<>(maps);
+		cbMap.setFont(FontManager.getFont(14f));
 		cbMap.setBackground(Color.BLACK);
 		cbMap.setForeground(Color.WHITE);
 		cbMap.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
 
-		JLabel            lblDiff = createLabel("DIFICULDADE:");
-		String[]          diffs   = {"Fácil", "Médio", "Difícil"};
-		JComboBox<String> cbDiff  = new JComboBox<>(diffs);
-		cbDiff.setFont(utils.FontManager.getFont(14f));
+		JLabel lblDiff = createLabel("DIFICULDADE:");
+		String[] diffs = { "Fácil", "Médio", "Difícil" };
+		JComboBox<String> cbDiff = new JComboBox<>(diffs);
+		cbDiff.setFont(FontManager.getFont(14f));
 		cbDiff.setBackground(Color.BLACK);
 		cbDiff.setForeground(Color.WHITE);
 		cbDiff.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
@@ -148,7 +152,7 @@ public class MainMenu extends JFrame {
 		btnPanel.setOpaque(false);
 		btnPanel.setBorder(BorderFactory.createEmptyBorder(18, 0, 0, 0));
 
-		JButton btnBack  = createButton("VOLTAR");
+		JButton btnBack = createButton("VOLTAR");
 		JButton btnStart = createButton("INICIAR");
 
 		btnBack.setBackground(new Color(40, 40, 40));
@@ -167,16 +171,17 @@ public class MainMenu extends JFrame {
 
 		btnStart.addActionListener(e -> {
 			String name = txtName.getText().trim();
-			if ( name.isEmpty() ) {
-				JOptionPane.showMessageDialog(this, "Digite um nome para o tanque!", "Aviso", JOptionPane.WARNING_MESSAGE);
+			if (name.isEmpty()) {
+				JOptionPane.showMessageDialog(this, "Digite um nome para o tanque!", "Aviso",
+						JOptionPane.WARNING_MESSAGE);
 				return;
 			}
 
 			int mapIndex = cbMap.getSelectedIndex();
-			if ( mapIndex == 3 )
+			if (mapIndex == 3)
 				mapIndex = new Random().nextInt(3);
 
-			String mapPath = switch ( mapIndex ) {
+			String mapPath = switch (mapIndex) {
 				case 0 -> "src/grid/models/model_classic.txt";
 				case 1 -> "src/grid/models/model_maze.txt";
 				case 2 -> "src/grid/models/model_strength.txt";
@@ -202,8 +207,8 @@ public class MainMenu extends JFrame {
 		mainPanel.add(btnPanel, BorderLayout.SOUTH);
 
 		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.gridx  = 0;
-		gbc.gridy  = 0;
+		gbc.gridx = 0;
+		gbc.gridy = 0;
 		gbc.anchor = GridBagConstraints.CENTER;
 
 		backgroundPanel.add(mainPanel, gbc);
@@ -212,17 +217,86 @@ public class MainMenu extends JFrame {
 		repaint();
 	}
 
+	public static void showEndScreen(String title, String message, TankPlayer player) {
+		JDialog dialog = new JDialog((Frame) null, "Fim de Jogo", true);
+		dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		dialog.setSize(650, 500);
+		dialog.setResizable(false);
+		dialog.setLocationRelativeTo(null);
+
+		BackgroundImagePanel backgroundPanel = new BackgroundImagePanel(BACKGROUND_IMAGE_PATH);
+		dialog.setContentPane(backgroundPanel);
+
+		RoundedPanel panel = new RoundedPanel(40, new Color(0, 0, 0, 200));
+		panel.setOpaque(false);
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		panel.setBorder(BorderFactory.createEmptyBorder(40, 30, 40, 30));
+
+		JLabel lblTitle = new JLabel(title);
+		lblTitle.setFont(FontManager.getFont(40f));
+		lblTitle.setForeground(Color.YELLOW);
+		lblTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+		JLabel lblMsg = new JLabel(message);
+		lblMsg.setFont(FontManager.getFont(18f));
+		lblMsg.setForeground(Color.WHITE);
+		lblMsg.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+		JLabel lblScore = new JLabel(
+				"Jogador: " + player.getPlayerName() + " | Pontuação: " + player.getScore());
+		lblScore.setFont(FontManager.getFont(18f));
+		lblScore.setForeground(Color.WHITE);
+		lblScore.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+		JButton btnOk = new JButton("VOLTAR AO MENU");
+		btnOk.setFont(FontManager.getFont(18f));
+		btnOk.setBackground(new Color(200, 180, 0));
+		btnOk.setForeground(Color.BLACK);
+		btnOk.setOpaque(true);
+		btnOk.setContentAreaFilled(true);
+		btnOk.setFocusPainted(false);
+		btnOk.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		btnOk.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+		btnOk.setMaximumSize(new Dimension(300, 50));
+
+		btnOk.setBorder(BorderFactory.createCompoundBorder(
+				BorderFactory.createLineBorder(Color.WHITE, 2),
+				BorderFactory.createEmptyBorder(10, 20, 10, 20)));
+
+		btnOk.addActionListener(e -> {
+			dialog.dispose();
+			new MainMenu().setVisible(true);
+		});
+
+		panel.add(lblTitle);
+		panel.add(Box.createVerticalStrut(30));
+		panel.add(lblMsg);
+		panel.add(Box.createVerticalStrut(20));
+		panel.add(lblScore);
+		panel.add(Box.createVerticalStrut(40));
+		panel.add(btnOk);
+
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.anchor = GridBagConstraints.CENTER;
+
+		backgroundPanel.add(panel, gbc);
+		dialog.setVisible(true);
+	}
+
 	private JLabel createLabel(String text) {
 		JLabel label = new JLabel(text);
 		label.setForeground(Color.WHITE);
-		label.setFont(utils.FontManager.getFont(14f));
+		label.setFont(FontManager.getFont(14f));
 		label.setVerticalAlignment(SwingConstants.BOTTOM);
 		return label;
 	}
 
 	private JButton createButton(String text) {
 		JButton button = new JButton(text);
-		button.setFont(utils.FontManager.getFont(18f));
+		button.setFont(FontManager.getFont(18f));
 		button.setForeground(Color.WHITE);
 
 		button.setOpaque(false);

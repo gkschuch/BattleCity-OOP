@@ -26,7 +26,6 @@ public class GameStateManager {
     protected void finalizeGame(TankPlayer player) {
         rankingManager.addEntry(player.getPlayerName(), player.getScore());
         rankingManager.printRanking();
-        RankingView.displayLeaderboard(rankingManager.getFormattedRanking());
     }
 
 }
