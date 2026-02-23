@@ -115,13 +115,23 @@ public class Game {
 		}
 	}
 
-	private void advanceToNextWave() {
-		this.currentWave++;
+	private void advanceToNextWave() throws game.exceptions.GameTerminationException {
+		String[] options = { "Continuar", "Sair" };
 
-		JOptionPane.showMessageDialog(panel,
-				"Wave " + (currentWave - 1) + " concluída!\nO mapa foi alterado e as forças inimigas aumentaram!",
-				"Prepare-se para a Wave " + currentWave,
-				JOptionPane.INFORMATION_MESSAGE);
+		int choice = JOptionPane.showOptionDialog(panel,
+				"Wave " + currentWave + " concluída!\nO que deseja fazer?",
+				"Vitória da Wave!",
+				JOptionPane.DEFAULT_OPTION,
+				JOptionPane.INFORMATION_MESSAGE,
+				null,
+				options,
+				options[0]);
+
+		if (choice != 0) {
+			throw new game.exceptions.AllEnemiesDestroyedException();
+		}
+
+		this.currentWave++;
 
 		this.targetEnemyCount = (int) Math.ceil(this.targetEnemyCount * 1.3);
 		this.elapsedTime = 0;
