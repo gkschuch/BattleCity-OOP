@@ -2,44 +2,45 @@
   "mapPath": "src/grid/models/model_classic.txt",
   "difficulty": 1,
   "player": {
-    "name": "aaa",
-    "x": 1.0,
-    "y": 10.0,
+    "name": "aaaaaa",
+    "x": 4.0,
+    "y": 11.0,
     "speed": 1.0,
     "score": 0,
     "lives": 4,
     "gunLevel": 1,
-    "direction": "UP"
+    "direction": "RIGHT"
   },
+  "elapsedTime": 9497,
   "enemies": [
     {
       "type": "NORMAL",
-      "x": 5.0,
-      "y": 6.0,
+      "x": 7.0,
+      "y": 7.0,
       "lives": 1,
       "frozen": false,
-      "direction": "LEFT"
+      "direction": "DOWN"
+    },
+    {
+      "type": "NORMAL",
+      "x": 6.0,
+      "y": 9.0,
+      "lives": 1,
+      "frozen": false,
+      "direction": "DOWN"
     },
     {
       "type": "NORMAL",
       "x": 7.0,
-      "y": 6.0,
+      "y": 9.0,
       "lives": 1,
       "frozen": false,
       "direction": "LEFT"
     },
     {
       "type": "NORMAL",
-      "x": 8.0,
-      "y": 6.0,
-      "lives": 1,
-      "frozen": false,
-      "direction": "LEFT"
-    },
-    {
-      "type": "NORMAL",
-      "x": 9.0,
-      "y": 5.0,
+      "x": 1.0,
+      "y": 8.0,
       "lives": 1,
       "frozen": false,
       "direction": "DOWN"
@@ -57,8 +58,8 @@
     "#..~~~..B..~~~..#",
     "#.B.B...B...B.B.#",
     "#.B.B...T...B.B.#",
-    "#......BB.......#",
-    "#.T....BX.....T.#",
+    "#......BBB......#",
+    "#.T....BXB....T.#",
     "#################"
   ]
 }

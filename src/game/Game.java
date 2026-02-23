@@ -31,12 +31,14 @@ public class Game {
 	private int difficulty;
 	private String mapPath;
 	private GamePanel panel;
+	private long elapsedTime = 0;
 
 	public Game() {
 	}
 
 	public void startGame(boolean isNewGame, String playerName, String mapPath, int difficulty) {
 		if (isNewGame) {
+			this.elapsedTime = 0;
 			this.mapPath = mapPath;
 			this.grid = new Grid(mapPath);
 			this.difficulty = difficulty;
@@ -57,22 +59,30 @@ public class Game {
 		frame.add(panel);
 		frame.setVisible(true);
 
+		long limitTimeMs = 60000;
+		long lastTickTime = System.currentTimeMillis();
 		long tick = 0;
+
 		try {
 			while (input.isRunning()) {
-				tick++;
+				long currentTime = System.currentTimeMillis();
+				long deltaTime = currentTime - lastTickTime;
+				lastTickTime = currentTime;
 
+				tick++;
 				input.processInput(player, grid, enemyManager.getEnemies(), shots, this);
 
 				if (!input.isPaused()) {
+					this.elapsedTime += deltaTime;
 					updateWorld(grid, player, tick);
 				}
 
+				long timeRemaining = limitTimeMs - this.elapsedTime;
+				panel.setTimeRemainingMs(Math.max(0, timeRemaining));
 				panel.setPaused(input.isPaused());
-
 				panel.repaint();
 
-				stateManager.checkGameState(grid, player, enemyManager.countAlive());
+				stateManager.checkGameState(grid, player, enemyManager.countAlive(), this.elapsedTime);
 				try {
 					Thread.sleep(160);
 				} catch (InterruptedException ex) {
@@ -81,7 +91,7 @@ public class Game {
 				}
 			}
 		} catch (GameTerminationException e) {
-			System.out.println(e.getMessage());
+			JOptionPane.showMessageDialog(panel, e.getMessage(), "Fim de Jogo", JOptionPane.INFORMATION_MESSAGE);
 			input.stop();
 		} finally {
 			cleanup(player, powerUpSpawner, frame);
@@ -104,7 +114,8 @@ public class Game {
 					currentPowerUps,
 					this.grid,
 					this.difficulty,
-					this.mapPath);
+					this.mapPath,
+					this.elapsedTime);
 
 			JOptionPane.showMessageDialog(panel, "Progresso guardado com sucesso!", "Save Game",
 					JOptionPane.INFORMATION_MESSAGE);
@@ -144,6 +155,7 @@ public class Game {
 
 		this.mapPath = data.mapPath;
 		this.difficulty = data.difficulty;
+		this.elapsedTime = data.elapsedTime;
 
 		this.grid = new Grid(mapPath);
 		this.grid.applySavedLayout(data.gridLayout);

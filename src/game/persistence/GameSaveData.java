@@ -9,6 +9,8 @@ public class GameSaveData {
 
     public PlayerSaveData player;
 
+    public long elapsedTime;
+
     public List<EnemySaveData> enemies = new ArrayList<>();
     public List<PowerUpSaveData> powerUps = new ArrayList<>();
 

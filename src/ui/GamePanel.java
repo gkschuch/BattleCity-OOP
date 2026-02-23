@@ -19,6 +19,7 @@ public class GamePanel extends JPanel {
     private Hud hud = new Hud();
 
     private boolean paused = false;
+    private long timeRemainingMs = 60000;
 
     public GamePanel(Grid grid, TankPlayer player, List<EnemyTank> enemies, List<Shot> shots) {
         if (grid == null)
@@ -36,6 +37,10 @@ public class GamePanel extends JPanel {
 
         setPreferredSize(new Dimension(grid.getCols() * GameConfig.TILE_SIZE, grid.getRows() * GameConfig.TILE_SIZE));
         setBackground(Color.BLACK);
+    }
+
+    public void setTimeRemainingMs(long timeRemainingMs) {
+        this.timeRemainingMs = timeRemainingMs;
     }
 
     public void updateReferences(Grid newGrid, TankPlayer newPlayer, List<EnemyTank> newEnemies) {
@@ -79,7 +84,21 @@ public class GamePanel extends JPanel {
             offsetY = 30;
         if (offsetX < 0)
             offsetX = 0;
+        g.setFont(utils.FontManager.getFont(24f));
+        long seconds = timeRemainingMs / 1000;
+        String timeStr = String.format("TEMPO: %02d:%02d", seconds / 60, seconds % 60);
+        FontMetrics fm = g.getFontMetrics();
+        int textX = offsetX + (gameWidth - fm.stringWidth(timeStr)) / 2;
+        int textY = offsetY - 15;
 
+        g.setColor(Color.DARK_GRAY);
+        g.drawString(timeStr, textX + 2, textY + 2);
+
+        if (seconds <= 10)
+            g.setColor(Color.RED);
+        else
+            g.setColor(Color.WHITE);
+        g.drawString(timeStr, textX, textY);
         g.translate(offsetX, offsetY);
 
         for (int r = 0; r < grid.getRows(); r++) {
@@ -116,7 +135,8 @@ public class GamePanel extends JPanel {
 
         g.translate(-offsetX, -offsetY);
         int hudX = offsetX + gameWidth + 20;
-        hud.drawRight(g, player, grid, getWidth(), getHeight(), hudX);    }
+        hud.drawRight(g, player, grid, getWidth(), getHeight(), hudX);
+    }
 
     private void drawPauseOverlay(Graphics g) {
         g.setColor(new Color(0, 0, 0, 180));

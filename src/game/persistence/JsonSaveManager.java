@@ -17,11 +17,12 @@ public class JsonSaveManager {
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     public static void saveGame(TankPlayer player, List<EnemyTank> enemies,
-            List<PowerUp> powerUps, Grid grid, int difficulty, String mapPath) {
+            List<PowerUp> powerUps, Grid grid, int difficulty, String mapPath, long elapsedTime) {
         GameSaveData data = new GameSaveData();
 
         data.mapPath = mapPath;
         data.difficulty = difficulty;
+        data.elapsedTime = elapsedTime;
         data.player = new PlayerSaveData(
                 player.getPlayerName(),
                 player.getX(),
