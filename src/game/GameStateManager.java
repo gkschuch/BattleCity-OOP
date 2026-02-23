@@ -3,13 +3,10 @@ package game;
 import characters.TankPlayer;
 import grid.Grid;
 import ranking.RankingManager;
-import ui.RankingView;
 import game.exceptions.*;
 
 public class GameStateManager {
     private final RankingManager rankingManager = new RankingManager();
-
-    // No arquivo src/game/GameStateManager.java
 
     protected void checkGameState(Grid grid, TankPlayer player, int enemiesAlive, long elapsedTime)
             throws GameTerminationException {
@@ -19,8 +16,6 @@ public class GameStateManager {
             throw new BaseDestroyedException();
         if (player.getLives() <= 0)
             throw new PlayerOutOfLivesException();
-        // if (enemiesAlive == 0)
-        // throw new AllEnemiesDestroyedException();
     }
 
     protected void finalizeGame(TankPlayer player) {
