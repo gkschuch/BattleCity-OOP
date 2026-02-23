@@ -133,6 +133,26 @@ public class EnemyManager {
         enemy.start();
     }
 
+    public void spawnWave(int difficulty, TankPlayer player, Grid grid, int targetAmount) {
+        this.clearEnemies();
+        this.spawnEnemies(difficulty, player, grid);
+
+        int currentSize = enemies.size();
+
+        for (int i = currentSize; i < targetAmount; i++) {
+            EnemyTankType type = EnemyTankType.NORMAL;
+            if (difficulty > 1) {
+                type = EnemyTankType.values()[random.nextInt(EnemyTankType.values().length)];
+            }
+
+            EnemyTank extraTank = createTank(type, player, grid);
+            extraTank.setBehaviorStrategy(new RandomBehaviorStrategy());
+            enemies.add(extraTank);
+            extraTank.setGrid(grid);
+            extraTank.start();
+        }
+    }
+
     public void clearEnemies() {
         stopAll();
         enemies.clear();

@@ -19,8 +19,8 @@ public class GameStateManager {
             throw new BaseDestroyedException();
         if (player.getLives() <= 0)
             throw new PlayerOutOfLivesException();
-        if (enemiesAlive == 0)
-            throw new AllEnemiesDestroyedException();
+        // if (enemiesAlive == 0)
+        // throw new AllEnemiesDestroyedException();
     }
 
     protected void finalizeGame(TankPlayer player) {

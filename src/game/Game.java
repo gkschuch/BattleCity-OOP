@@ -33,6 +33,9 @@ public class Game {
 	private GamePanel panel;
 	private long elapsedTime = 0;
 
+	private int targetEnemyCount;
+	private int currentWave = 1;
+
 	public Game() {
 	}
 
@@ -47,8 +50,10 @@ public class Game {
 			this.player.setGrid(grid);
 			this.player.start();
 			enemyManager.spawnEnemies(difficulty, player, grid);
+			this.targetEnemyCount = enemyManager.getEnemies().size();
 		} else {
 			load();
+			this.targetEnemyCount = enemyManager.getEnemies().size();
 		}
 		this.powerUpSpawner = new PowerUpSpawner(grid, enemyManager.getEnemies(), input);
 		Thread spawnerThread = new Thread(powerUpSpawner);
@@ -75,6 +80,9 @@ public class Game {
 				if (!input.isPaused()) {
 					this.elapsedTime += deltaTime;
 					updateWorld(grid, player, tick);
+					if (enemyManager.countAlive() == 0) {
+						advanceToNextWave();
+					}
 				}
 
 				long timeRemaining = limitTimeMs - this.elapsedTime;
@@ -105,6 +113,42 @@ public class Game {
 
 			stateManager.finalizeGame(player);
 		}
+	}
+
+	private void advanceToNextWave() {
+		this.currentWave++;
+
+		JOptionPane.showMessageDialog(panel,
+				"Wave " + (currentWave - 1) + " concluída!\nO mapa foi alterado e as forças inimigas aumentaram!",
+				"Prepare-se para a Wave " + currentWave,
+				JOptionPane.INFORMATION_MESSAGE);
+
+		this.targetEnemyCount = (int) Math.ceil(this.targetEnemyCount * 1.3);
+		this.elapsedTime = 0;
+
+		String[] availableMaps = {
+				"src/grid/models/model_classic.txt",
+				"src/grid/models/model_maze.txt",
+				"src/grid/models/model_strength.txt"
+		};
+
+		this.mapPath = availableMaps[new java.util.Random().nextInt(availableMaps.length)];
+		this.grid = new Grid(this.mapPath);
+
+		this.player.setX(1);
+		this.player.setY(11);
+		this.player.setGrid(this.grid);
+
+		ShotSystem.stopAllShots(shots);
+
+		this.powerUpSpawner.stop();
+		this.powerUpSpawner = new PowerUpSpawner(this.grid, enemyManager.getEnemies(), input);
+		new Thread(this.powerUpSpawner).start();
+
+		enemyManager.spawnWave(this.difficulty, player, grid, this.targetEnemyCount);
+
+		this.panel.updateReferences(this.grid, this.player, enemyManager.getEnemies());
+		this.panel.repaint();
 	}
 
 	public void save() {
