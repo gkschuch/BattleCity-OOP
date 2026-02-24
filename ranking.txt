@@ -1,10 +1,10 @@
+AAAA;13900
 a;4700
+aaaa;4000
 a;3700
+AAAA;3150
+AAAAA;2900
 as;2800
-aaa;2450
-aaa;2100
-aaaaaa;2100
-tiago;2100
-a;2100
-a;1800
-.;1800
+aaa;2800
+aaaa;2700
+AAA;2500

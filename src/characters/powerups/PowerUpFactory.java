@@ -46,7 +46,7 @@ public class PowerUpFactory {
 
         return switch (type) {
             case STAR -> new StarPowerUp(row, col);
-            case HELMET -> new HelmetPowerUp(row, col);
+            case HELMET -> new HelmetPowerUp(row, col, enemies);
             case LIFE -> new LifePowerUp(row, col);
             case BOMB -> {
                 if (enemies == null)
